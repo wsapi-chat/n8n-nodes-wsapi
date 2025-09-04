@@ -1,0 +1,69 @@
+{
+  "name": "n8n-nodes-wsapi",
+  "version": "1.0.19",
+  "description": "A comprehensive n8n community node for WSAPI - the powerful WhatsApp API Gateway. Easily integrate WhatsApp messaging, contact management, group operations, and more into your n8n workflows.",
+  "keywords": [
+    "n8n-community-node-package",
+    "whatsapp",
+    "whatsapp-business-api",
+    "messaging",
+    "wsapi",
+    "chat",
+    "automation",
+    "webhook",
+    "communication",
+    "api"
+  ],
+  "license": "MIT",
+  "homepage": "https://wsapi.chat",
+  "author": {
+    "name": "WSAPI",
+    "email": "support@wsapi.chat"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wsapi-chat/n8n-nodes-wsapi"
+  },
+  "main": "index.js",
+  "engines": {
+    "node": ">=20.19.0 <=24.x",
+    "npm": ">=9.0.0"
+  },
+  "scripts": {
+    "build": "tsc && npm run build:icons && npm run copy:package",
+    "build:icons": "copyfiles -u 1 icons/**/* dist/nodes/WSApi",
+    "copy:package": "copyfiles package.json dist/",
+    "dev": "tsc --watch",
+    "format": "prettier nodes credentials --write",
+    "lint": "eslint 'nodes/**/*.ts' 'credentials/**/*.ts' package.json",
+    "lintfix": "eslint 'nodes/**/*.ts' 'credentials/**/*.ts' package.json --fix",
+    "prepublishOnly": "npm run build",
+    "test": "echo \"No tests specified\" && exit 0"
+  },
+  "files": [
+    "dist"
+  ],
+  "n8n": {
+    "n8nNodesApiVersion": 1,
+    "credentials": [
+      "dist/credentials/WSApiApi.credentials.js"
+    ],
+    "nodes": [
+      "dist/nodes/WSApi/WSApi.node.js",
+      "dist/nodes/WSApi/WSApiTrigger.node.js"
+    ]
+  },
+  "peerDependencies": {
+    "n8n-workflow": "*"
+  },
+  "devDependencies": {
+    "@types/node": "^18.19.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "copyfiles": "^2.4.1",
+    "eslint": "^8.0.0",
+    "eslint-plugin-n8n-nodes-base": "^1.16.0",
+    "n8n-workflow": "^1.82.0",
+    "prettier": "^3.0.0",
+    "typescript": "^5.3.0"
+  }
+}

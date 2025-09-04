@@ -1,0 +1,38 @@
+{
+	"compilerOptions": {
+		"target": "ES2022",
+		"module": "commonjs",
+		"lib": ["ES2022"],
+		"declaration": true,
+		"outDir": "./dist",
+		"rootDir": "./",
+		"removeComments": true,
+		"strict": true,
+		"noImplicitAny": false,
+		"strictNullChecks": false,
+		"strictFunctionTypes": true,
+		"noImplicitReturns": true,
+		"noFallthroughCasesInSwitch": true,
+		"moduleResolution": "node",
+		"allowSyntheticDefaultImports": true,
+		"esModuleInterop": true,
+		"experimentalDecorators": true,
+		"emitDecoratorMetadata": true,
+		"skipLibCheck": true,
+		"forceConsistentCasingInFileNames": true,
+		"resolveJsonModule": true,
+		"allowJs": true
+	},
+	"include": [
+		"credentials/**/*",
+		"nodes/**/*",
+		"index.ts"
+	],
+	"exclude": [
+		"dist/**/*",
+		"node_modules/**/*",
+		"test-build.ts",
+		"simple-package.json",
+		"gulpfile.js"
+	]
+}
