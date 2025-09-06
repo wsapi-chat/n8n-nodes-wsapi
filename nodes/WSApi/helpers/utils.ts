@@ -1,4 +1,4 @@
-import { INodeProperties } from 'n8n-workflow';
+import { IExecuteFunctions, INodeProperties } from 'n8n-workflow';
 
 export function createAdvancedOptions(): INodeProperties {
 	return {
@@ -53,4 +53,27 @@ export function parseAdvancedOptions(advancedOptions: any, body: any): void {
 	if (advancedOptions.replyTo) body.replyTo = advancedOptions.replyTo;
 	if (advancedOptions.isForwarded) body.isForwarded = advancedOptions.isForwarded;
 	if (advancedOptions.viewOnce) body.viewOnce = advancedOptions.viewOnce;
+}
+
+// Simple per-node static-data cache helpers
+type CacheEntry = { value: any; expiresAt: number };
+
+export function cacheRead(ctx: IExecuteFunctions, key: string): any | undefined {
+    const sd = ctx.getWorkflowStaticData('node') as any;
+    sd.wsapiCache = sd.wsapiCache || {};
+    const entry: CacheEntry | undefined = sd.wsapiCache[key];
+    if (!entry) return undefined;
+    if (typeof entry.expiresAt !== 'number' || entry.expiresAt <= Date.now()) return undefined;
+    return entry.value;
+}
+
+export function cacheWrite(ctx: IExecuteFunctions, key: string, value: any, ttlSeconds: number): void {
+    const sd = ctx.getWorkflowStaticData('node') as any;
+    sd.wsapiCache = sd.wsapiCache || {};
+    const ttlMs = Math.max(1, Math.floor(ttlSeconds)) * 1000;
+    sd.wsapiCache[key] = { value, expiresAt: Date.now() + ttlMs } as CacheEntry;
+}
+
+export function makeCacheKey(parts: Array<string | number | boolean | undefined | null>): string {
+    return parts.map((v) => encodeURIComponent(String(v ?? ''))).join('|');
 }

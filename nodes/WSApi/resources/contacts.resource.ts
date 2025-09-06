@@ -81,6 +81,35 @@ export const contactsFields: INodeProperties[] = [
 			},
 		},
 	},
+	// Cache options for GET-like operations
+	{
+		displayName: 'Cache Results',
+		name: 'cacheResults',
+		type: 'boolean',
+		default: false,
+		description: 'Cache the result for repeated requests with the same Contact ID',
+		displayOptions: {
+			show: {
+				resource: ['contacts'],
+				operation: ['get', 'getPicture', 'getBusiness'],
+			},
+		},
+	},
+	{
+		displayName: 'Cache TTL (sec)',
+		name: 'cacheTtl',
+		type: 'number',
+		default: 300,
+		description: 'Time-to-live for the cache entry in seconds',
+		typeOptions: { minValue: 1 },
+		displayOptions: {
+			show: {
+				resource: ['contacts'],
+				operation: ['get', 'getPicture', 'getBusiness'],
+				cacheResults: [true],
+			},
+		},
+	},
 	// Create Contact fields (tool-compatible)
 	{
 		displayName: 'Contact ID',

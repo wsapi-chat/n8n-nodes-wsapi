@@ -1,5 +1,6 @@
 import { IExecuteFunctions } from 'n8n-workflow';
 import { WSApiResponse } from '../types';
+import { cacheRead, cacheWrite, makeCacheKey } from '../helpers/utils';
 
 export async function executeChatOperation(
 	this: IExecuteFunctions,
@@ -25,6 +26,19 @@ export async function executeChatOperation(
 
 		case 'getChat':
 			const getChatId = this.getNodeParameter('chatId', i) as string;
+			const cacheResults = this.getNodeParameter('cacheResults', i, false) as boolean;
+			const cacheTtl = this.getNodeParameter('cacheTtl', i, 300) as number;
+
+			if (cacheResults) {
+				const credentials = await this.getCredentials('WSApiApi');
+				const instanceId = credentials.instanceId as string;
+				const key = makeCacheKey(['chat','getChat',getChatId,instanceId,baseURL]);
+				const cached = cacheRead(this, key);
+				if (cached !== undefined) {
+					responseData = cached as WSApiResponse;
+					break;
+				}
+			}
 
 			responseData = await this.helpers.requestWithAuthentication.call(
 				this,
@@ -36,6 +50,13 @@ export async function executeChatOperation(
 					json: true,
 				},
 			);
+
+			if (cacheResults) {
+				const credentials = await this.getCredentials('WSApiApi');
+				const instanceId = credentials.instanceId as string;
+				const key = makeCacheKey(['chat','getChat',getChatId,instanceId,baseURL]);
+				cacheWrite(this, key, responseData, cacheTtl);
+			}
 			break;
 
 		case 'deleteChat':

@@ -1,5 +1,6 @@
 import { IExecuteFunctions } from 'n8n-workflow';
 import { IDataObject } from 'n8n-workflow';
+import { cacheRead, cacheWrite, makeCacheKey } from '../helpers/utils';
 
 export async function executeGroupsOperation(
 	this: IExecuteFunctions,
@@ -24,7 +25,19 @@ export async function executeGroupsOperation(
 
 		case 'get':
 			const groupId = this.getNodeParameter('groupId', i) as string;
-			return await this.helpers.requestWithAuthentication.call(
+			const cacheResults = this.getNodeParameter('cacheResults', i, false) as boolean;
+			const cacheTtl = this.getNodeParameter('cacheTtl', i, 300) as number;
+
+			if (cacheResults) {
+				const credentials = await this.getCredentials('WSApiApi');
+				const instanceId = credentials.instanceId as string;
+				const baseURL = credentials.baseUrl as string;
+				const key = makeCacheKey(['groups','get',groupId,instanceId,baseURL]);
+				const cached = cacheRead(this, key);
+				if (cached !== undefined) return cached as IDataObject;
+			}
+
+			const resGet = await this.helpers.requestWithAuthentication.call(
 				this,
 				'WSApiApi',
 				{
@@ -34,6 +47,15 @@ export async function executeGroupsOperation(
 					json: true,
 				},
 			);
+
+			if (cacheResults) {
+				const credentials = await this.getCredentials('WSApiApi');
+				const instanceId = credentials.instanceId as string;
+				const baseURL = credentials.baseUrl as string;
+				const key = makeCacheKey(['groups','get',groupId,instanceId,baseURL]);
+				cacheWrite(this, key, resGet, cacheTtl);
+			}
+			return resGet;
 
 		case 'create':
 			const groupName = this.getNodeParameter('groupName', i) as string;

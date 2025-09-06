@@ -87,6 +87,35 @@ export const chatFields: INodeProperties[] = [
 		description: 'WhatsApp chat identifier. For contacts: phone + @s.whatsapp.net. For groups: group ID + @g.us',
 		hint: 'Individual chat: 1234567890@s.whatsapp.net | Group chat: 120363123456789@g.us',
 	},
+	// Cache options for Get Chat
+	{
+		displayName: 'Cache Results',
+		name: 'cacheResults',
+		type: 'boolean',
+		default: false,
+		description: 'Cache the result for repeated requests with the same Chat ID',
+		displayOptions: {
+			show: {
+				resource: ['chat'],
+				operation: ['getChat'],
+			},
+		},
+	},
+	{
+		displayName: 'Cache TTL (sec)',
+		name: 'cacheTtl',
+		type: 'number',
+		default: 300,
+		description: 'Time-to-live for the cache entry in seconds',
+		typeOptions: { minValue: 1 },
+		displayOptions: {
+			show: {
+				resource: ['chat'],
+				operation: ['getChat'],
+				cacheResults: [true],
+			},
+		},
+	},
 	// Presence field (tool-compatible)
 	{
 		displayName: 'Presence',

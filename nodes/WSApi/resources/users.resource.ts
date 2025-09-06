@@ -39,4 +39,33 @@ export const usersFields: INodeProperties[] = [
 			},
 		},
 	},
+	// Cache options for Get User
+	{
+		displayName: 'Cache Results',
+		name: 'cacheResults',
+		type: 'boolean',
+		default: false,
+		description: 'Cache the result for repeated requests with the same Phone Number',
+		displayOptions: {
+			show: {
+				resource: ['users'],
+				operation: ['get'],
+			},
+		},
+	},
+	{
+		displayName: 'Cache TTL (sec)',
+		name: 'cacheTtl',
+		type: 'number',
+		default: 300,
+		description: 'Time-to-live for the cache entry in seconds',
+		typeOptions: { minValue: 1 },
+		displayOptions: {
+			show: {
+				resource: ['users'],
+				operation: ['get'],
+				cacheResults: [true],
+			},
+		},
+	},
 ];

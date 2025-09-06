@@ -1,4 +1,4 @@
-# n8n-nodes-wsapi
+# n8n Nodes - WSAPI API Integration
 
 ![npm version](https://img.shields.io/npm/v/n8n-nodes-wsapi.svg?style=flat-square)
 ![npm downloads](https://img.shields.io/npm/dt/n8n-nodes-wsapi.svg?style=flat-square)
@@ -16,14 +16,14 @@ Note on affiliation: This is a community-maintained package for use with n8n. It
 
 1. Go to **Settings > Community Nodes** in your n8n instance
 2. Click **Install Community Node**
-3. Enter: `n8n-nodes-wsapi`
+3. Enter: `@wsapichat/n8n-nodes-wsapi`
 4. Click **Install**
 
 ### Manual Installation
 
 ```bash
 # Install in your n8n root directory
-npm install n8n-nodes-wsapi
+npm install @wsapichat/n8n-nodes-wsapi
 ```
 
 ## Prerequisites
@@ -253,7 +253,3 @@ See [CHANGELOG.md](CHANGELOG.md) for version history and updates.
 This project is licensed under the MIT License — see `LICENSE` for details.
 
 Trademark notice: "n8n" is a trademark of n8n GmbH. "WhatsApp" is a trademark of WhatsApp LLC. Any use here is for identification and compatibility purposes only and does not imply endorsement or affiliation with n8n GmbH, Meta Platforms, Inc., or WhatsApp LLC.
-
-[⬆ Back to top](#n8n-nodes-wsapi)
-
-[⬆ Back to top](#n8n-nodes-wsapi)
