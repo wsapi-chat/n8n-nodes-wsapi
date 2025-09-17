@@ -12,6 +12,18 @@ export const chatOperations: INodeProperties = {
 	},
 	options: [
 		{
+			name: 'Archive Chat',
+			value: 'archiveChat',
+			description: 'Archive or unarchive a chat',
+			action: 'Archive chat',
+		},
+		{
+			name: 'Delete Chat',
+			value: 'deleteChat',
+			description: 'Delete a WhatsApp chat',
+			action: 'Delete a chat',
+		},
+		{
 			name: 'Get All Chats',
 			value: 'getChats',
 			description: 'List all WhatsApp chats',
@@ -24,22 +36,10 @@ export const chatOperations: INodeProperties = {
 			action: 'Get a chat',
 		},
 		{
-			name: 'Delete Chat',
-			value: 'deleteChat',
-			description: 'Delete a WhatsApp chat',
-			action: 'Delete a chat',
-		},
-		{
 			name: 'Mark as Read',
 			value: 'markChatAsRead',
 			description: 'Mark a chat as read',
 			action: 'Mark chat as read',
-		},
-		{
-			name: 'Set Presence',
-			value: 'setPresence',
-			description: 'Update chat presence (typing, recording, online)',
-			action: 'Set chat presence',
 		},
 		{
 			name: 'Mute Chat',
@@ -54,16 +54,16 @@ export const chatOperations: INodeProperties = {
 			action: 'Pin chat',
 		},
 		{
-			name: 'Archive Chat',
-			value: 'archiveChat',
-			description: 'Archive or unarchive a chat',
-			action: 'Archive chat',
-		},
-		{
 			name: 'Set Ephemeral',
 			value: 'setEphemeral',
 			description: 'Set ephemeral message expiration time',
 			action: 'Set ephemeral messages',
+		},
+		{
+			name: 'Set Presence',
+			value: 'setPresence',
+			description: 'Update chat presence (typing, recording, online)',
+			action: 'Set chat presence',
 		},
 	],
 	default: 'getChats',
@@ -93,7 +93,7 @@ export const chatFields: INodeProperties[] = [
 		name: 'cacheResults',
 		type: 'boolean',
 		default: false,
-		description: 'Cache the result for repeated requests with the same Chat ID',
+		description: 'Whether to cache the result for repeated requests with the same chat ID',
 		displayOptions: {
 			show: {
 				resource: ['chat'],
@@ -102,7 +102,7 @@ export const chatFields: INodeProperties[] = [
 		},
 	},
 	{
-		displayName: 'Cache TTL (sec)',
+		displayName: 'Cache TTL (Sec)',
 		name: 'cacheTtl',
 		type: 'number',
 		default: 300,
@@ -181,7 +181,7 @@ export const chatFields: INodeProperties[] = [
 			},
 		},
 		default: true,
-		description: 'Pin or unpin chat to the top of the chat list',
+		description: 'Whether to pin the chat to the top of the chat list',
 		hint: 'true = pin chat to top, false = remove from pinned chats',
 	},
 	// Archived field (tool-compatible)
@@ -197,7 +197,7 @@ export const chatFields: INodeProperties[] = [
 			},
 		},
 		default: true,
-		description: 'Move chat to or from the archived folder',
+		description: 'Whether to move the chat to or from the archived folder',
 		hint: 'true = move chat to archive, false = restore from archive to main chat list',
 	},
 	// Ephemeral expiration field (tool-compatible)
@@ -235,7 +235,7 @@ export const chatFields: INodeProperties[] = [
 			},
 		},
 		default: true,
-		description: 'Whether to mark the chat as read.',
+		description: 'Whether to mark the chat as read',
 		hint: 'API expects { "read": true } to mark as read; set false to leave unread.',
 	},
 ];

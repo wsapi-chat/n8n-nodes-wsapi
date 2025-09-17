@@ -41,8 +41,8 @@ export class WSApi implements INodeType {
 			name: 'WSAPI',
 		},
 		usableAsTool: true,
-		inputs: [{ type: NodeConnectionType.Main }],
-		outputs: [{ type: NodeConnectionType.Main }],
+		inputs: ['main'] as NodeConnectionType[],
+		outputs: ['main'] as NodeConnectionType[],
 		credentials: [
 			{
 				name: 'WSApiApi',

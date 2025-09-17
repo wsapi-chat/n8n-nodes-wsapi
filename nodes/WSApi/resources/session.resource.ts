@@ -12,6 +12,12 @@ export const sessionOperations: INodeProperties = {
 	},
 	options: [
 		{
+			name: 'Get Login Code',
+			value: 'getLoginCode',
+			description: 'Get login code for WhatsApp',
+			action: 'Get login code for phone',
+		},
+		{
 			name: 'Get QR Code Image',
 			value: 'getQrImage',
 			description: 'Get QR code image for WhatsApp login',
@@ -24,12 +30,6 @@ export const sessionOperations: INodeProperties = {
 			action: 'Get QR code string for login',
 		},
 		{
-			name: 'Get Login Code',
-			value: 'getLoginCode',
-			description: 'Get login code for WhatsApp',
-			action: 'Get login code for phone',
-		},
-		{
 			name: 'Get Status',
 			value: 'getStatus',
 			description: 'Get WhatsApp session status',
@@ -39,7 +39,7 @@ export const sessionOperations: INodeProperties = {
 			name: 'Logout',
 			value: 'logout',
 			description: 'Logout from WhatsApp',
-			action: 'Logout from WhatsApp',
+			action: 'Log out from whats app',
 		},
 	],
 	default: 'getStatus',

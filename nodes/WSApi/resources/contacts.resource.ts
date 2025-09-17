@@ -12,34 +12,10 @@ export const contactsOperations: INodeProperties = {
 	},
 	options: [
 		{
-			name: 'List All',
-			value: 'getAll',
-			description: 'List all WhatsApp contacts',
-			action: 'List all contacts',
-		},
-		{
-			name: 'Get Contact',
-			value: 'get',
-			description: 'Get contact information',
-			action: 'Get contact information',
-		},
-		{
 			name: 'Create Contact',
 			value: 'create',
 			description: 'Create a new WhatsApp contact',
 			action: 'Create new contact',
-		},
-		{
-			name: 'Update Contact',
-			value: 'update',
-			description: 'Update contact information',
-			action: 'Update contact information',
-		},
-		{
-			name: 'Get Picture',
-			value: 'getPicture',
-			description: 'Get contact profile picture',
-			action: 'Get contact profile picture',
 		},
 		{
 			name: 'Get Business Profile',
@@ -48,16 +24,40 @@ export const contactsOperations: INodeProperties = {
 			action: 'Get contact business profile',
 		},
 		{
-			name: 'Update Full Name',
-			value: 'updateFullName',
-			description: 'Update contact full name',
-			action: 'Update contact full name',
+			name: 'Get Contact',
+			value: 'get',
+			description: 'Get contact information',
+			action: 'Get contact information',
+		},
+		{
+			name: 'Get Many',
+			value: 'getAll',
+			description: 'List many WhatsApp contacts',
+			action: 'List all contacts',
+		},
+		{
+			name: 'Get Picture',
+			value: 'getPicture',
+			description: 'Get contact profile picture',
+			action: 'Get contact profile picture',
 		},
 		{
 			name: 'Subscribe to Presence',
 			value: 'subscribePresence',
 			description: 'Subscribe to contact presence updates',
 			action: 'Subscribe to contact presence',
+		},
+		{
+			name: 'Update Contact',
+			value: 'update',
+			description: 'Update contact information',
+			action: 'Update contact information',
+		},
+		{
+			name: 'Update Full Name',
+			value: 'updateFullName',
+			description: 'Update contact full name',
+			action: 'Update contact full name',
 		},
 	],
 	default: 'getAll',
@@ -87,7 +87,7 @@ export const contactsFields: INodeProperties[] = [
 		name: 'cacheResults',
 		type: 'boolean',
 		default: false,
-		description: 'Cache the result for repeated requests with the same Contact ID',
+		description: 'Whether to cache the result for repeated requests with the same contact ID',
 		displayOptions: {
 			show: {
 				resource: ['contacts'],
@@ -96,7 +96,7 @@ export const contactsFields: INodeProperties[] = [
 		},
 	},
 	{
-		displayName: 'Cache TTL (sec)',
+		displayName: 'Cache TTL (Sec)',
 		name: 'cacheTtl',
 		type: 'number',
 		default: 300,

@@ -45,7 +45,7 @@ export const usersFields: INodeProperties[] = [
 		name: 'cacheResults',
 		type: 'boolean',
 		default: false,
-		description: 'Cache the result for repeated requests with the same Phone Number',
+		description: 'Whether to cache the result for repeated requests with the same phone number',
 		displayOptions: {
 			show: {
 				resource: ['users'],
@@ -54,7 +54,7 @@ export const usersFields: INodeProperties[] = [
 		},
 	},
 	{
-		displayName: 'Cache TTL (sec)',
+		displayName: 'Cache TTL (Sec)',
 		name: 'cacheTtl',
 		type: 'number',
 		default: 300,

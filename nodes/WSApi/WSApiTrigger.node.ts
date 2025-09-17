@@ -25,7 +25,7 @@ export class WSApiTrigger implements INodeType {
 			name: 'WSAPI Trigger',
 		},
 		inputs: [],
-		outputs: [{ type: NodeConnectionType.Main }],
+		outputs: ['main'] as NodeConnectionType[],
 		credentials: [
 			{
 				name: 'WSApiApi',
@@ -48,46 +48,46 @@ export class WSApiTrigger implements INodeType {
 				noDataExpression: true,
 				options: [
 					{
-						name: 'On Message Event',
-						value: 'message',
-						description: 'Trigger on Message events (message, read, delete, star, etc.)',
-						action: 'Trigger on Message events',
-					},
-					{
-						name: 'On Session Event',
-						value: 'session',
-						description: 'Trigger on Session events (login, logout, authentication)',
-						action: 'Trigger on Session events',
-					},
-					{
-						name: 'On Chat Event',
-						value: 'chat',
-						description: 'Trigger on Chat events (settings, presence)',
-						action: 'Trigger on Chat events',
+						name: 'On Any Event',
+						value: 'all',
+						description: 'Trigger on all event types',
+						action: 'Trigger on all events',
 					},
 					{
 						name: 'On Call Event',
 						value: 'call',
-						description: 'Trigger on Call events (offer, accept, terminate)',
-						action: 'Trigger on Call events',
+						description: 'Trigger on call events (offer, accept, terminate)',
+						action: 'Trigger on call events',
 					},
 					{
-						name: 'On User Event',
-						value: 'user',
-						description: 'Trigger on User events (profile, presence updates)',
-						action: 'Trigger on User events',
+						name: 'On Chat Event',
+						value: 'chat',
+						description: 'Trigger on chat events (settings, presence)',
+						action: 'Trigger on chat events',
 					},
 					{
 						name: 'On Contact Event',
 						value: 'contact',
-						description: 'Trigger on Contact Events',
-						action: 'Trigger on Contact Events',
+						description: 'Trigger on contact events',
+						action: 'Trigger on contact events',
 					},
 					{
-						name: 'On Any Event',
-						value: 'all',
-						description: 'Trigger on All event types',
-						action: 'Trigger on All events',
+						name: 'On Message Event',
+						value: 'message',
+						description: 'Trigger on message events (message, read, delete, star, etc.)',
+						action: 'Trigger on message events',
+					},
+					{
+						name: 'On Session Event',
+						value: 'session',
+						description: 'Trigger on session events (login, logout, authentication)',
+						action: 'Trigger on session events',
+					},
+					{
+						name: 'On User Event',
+						value: 'user',
+						description: 'Trigger on user events (profile, presence updates)',
+						action: 'Trigger on user events',
 					},
 				],
 				default: 'message',
@@ -97,7 +97,41 @@ export class WSApiTrigger implements INodeType {
 				name: 'events',
 				type: 'multiOptions',
 				options: [
-					// Session Events
+					{
+						name: 'Call Accept',
+						value: 'call_accept',
+						description: 'Call was accepted',
+					},
+					{
+						name: 'Call Offer',
+						value: 'call_offer',
+						description: 'Incoming call offer received',
+					},
+					{
+						name: 'Call Terminate',
+						value: 'call_terminate',
+						description: 'Call was terminated',
+					},
+					{
+						name: 'Chat Presence',
+						value: 'chat_presence',
+						description: 'Chat presence updated (typing, recording, paused)',
+					},
+					{
+						name: 'Chat Setting',
+						value: 'chat_setting',
+						description: 'Chat settings changed (mute, pin, archive, ephemeral)',
+					},
+					{
+						name: 'Contact',
+						value: 'contact',
+						description: 'Contact information updated',
+					},
+					{
+						name: 'Group',
+						value: 'group',
+						description: 'Group information updated',
+					},
 					{
 						name: 'Logged In',
 						value: 'logged_in',
@@ -113,16 +147,10 @@ export class WSApiTrigger implements INodeType {
 						value: 'logged_error',
 						description: 'Error during login process',
 					},
-					// Message Events
 					{
 						name: 'Message',
 						value: 'message',
 						description: 'New message received (text, media, reaction, contact, etc.)',
-					},
-					{
-						name: 'Message Read',
-						value: 'message_read',
-						description: 'Message read receipt received',
 					},
 					{
 						name: 'Message Deleted',
@@ -130,52 +158,19 @@ export class WSApiTrigger implements INodeType {
 						description: 'Message was deleted',
 					},
 					{
-						name: 'Message Starred',
-						value: 'message_star',
-						description: 'Message was starred/unstarred',
-					},
-					{
 						name: 'Message History Sync',
 						value: 'message_history_sync',
 						description: 'Initial message history sync during pairing',
 					},
-					// Chat Events
 					{
-						name: 'Chat Setting',
-						value: 'chat_setting',
-						description: 'Chat settings changed (mute, pin, archive, ephemeral)',
+						name: 'Message Read',
+						value: 'message_read',
+						description: 'Message read receipt received',
 					},
 					{
-						name: 'Chat Presence',
-						value: 'chat_presence',
-						description: 'Chat presence updated (typing, recording, paused)',
-					},
-					// Call Events
-					{
-						name: 'Call Offer',
-						value: 'call_offer',
-						description: 'Incoming call offer received',
-					},
-					{
-						name: 'Call Accept',
-						value: 'call_accept',
-						description: 'Call was accepted',
-					},
-					{
-						name: 'Call Terminate',
-						value: 'call_terminate',
-						description: 'Call was terminated',
-					},
-					// User Events
-					{
-						name: 'User Push Name',
-						value: 'user_push_name',
-						description: 'User display name updated',
-					},
-					{
-						name: 'User Status',
-						value: 'user_status',
-						description: 'User status message updated',
+						name: 'Message Starred',
+						value: 'message_star',
+						description: 'Message was starred/unstarred',
 					},
 					{
 						name: 'User Picture',
@@ -187,16 +182,15 @@ export class WSApiTrigger implements INodeType {
 						value: 'user_presence',
 						description: 'User online presence updated (available/unavailable)',
 					},
-					// Contact & Group Events
 					{
-						name: 'Contact',
-						value: 'contact',
-						description: 'Contact information updated',
+						name: 'User Push Name',
+						value: 'user_push_name',
+						description: 'User display name updated',
 					},
 					{
-						name: 'Group',
-						value: 'group',
-						description: 'Group information updated',
+						name: 'User Status',
+						value: 'user_status',
+						description: 'User status message updated',
 					},
 				],
 				default: ['message'],
@@ -213,6 +207,11 @@ export class WSApiTrigger implements INodeType {
 				type: 'multiOptions',
 				options: [
 					{
+						name: 'Login Error',
+						value: 'logged_error',
+						description: 'Error during login process',
+					},
+					{
 						name: 'Logged In',
 						value: 'logged_in',
 						description: 'User successfully logged in',
@@ -221,11 +220,6 @@ export class WSApiTrigger implements INodeType {
 						name: 'Logged Out',
 						value: 'logged_out',
 						description: 'User logged out',
-					},
-					{
-						name: 'Login Error',
-						value: 'logged_error',
-						description: 'Error during login process',
 					},
 				],
 				default: ['logged_in'],
@@ -247,24 +241,24 @@ export class WSApiTrigger implements INodeType {
 						description: 'New message received (text, media, reaction, contact, etc.)',
 					},
 					{
-						name: 'Message Read',
-						value: 'message_read',
-						description: 'Message read receipt received',
-					},
-					{
 						name: 'Message Deleted',
 						value: 'message_delete',
 						description: 'Message was deleted',
 					},
 					{
-						name: 'Message Starred',
-						value: 'message_star',
-						description: 'Message was starred/unstarred',
-					},
-					{
 						name: 'Message History Sync',
 						value: 'message_history_sync',
 						description: 'Initial message history sync during pairing',
+					},
+					{
+						name: 'Message Read',
+						value: 'message_read',
+						description: 'Message read receipt received',
+					},
+					{
+						name: 'Message Starred',
+						value: 'message_star',
+						description: 'Message was starred/unstarred',
 					},
 				],
 				default: ['message'],
@@ -281,14 +275,14 @@ export class WSApiTrigger implements INodeType {
 				type: 'multiOptions',
 				options: [
 					{
-						name: 'Chat Setting',
-						value: 'chat_setting',
-						description: 'Chat settings changed (mute, pin, archive, ephemeral)',
-					},
-					{
 						name: 'Chat Presence',
 						value: 'chat_presence',
 						description: 'Chat presence updated (typing, recording, paused)',
+					},
+					{
+						name: 'Chat Setting',
+						value: 'chat_setting',
+						description: 'Chat settings changed (mute, pin, archive, ephemeral)',
 					},
 				],
 				default: ['chat_setting'],
@@ -305,14 +299,14 @@ export class WSApiTrigger implements INodeType {
 				type: 'multiOptions',
 				options: [
 					{
-						name: 'Call Offer',
-						value: 'call_offer',
-						description: 'Incoming call offer received',
-					},
-					{
 						name: 'Call Accept',
 						value: 'call_accept',
 						description: 'Call was accepted',
+					},
+					{
+						name: 'Call Offer',
+						value: 'call_offer',
+						description: 'Incoming call offer received',
 					},
 					{
 						name: 'Call Terminate',
@@ -334,16 +328,6 @@ export class WSApiTrigger implements INodeType {
 				type: 'multiOptions',
 				options: [
 					{
-						name: 'User Push Name',
-						value: 'user_push_name',
-						description: 'User display name updated',
-					},
-					{
-						name: 'User Status',
-						value: 'user_status',
-						description: 'User status message updated',
-					},
-					{
 						name: 'User Picture',
 						value: 'user_picture',
 						description: 'User profile picture updated',
@@ -352,6 +336,16 @@ export class WSApiTrigger implements INodeType {
 						name: 'User Presence',
 						value: 'user_presence',
 						description: 'User online presence updated (available/unavailable)',
+					},
+					{
+						name: 'User Push Name',
+						value: 'user_push_name',
+						description: 'User display name updated',
+					},
+					{
+						name: 'User Status',
+						value: 'user_status',
+						description: 'User status message updated',
 					},
 				],
 				default: ['user_push_name'],
@@ -391,7 +385,7 @@ export class WSApiTrigger implements INodeType {
 				name: 'autoDownloadMedia',
 				type: 'boolean',
 				default: false,
-				description: 'Automatically download media files when message events contain media',
+				description: 'Whether to automatically download media files when message events contain media',
 				displayOptions: {
 					show: {
 						operation: ['all', 'message'],
@@ -404,21 +398,21 @@ export class WSApiTrigger implements INodeType {
 				name: 'parseEventData',
 				type: 'boolean',
 				default: true,
-				description: 'Parse eventData based on event type for easier access to fields',
+				description: 'Whether to parse event data based on the event type for easier access to fields',
 			},
 			{
 				displayName: 'Include Raw Event',
 				name: 'includeRawEvent',
 				type: 'boolean',
 				default: false,
-				description: 'Include the original webhook payload in the output',
+				description: 'Whether to include the original webhook payload in the output',
 			},
 			{
 				displayName: 'Webhook Authentication',
 				name: 'enableAuth',
 				type: 'boolean',
 				default: false,
-				description: 'Enable custom header authentication for incoming webhooks',
+				description: 'Whether to enable custom header authentication for incoming webhooks',
 			},
 			{
 				displayName: 'Auth Header Name',

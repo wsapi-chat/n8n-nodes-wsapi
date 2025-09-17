@@ -12,18 +12,6 @@ export const groupsOperations: INodeProperties = {
 	},
 	options: [
 		{
-			name: 'List All',
-			value: 'getAll',
-			description: 'List all WhatsApp groups',
-			action: 'List all groups',
-		},
-		{
-			name: 'Get Group',
-			value: 'get',
-			description: 'Get group information',
-			action: 'Get group information',
-		},
-		{
 			name: 'Create Group',
 			value: 'create',
 			description: 'Create a new WhatsApp group',
@@ -32,8 +20,37 @@ export const groupsOperations: INodeProperties = {
 		{
 			name: 'Delete Group',
 			value: 'delete',
-			description: 'Delete group',
 			action: 'Delete group',
+		},
+		{
+			name: 'Get Group',
+			value: 'get',
+			description: 'Get group information',
+			action: 'Get group information',
+		},
+		{
+			name: 'Get Invite Info',
+			value: 'getInviteInfo',
+			description: 'Get group invite information',
+			action: 'Get group invite information',
+		},
+		{
+			name: 'Get Invite Link',
+			value: 'getInviteLink',
+			description: 'Get group invite link',
+			action: 'Get group invite link',
+		},
+		{
+			name: 'Get Invite Requests',
+			value: 'getInviteRequests',
+			description: 'List group invite requests',
+			action: 'Get group invite requests',
+		},
+		{
+			name: 'Get Many',
+			value: 'getAll',
+			description: 'List many WhatsApp groups',
+			action: 'List all groups',
 		},
 		{
 			name: 'Set Description',
@@ -54,28 +71,10 @@ export const groupsOperations: INodeProperties = {
 			action: 'Set group picture',
 		},
 		{
-			name: 'Get Invite Link',
-			value: 'getInviteLink',
-			description: 'Get group invite link',
-			action: 'Get group invite link',
-		},
-		{
-			name: 'Get Invite Requests',
-			value: 'getInviteRequests',
-			description: 'List group invite requests',
-			action: 'Get group invite requests',
-		},
-		{
 			name: 'Update Participants',
 			value: 'updateParticipants',
 			description: 'Update group participants',
 			action: 'Update group participants',
-		},
-		{
-			name: 'Get Invite Info',
-			value: 'getInviteInfo',
-			description: 'Get group invite information',
-			action: 'Get group invite information',
 		},
 	],
 	default: 'getAll',
@@ -105,7 +104,7 @@ export const groupsFields: INodeProperties[] = [
 		name: 'cacheResults',
 		type: 'boolean',
 		default: false,
-		description: 'Cache the result for repeated requests with the same Group ID',
+		description: 'Whether to cache the result for repeated requests with the same group ID',
 		displayOptions: {
 			show: {
 				resource: ['groups'],
@@ -114,7 +113,7 @@ export const groupsFields: INodeProperties[] = [
 		},
 	},
 	{
-		displayName: 'Cache TTL (sec)',
+		displayName: 'Cache TTL (Sec)',
 		name: 'cacheTtl',
 		type: 'number',
 		default: 300,

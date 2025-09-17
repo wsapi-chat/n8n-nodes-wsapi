@@ -50,14 +50,6 @@ export const instanceFields: INodeProperties[] = [
 		description: 'Instance configuration settings to update',
 		options: [
 			{
-				displayName: 'Name',
-				name: 'name',
-				type: 'string',
-				default: '',
-				description: 'Display name for the WhatsApp instance',
-				placeholder: 'My WhatsApp',
-			},
-			{
 				displayName: 'Description',
 				name: 'description',
 				type: 'string',
@@ -66,12 +58,19 @@ export const instanceFields: INodeProperties[] = [
 				placeholder: 'Customer support WhatsApp instance',
 			},
 			{
-				displayName: 'Webhook URL',
-				name: 'webhookUrl',
+				displayName: 'Name',
+				name: 'name',
 				type: 'string',
 				default: '',
-				description: 'HTTPS endpoint to receive WhatsApp events and messages',
-				placeholder: 'https://your-domain.com/webhook/whatsapp',
+				description: 'Display name for the WhatsApp instance',
+				placeholder: 'My WhatsApp',
+			},
+			{
+				displayName: 'Pull Mode',
+				name: 'pullMode',
+				type: 'boolean',
+				default: false,
+				description: 'Whether to enable pull mode to fetch events instead of receiving webhooks',
 			},
 			{
 				displayName: 'Webhook Auth Header',
@@ -90,11 +89,12 @@ export const instanceFields: INodeProperties[] = [
 				placeholder: 'Bearer your-secret-token',
 			},
 			{
-				displayName: 'Pull Mode',
-				name: 'pullMode',
-				type: 'boolean',
-				default: false,
-				description: 'Enable pull mode to fetch events instead of receiving webhooks',
+				displayName: 'Webhook URL',
+				name: 'webhookUrl',
+				type: 'string',
+				default: '',
+				description: 'HTTPS endpoint to receive WhatsApp events and messages',
+				placeholder: 'https://your-domain.com/webhook/whatsapp',
 			},
 		],
 		displayOptions: {
