@@ -146,11 +146,11 @@ export const chatFields: INodeProperties[] = [
 		description: 'Activity indicator to show in the chat',
 		hint: 'Typing = show typing indicator, Recording = show voice recording, Paused = stop all indicators',
 	},
-	// Muted field (tool-compatible)
+	// Mute duration field aligned with API contract
 	{
-		displayName: 'Muted',
-		name: 'muted',
-		type: 'boolean',
+		displayName: 'Mute Duration',
+		name: 'muteDuration',
+		type: 'options',
 		required: true,
 		displayOptions: {
 			show: {
@@ -158,9 +158,15 @@ export const chatFields: INodeProperties[] = [
 				operation: ['muteChat'],
 			},
 		},
-		default: true,
-		description: 'Enable or disable chat notifications',
-		hint: 'true = mute notifications for this chat, false = enable notifications',
+		options: [
+			{ name: 'Unmute', value: 'unmute' },
+			{ name: '8 Hours', value: '8h' },
+			{ name: '1 Week', value: '1w' },
+			{ name: 'Always', value: 'always' },
+		],
+		default: '8h',
+		description: 'Duration preset for muting the chat. Choose Unmute to disable muting.',
+		hint: 'Matches API presets: 8h, 1w, always. Selecting Unmute sends duration=null.',
 	},
 	// Pinned field (tool-compatible)
 	{
@@ -196,7 +202,7 @@ export const chatFields: INodeProperties[] = [
 	},
 	// Ephemeral expiration field (tool-compatible)
 	{
-		displayName: 'Ephemeral Expiration (Seconds)',
+		displayName: 'Ephemeral Expiration',
 		name: 'ephemeralExpiration',
 		type: 'options',
 		required: true,
@@ -207,25 +213,29 @@ export const chatFields: INodeProperties[] = [
 			},
 		},
 		options: [
-			{
-				name: 'Off',
-				value: 0,
-			},
-			{
-				name: '24 Hours',
-				value: 86400,
-			},
-			{
-				name: '7 Days',
-				value: 604800,
-			},
-			{
-				name: '90 Days',
-				value: 7776000,
-			},
+			{ name: 'Off', value: 'off' },
+			{ name: '24 Hours', value: '24h' },
+			{ name: '7 Days', value: '7d' },
+			{ name: '90 Days', value: '90d' },
 		],
-		default: 0,
+		default: 'off',
 		description: 'Set automatic message deletion timer for the chat',
-		hint: 'Choose how long messages remain visible. Off = messages never disappear automatically',
+		hint: 'Values map directly to the API string presets (off, 24h, 7d, 90d).',
+	},
+	// Mark chat as read body requirements
+	{
+		displayName: 'Mark Read',
+		name: 'read',
+		type: 'boolean',
+		required: true,
+		displayOptions: {
+			show: {
+				resource: ['chat'],
+				operation: ['markChatAsRead'],
+			},
+		},
+		default: true,
+		description: 'Whether to mark the chat as read.',
+		hint: 'API expects { "read": true } to mark as read; set false to leave unread.',
 	},
 ];

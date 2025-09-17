@@ -153,7 +153,7 @@ export const messageFields: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				resource: ['message'],
-				operation: ['sendText'],
+				operation: ['sendText', 'sendLink'],
 			},
 		},
 		default: '',
@@ -297,13 +297,28 @@ export const messageFields: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				resource: ['message'],
-				operation: ['sendReaction', 'editMessage', 'deleteMessage', 'deleteForMe', 'starMessage'],
+				operation: ['sendReaction', 'editMessage', 'deleteMessage', 'deleteForMe', 'starMessage', 'markAsRead'],
 			},
 		},
 		default: '',
 		description: 'Unique identifier of the WhatsApp message to interact with',
 		hint: 'Get message ID from previous WhatsApp operations or webhook events',
 		placeholder: 'BAE5F2C9A4B1E3D2F7G8H9I0',
+	},
+	{
+		displayName: 'Sender ID',
+		name: 'senderId',
+		type: 'string',
+		required: true,
+		displayOptions: {
+			show: {
+				resource: ['message'],
+				operation: ['sendReaction', 'deleteMessage', 'deleteForMe', 'starMessage', 'markAsRead'],
+			},
+		},
+		default: '',
+		description: 'WhatsApp JID of the user that originally sent the message',
+		hint: 'Format: phone number with suffix (e.g., 1234567890@s.whatsapp.net).',
 	},
 	{
 		displayName: 'Emoji',
@@ -322,6 +337,27 @@ export const messageFields: INodeProperties[] = [
 		hint: 'Use any standard emoji. Examples: 👍, ❤️, 😂, 😮, 😢, 🙏',
 	},
 	{
+		displayName: 'Receipt Type',
+		name: 'receiptType',
+		type: 'options',
+		required: true,
+		displayOptions: {
+			show: {
+				resource: ['message'],
+				operation: ['markAsRead'],
+			},
+		},
+		options: [
+			{ name: 'Delivered', value: 'delivered' },
+			{ name: 'Sender', value: 'sender' },
+			{ name: 'Read', value: 'read' },
+			{ name: 'Played', value: 'played' },
+		],
+		default: 'read',
+		description: 'Receipt status to mark for the message.',
+		hint: 'Matches API enum delivered | sender | read | played.',
+	},
+	{
 		displayName: 'New Message',
 		name: 'newMessage',
 		type: 'string',
@@ -337,19 +373,33 @@ export const messageFields: INodeProperties[] = [
 		hint: 'Provide the new message text. Only text messages can be edited in WhatsApp.',
 	},
 	{
-		displayName: 'Starred',
-		name: 'starred',
+		displayName: 'If From Me',
+		name: 'ifFromMe',
 		type: 'boolean',
 		required: true,
 		displayOptions: {
 			show: {
 				resource: ['message'],
-				operation: ['starMessage'],
+				operation: ['deleteForMe'],
 			},
 		},
 		default: true,
-		description: 'Whether to star (true) or unstar (false) the message',
-		hint: 'Set to true to star the message, false to remove the star',
+		description: 'Set to true if the message being deleted was sent by the current account.',
+	},
+	{
+		displayName: 'Deletion Timestamp',
+		name: 'deleteTimestamp',
+		type: 'string',
+		required: true,
+		displayOptions: {
+			show: {
+				resource: ['message'],
+				operation: ['deleteForMe'],
+			},
+		},
+		default: '',
+		description: 'ISO 8601 timestamp representing the original message time.',
+		hint: 'Matches the API "Time" field (e.g., 2024-06-02T18:30:00Z).',
 	},
 	// Advanced options
 	{

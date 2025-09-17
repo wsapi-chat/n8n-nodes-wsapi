@@ -21,6 +21,11 @@ export interface WSApiMessageBody {
 	replyTo?: string;
 	isForwarded?: boolean;
 	viewOnce?: boolean;
+	senderId?: string;
+	reaction?: string;
+	receiptType?: string;
+	ifFromMe?: boolean;
+	Time?: string;
 }
 
 export interface WSApiChatBody {

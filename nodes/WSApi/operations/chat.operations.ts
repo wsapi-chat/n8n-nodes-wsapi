@@ -77,6 +77,7 @@ export async function executeChatOperation(
 
 		case 'markChatAsRead':
 			const readChatId = this.getNodeParameter('chatId', i) as string;
+			const read = this.getNodeParameter('read', i) as boolean;
 
 			await this.helpers.requestWithAuthentication.call(
 				this,
@@ -84,11 +85,12 @@ export async function executeChatOperation(
 				{
 					method: 'PUT',
 					url: `/chats/${encodeURIComponent(readChatId)}/read`,
+					body: { read },
 					baseURL: baseURL,
 					json: true,
 				},
 			);
-			responseData = { success: true, chatId: readChatId };
+			responseData = { success: true, chatId: readChatId, read };
 			break;
 
 		case 'setPresence':
@@ -111,7 +113,8 @@ export async function executeChatOperation(
 
 		case 'muteChat':
 			const muteChatId = this.getNodeParameter('chatId', i) as string;
-			const muted = this.getNodeParameter('muted', i) as boolean;
+			const muteDuration = this.getNodeParameter('muteDuration', i) as string;
+			const duration = muteDuration === 'unmute' ? null : muteDuration;
 
 			await this.helpers.requestWithAuthentication.call(
 				this,
@@ -119,12 +122,12 @@ export async function executeChatOperation(
 				{
 					method: 'PUT',
 					url: `/chats/${encodeURIComponent(muteChatId)}/mute`,
-					body: { muted },
+					body: { duration },
 					baseURL: baseURL,
 					json: true,
 				},
 			);
-			responseData = { success: true, chatId: muteChatId, muted };
+			responseData = { success: true, chatId: muteChatId, duration };
 			break;
 
 		case 'pinChat':
@@ -165,7 +168,7 @@ export async function executeChatOperation(
 
 		case 'setEphemeral':
 			const ephemeralChatId = this.getNodeParameter('chatId', i) as string;
-			const ephemeralExpiration = this.getNodeParameter('ephemeralExpiration', i) as number;
+			const ephemeralExpiration = this.getNodeParameter('ephemeralExpiration', i) as string;
 
 			await this.helpers.requestWithAuthentication.call(
 				this,

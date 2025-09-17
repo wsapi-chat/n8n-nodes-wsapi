@@ -13,11 +13,11 @@ export async function executeMessageOperation(
 
 	let responseData: WSApiResponse;
 
-	switch (operation) {
-		case 'sendText':
-			const message = this.getNodeParameter('message', i) as string;
-			const textBody: any = { to, text: message };
-			parseAdvancedOptions(advancedOptions, textBody);
+		switch (operation) {
+			case 'sendText':
+				const message = this.getNodeParameter('message', i) as string;
+				const textBody: any = { to, text: message };
+				parseAdvancedOptions(advancedOptions, textBody);
 
 			responseData = await this.helpers.requestWithAuthentication.call(
 				this,
@@ -34,7 +34,8 @@ export async function executeMessageOperation(
 
 		case 'sendLink':
 			const url = this.getNodeParameter('url', i) as string;
-			const linkBody: WSApiMessageBody = { to, url };
+			const linkText = this.getNodeParameter('message', i) as string;
+			const linkBody: WSApiMessageBody = { to, url, text: linkText };
 			parseAdvancedOptions(advancedOptions, linkBody);
 
 			responseData = await this.helpers.requestWithAuthentication.call(
@@ -210,14 +211,15 @@ export async function executeMessageOperation(
 		case 'sendReaction':
 			const messageId = this.getNodeParameter('messageId', i) as string;
 			const emoji = this.getNodeParameter('emoji', i) as string;
+			const senderId = this.getNodeParameter('senderId', i) as string;
 
 			responseData = await this.helpers.requestWithAuthentication.call(
 				this,
 				'WSApiApi',
 				{
 					method: 'POST',
-					url: '/messages/reaction',
-					body: { to, messageId, emoji },
+					url: `/messages/${encodeURIComponent(messageId)}/reaction`,
+					body: { to, senderId, reaction: emoji },
 					baseURL: baseURL,
 					json: true,
 				},
@@ -243,14 +245,15 @@ export async function executeMessageOperation(
 
 		case 'deleteMessage':
 			const deleteMessageId = this.getNodeParameter('messageId', i) as string;
+			const deleteSenderId = this.getNodeParameter('senderId', i) as string;
 
 			await this.helpers.requestWithAuthentication.call(
 				this,
 				'WSApiApi',
 				{
-					method: 'DELETE',
-					url: `/messages/${deleteMessageId}`,
-					body: { to },
+					method: 'PUT',
+					url: `/messages/${encodeURIComponent(deleteMessageId)}/delete`,
+					body: { chatId: to, senderId: deleteSenderId },
 					baseURL: baseURL,
 					json: true,
 				},
@@ -260,14 +263,20 @@ export async function executeMessageOperation(
 
 		case 'deleteForMe':
 			const deleteForMeMessageId = this.getNodeParameter('messageId', i) as string;
+			const deleteForMeSenderId = this.getNodeParameter('senderId', i) as string;
+			const ifFromMe = this.getNodeParameter('ifFromMe', i) as boolean;
+			const deleteTimestamp = this.getNodeParameter('deleteTimestamp', i) as string;
+			if (!deleteTimestamp) {
+				throw new Error('Deletion timestamp is required to delete message for me.');
+			}
 
 			await this.helpers.requestWithAuthentication.call(
 				this,
 				'WSApiApi',
 				{
-					method: 'DELETE',
-					url: `/messages/${deleteForMeMessageId}/forme`,
-					body: { to },
+					method: 'PUT',
+					url: `/messages/${encodeURIComponent(deleteForMeMessageId)}/delete/forme`,
+					body: { chatId: to, senderId: deleteForMeSenderId, ifFromMe, Time: deleteTimestamp },
 					baseURL: baseURL,
 					json: true,
 				},
@@ -277,37 +286,39 @@ export async function executeMessageOperation(
 
 		case 'starMessage':
 			const starMessageId = this.getNodeParameter('messageId', i) as string;
-			const starred = this.getNodeParameter('starred', i) as boolean;
-
-			await this.helpers.requestWithAuthentication.call(
-				this,
-				'WSApiApi',
-				{
-					method: starred ? 'PUT' : 'DELETE',
-					url: `/messages/${starMessageId}/star`,
-					body: { chatId: to, senderId: to },
-					baseURL: baseURL,
-					json: true,
-				},
-			);
-			responseData = { success: true, messageId: starMessageId, starred };
-			break;
-
-		case 'markAsRead':
-			const readMessageId = this.getNodeParameter('messageId', i, '') as string;
+			const starSenderId = this.getNodeParameter('senderId', i) as string;
 
 			await this.helpers.requestWithAuthentication.call(
 				this,
 				'WSApiApi',
 				{
 					method: 'PUT',
-					url: `/messages/${readMessageId}/read`,
-					body: { chatId: to, senderId: to, receiptType: 'read' },
+					url: `/messages/${encodeURIComponent(starMessageId)}/star`,
+					body: { chatId: to, senderId: starSenderId },
 					baseURL: baseURL,
 					json: true,
 				},
 			);
-			responseData = { success: true, to, messageId: readMessageId };
+			responseData = { success: true, messageId: starMessageId };
+			break;
+
+		case 'markAsRead':
+			const readMessageId = this.getNodeParameter('messageId', i) as string;
+			const readSenderId = this.getNodeParameter('senderId', i) as string;
+			const receiptType = this.getNodeParameter('receiptType', i) as string;
+
+			await this.helpers.requestWithAuthentication.call(
+				this,
+				'WSApiApi',
+				{
+					method: 'PUT',
+					url: `/messages/${encodeURIComponent(readMessageId)}/read`,
+					body: { chatId: to, senderId: readSenderId, receiptType },
+					baseURL: baseURL,
+					json: true,
+				},
+			);
+			responseData = { success: true, chatId: to, messageId: readMessageId, receiptType };
 			break;
 
 		default:
