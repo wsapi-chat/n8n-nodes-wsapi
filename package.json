@@ -1,6 +1,6 @@
 {
   "name": "@wsapichat/n8n-nodes-wsapi",
-  "version": "1.0.23",
+  "version": "1.0.30",
   "description": "A comprehensive n8n community node for WSAPI - the powerful WhatsApp API Gateway. Easily integrate WhatsApp messaging, contact management, group operations, and more into your n8n workflows.",
   "keywords": [
     "n8n-community-node-package",
@@ -22,17 +22,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/wsapi-chat/n8n-nodes-wsapi"
+    "url": "git+https://github.com/wsapi-chat/n8n-nodes-wsapi.git"
   },
-  "main": "index.js",
   "engines": {
     "node": ">=20.19.0 <=24.x",
     "npm": ">=9.0.0"
   },
   "scripts": {
-    "build": "tsc && npm run build:icons && npm run copy:package",
+    "build": "tsc && npm run build:icons",
     "build:icons": "copyfiles -u 1 icons/**/* dist/nodes/WSApi",
-    "copy:package": "copyfiles package.json dist/",
     "dev": "tsc --watch",
     "format": "prettier nodes credentials --write",
     "lint": "eslint 'nodes/**/*.ts' 'credentials/**/*.ts' package.json",

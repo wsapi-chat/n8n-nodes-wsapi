@@ -32,7 +32,7 @@ export async function executeChatOperation(
 			if (cacheResults) {
 				const credentials = await this.getCredentials('WSApiApi');
 				const instanceId = credentials.instanceId as string;
-				const key = makeCacheKey(['chat','getChat',getChatId,instanceId,baseURL]);
+				const key = makeCacheKey(['chat', 'getChat', getChatId, instanceId, baseURL]);
 				const cached = cacheRead(this, key);
 				if (cached !== undefined) {
 					responseData = cached as WSApiResponse;
@@ -54,7 +54,7 @@ export async function executeChatOperation(
 			if (cacheResults) {
 				const credentials = await this.getCredentials('WSApiApi');
 				const instanceId = credentials.instanceId as string;
-				const key = makeCacheKey(['chat','getChat',getChatId,instanceId,baseURL]);
+				const key = makeCacheKey(['chat', 'getChat', getChatId, instanceId, baseURL]);
 				cacheWrite(this, key, responseData, cacheTtl);
 			}
 			break;
@@ -102,7 +102,7 @@ export async function executeChatOperation(
 				'WSApiApi',
 				{
 					method: 'PUT',
-					url: `/chats/${encodeURIComponent(presenceChatId)}/presence`,
+					url: `/chats/${encodeURIComponent(presenceChatId)}/presence/set`,
 					body: { state: presence },
 					baseURL: baseURL,
 					json: true,
