@@ -1,6 +1,6 @@
 {
   "name": "@wsapichat/n8n-nodes-wsapi",
-  "version": "1.0.30",
+  "version": "1.0.31",
   "description": "A comprehensive n8n community node for WSAPI - the powerful WhatsApp API Gateway. Easily integrate WhatsApp messaging, contact management, group operations, and more into your n8n workflows.",
   "keywords": [
     "n8n-community-node-package",

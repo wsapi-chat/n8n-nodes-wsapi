@@ -445,12 +445,12 @@ export class WSApiTrigger implements INodeType {
 
 	async webhook(this: IWebhookFunctions): Promise<IWebhookResponseData> {
 		const body = this.getBodyData() as IDataObject;
-		const operation = this.getNodeParameter('operation') as string;
 		const events = this.getNodeParameter('events') as string[];
 		const autoDownloadMedia = this.getNodeParameter('autoDownloadMedia') as boolean;
 		const parseEventData = this.getNodeParameter('parseEventData') as boolean;
 		const includeRawEvent = this.getNodeParameter('includeRawEvent') as boolean;
 		const enableAuth = this.getNodeParameter('enableAuth') as boolean;
+		const responseMode = this.getNodeParameter('responseMode', 'lastNode') as string;
 
 		// Validate webhook authentication if enabled
 		if (enableAuth) {
@@ -463,7 +463,13 @@ export class WSApiTrigger implements INodeType {
 
 			if (!receivedAuthValue || receivedAuthValue !== authHeaderValue) {
 				return {
-					noWebhookResponse: true,
+					webhookResponse: {
+						status: 401,
+						body: {
+							error: 'Unauthorized',
+							message: 'Invalid or missing authentication header',
+						},
+					},
 				};
 			}
 		}
@@ -471,7 +477,14 @@ export class WSApiTrigger implements INodeType {
 		// Validate webhook structure
 		if (!body.eventType || !body.eventData) {
 			return {
-				noWebhookResponse: true,
+				webhookResponse: {
+					status: 400,
+					body: {
+						error: 'Bad Request',
+						message: 'Invalid webhook payload. Expected format: { eventType: string, eventData: object }',
+						received: body,
+					},
+				},
 			};
 		}
 
@@ -480,7 +493,14 @@ export class WSApiTrigger implements INodeType {
 		// Filter by selected event types
 		if (!events.includes(eventType)) {
 			return {
-				noWebhookResponse: true,
+				webhookResponse: {
+					status: 200,
+					body: {
+						message: 'Event type not subscribed',
+						eventType,
+						subscribedEvents: events,
+					},
+				},
 			};
 		}
 
