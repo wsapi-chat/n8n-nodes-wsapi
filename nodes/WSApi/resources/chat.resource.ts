@@ -18,6 +18,12 @@ export const chatOperations: INodeProperties = {
 			action: 'Archive chat',
 		},
 		{
+			name: 'Clear Chat',
+			value: 'clearChat',
+			description: 'Clear all messages from a chat',
+			action: 'Clear chat messages',
+		},
+		{
 			name: 'Delete Chat',
 			value: 'deleteChat',
 			description: 'Delete a WhatsApp chat',
@@ -30,10 +36,22 @@ export const chatOperations: INodeProperties = {
 			action: 'Get all chats',
 		},
 		{
+			name: 'Get Business Profile',
+			value: 'getBusinessProfile',
+			description: 'Get chat business profile information',
+			action: 'Get business profile',
+		},
+		{
 			name: 'Get Chat',
 			value: 'getChat',
 			description: 'Get information about a specific chat',
 			action: 'Get a chat',
+		},
+		{
+			name: 'Get Picture',
+			value: 'getPicture',
+			description: 'Get chat profile picture',
+			action: 'Get chat picture',
 		},
 		{
 			name: 'Mark as Read',
@@ -65,6 +83,12 @@ export const chatOperations: INodeProperties = {
 			description: 'Update chat presence (typing, recording, online)',
 			action: 'Set chat presence',
 		},
+		{
+			name: 'Subscribe to Presence',
+			value: 'subscribePresence',
+			description: 'Subscribe to chat presence updates',
+			action: 'Subscribe to presence updates',
+		},
 	],
 	default: 'getChats',
 };
@@ -79,7 +103,7 @@ export const chatFields: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				resource: ['chat'],
-				operation: ['getChat', 'deleteChat', 'markChatAsRead', 'setPresence', 'muteChat', 'pinChat', 'archiveChat', 'setEphemeral'],
+				operation: ['getChat', 'deleteChat', 'markChatAsRead', 'setPresence', 'muteChat', 'pinChat', 'archiveChat', 'setEphemeral', 'getPicture', 'getBusinessProfile', 'subscribePresence', 'clearChat'],
 			},
 		},
 		default: '',

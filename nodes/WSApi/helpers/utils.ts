@@ -23,6 +23,14 @@ export function createAdvancedOptions(): INodeProperties {
 				description: 'ID of the message to reply to',
 			},
 			{
+				displayName: 'Reply To Sender ID',
+				name: 'replyToSenderId',
+				type: 'string',
+				default: '',
+				description: 'The ID of the sender of the message being replied to. Should be set when replyTo is specified.',
+				placeholder: '1234567890@s.whatsapp.net',
+			},
+			{
 				displayName: 'Is Forwarded',
 				name: 'isForwarded',
 				type: 'boolean',
@@ -38,9 +46,22 @@ export function createAdvancedOptions(): INodeProperties {
 				displayOptions: {
 					show: {
 						'/resource': ['message'],
-						'/operation': ['sendImage', 'sendVideo'],
+						'/operation': ['sendImage', 'sendVideo', 'sendAudio', 'sendVoice'],
 					},
 				},
+			},
+			{
+				displayName: 'Ephemeral Expiration',
+				name: 'ephemeralExpiration',
+				type: 'options',
+				default: '',
+				description: 'Custom expiration time for this message, overriding the chat\'s ephemeral settings',
+				options: [
+					{ name: 'Use Chat Default', value: '' },
+					{ name: '24 Hours', value: '24h' },
+					{ name: '7 Days', value: '7d' },
+					{ name: '90 Days', value: '90d' },
+				],
 			},
 		],
 	};
@@ -51,8 +72,10 @@ export function parseAdvancedOptions(advancedOptions: any, body: any): void {
 		body.mentions = advancedOptions.mentions.split(',').map((m: string) => m.trim());
 	}
 	if (advancedOptions.replyTo) body.replyTo = advancedOptions.replyTo;
+	if (advancedOptions.replyToSenderId) body.replyToSenderId = advancedOptions.replyToSenderId;
 	if (advancedOptions.isForwarded) body.isForwarded = advancedOptions.isForwarded;
 	if (advancedOptions.viewOnce) body.viewOnce = advancedOptions.viewOnce;
+	if (advancedOptions.ephemeralExpiration) body.ephemeralExpiration = advancedOptions.ephemeralExpiration;
 }
 
 // Simple per-node static-data cache helpers

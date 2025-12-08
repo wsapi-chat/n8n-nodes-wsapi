@@ -177,7 +177,67 @@ export const messageFields: INodeProperties[] = [
 		hint: 'Enter a valid HTTP or HTTPS URL. WhatsApp will automatically generate a preview.',
 		placeholder: 'https://example.com',
 	},
-	// Media fields (tool-compatible)
+	{
+		displayName: 'Link Title',
+		name: 'linkTitle',
+		type: 'string',
+		displayOptions: {
+			show: {
+				resource: ['message'],
+				operation: ['sendLink'],
+			},
+		},
+		default: '',
+		description: 'Optional title for the link preview',
+		placeholder: 'My Website',
+	},
+	{
+		displayName: 'Link Description',
+		name: 'linkDescription',
+		type: 'string',
+		displayOptions: {
+			show: {
+				resource: ['message'],
+				operation: ['sendLink'],
+			},
+		},
+		default: '',
+		description: 'Optional description for the link preview',
+		placeholder: 'A brief description of the linked content',
+	},
+	{
+		displayName: 'Link Thumbnail (Base64)',
+		name: 'jpegThumbnail',
+		type: 'string',
+		displayOptions: {
+			show: {
+				resource: ['message'],
+				operation: ['sendLink'],
+			},
+		},
+		default: '',
+		description: 'Optional JPEG thumbnail for the link preview (base64 encoded)',
+		placeholder: '/9j/4AAQSkZJRgABAQ...',
+	},
+	// Media input type selector
+	{
+		displayName: 'Input Type',
+		name: 'mediaInputType',
+		type: 'options',
+		displayOptions: {
+			show: {
+				resource: ['message'],
+				operation: ['sendImage', 'sendVideo', 'sendAudio', 'sendVoice', 'sendDocument', 'sendSticker'],
+			},
+		},
+		options: [
+			{ name: 'URL', value: 'url' },
+			{ name: 'Base64', value: 'base64' },
+		],
+		default: 'url',
+		description: 'Choose whether to provide media as a URL or Base64 encoded string',
+	},
+	// Media URL field
 	{
 		displayName: 'Media URL',
 		name: 'mediaUrl',
@@ -186,12 +246,76 @@ export const messageFields: INodeProperties[] = [
 			show: {
 				resource: ['message'],
 				operation: ['sendImage', 'sendVideo', 'sendAudio', 'sendVoice', 'sendDocument', 'sendSticker'],
+				mediaInputType: ['url'],
 			},
 		},
 		default: '',
 		description: 'URL of the media file to send. Must be a publicly accessible HTTP or HTTPS URL.',
 		hint: 'Provide a direct link to the media file. Supported formats vary by operation (images: JPG, PNG; videos: MP4; audio: MP3, etc.)',
 		placeholder: 'https://example.com/media/file.jpg',
+	},
+	// Media Base64 field
+	{
+		displayName: 'Media Base64',
+		name: 'mediaBase64',
+		type: 'string',
+		displayOptions: {
+			show: {
+				resource: ['message'],
+				operation: ['sendImage', 'sendVideo', 'sendAudio', 'sendVoice', 'sendDocument', 'sendSticker'],
+				mediaInputType: ['base64'],
+			},
+		},
+		default: '',
+		description: 'Base64 encoded media content',
+		hint: 'Provide the media file as a base64 encoded string (without data URI prefix)',
+	},
+	// MIME Type field
+	{
+		displayName: 'MIME Type',
+		name: 'mimeType',
+		type: 'string',
+		displayOptions: {
+			show: {
+				resource: ['message'],
+				operation: ['sendImage', 'sendVideo', 'sendAudio', 'sendSticker'],
+			},
+		},
+		default: '',
+		description: 'MIME type of the media file (e.g., image/jpeg, video/mp4, audio/mpeg, image/webp)',
+		placeholder: 'image/jpeg',
+		hint: 'Leave empty to use default: image/jpeg for images, video/mp4 for videos, audio/mpeg for audio, image/webp for stickers',
+	},
+	// File Name field for documents
+	{
+		displayName: 'File Name',
+		name: 'fileName',
+		type: 'string',
+		displayOptions: {
+			show: {
+				resource: ['message'],
+				operation: ['sendDocument'],
+			},
+		},
+		default: '',
+		required: true,
+		description: 'Name of the document file including extension',
+		placeholder: 'report.pdf',
+		hint: 'Provide a descriptive filename with the correct extension (e.g., document.pdf, spreadsheet.xlsx)',
+	},
+	// Is Animated for stickers
+	{
+		displayName: 'Is Animated',
+		name: 'isAnimated',
+		type: 'boolean',
+		displayOptions: {
+			show: {
+				resource: ['message'],
+				operation: ['sendSticker'],
+			},
+		},
+		default: false,
+		description: 'Whether the sticker is animated',
 	},
 	{
 		displayName: 'Caption',
@@ -287,6 +411,20 @@ export const messageFields: INodeProperties[] = [
 		description: 'Optional human-readable address for the location',
 		hint: 'Provide a descriptive address or place name to help identify the location',
 		placeholder: 'Times Square, New York, NY',
+	},
+	{
+		displayName: 'Location URL',
+		name: 'locationUrl',
+		type: 'string',
+		displayOptions: {
+			show: {
+				resource: ['message'],
+				operation: ['sendLocation'],
+			},
+		},
+		default: '',
+		description: 'Optional URL for the location (e.g., Google Maps link)',
+		placeholder: 'https://maps.google.com/?q=Times+Square',
 	},
 	// Message management fields (tool-compatible)
 	{
@@ -407,7 +545,7 @@ export const messageFields: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				resource: ['message'],
-				operation: ['sendText', 'sendLink', 'sendImage', 'sendVideo', 'sendAudio', 'sendVoice', 'sendDocument', 'sendContact', 'sendLocation', 'sendSticker'],
+				operation: ['sendText', 'sendLink', 'sendImage', 'sendVideo', 'sendAudio', 'sendVoice', 'sendDocument', 'sendContact', 'sendLocation', 'sendSticker', 'sendReaction'],
 			},
 		},
 	},

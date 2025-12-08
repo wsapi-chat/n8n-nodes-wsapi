@@ -184,6 +184,68 @@ export async function executeChatOperation(
 			responseData = { success: true, chatId: ephemeralChatId, ephemeralExpiration };
 			break;
 
+		case 'getPicture':
+			const pictureChatId = this.getNodeParameter('chatId', i) as string;
+
+			responseData = await this.helpers.requestWithAuthentication.call(
+				this,
+				'WSApiApi',
+				{
+					method: 'GET',
+					url: `/chats/${encodeURIComponent(pictureChatId)}/picture`,
+					baseURL: baseURL,
+					json: true,
+				},
+			);
+			break;
+
+		case 'getBusinessProfile':
+			const businessChatId = this.getNodeParameter('chatId', i) as string;
+
+			responseData = await this.helpers.requestWithAuthentication.call(
+				this,
+				'WSApiApi',
+				{
+					method: 'GET',
+					url: `/chats/${encodeURIComponent(businessChatId)}/business`,
+					baseURL: baseURL,
+					json: true,
+				},
+			);
+			break;
+
+		case 'subscribePresence':
+			const subscribeChatId = this.getNodeParameter('chatId', i) as string;
+
+			await this.helpers.requestWithAuthentication.call(
+				this,
+				'WSApiApi',
+				{
+					method: 'PUT',
+					url: `/chats/${encodeURIComponent(subscribeChatId)}/presence/subscribe`,
+					baseURL: baseURL,
+					json: true,
+				},
+			);
+			responseData = { success: true, chatId: subscribeChatId };
+			break;
+
+		case 'clearChat':
+			const clearChatId = this.getNodeParameter('chatId', i) as string;
+
+			await this.helpers.requestWithAuthentication.call(
+				this,
+				'WSApiApi',
+				{
+					method: 'POST',
+					url: `/chats/${encodeURIComponent(clearChatId)}/clear`,
+					baseURL: baseURL,
+					json: true,
+				},
+			);
+			responseData = { success: true, chatId: clearChatId };
+			break;
+
 		default:
 			throw new Error(`Unknown chat operation: ${operation}`);
 	}

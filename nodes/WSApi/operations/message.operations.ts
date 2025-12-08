@@ -33,9 +33,15 @@ export async function executeMessageOperation(
 			break;
 
 		case 'sendLink':
-			const url = this.getNodeParameter('url', i) as string;
+			const linkUrl = this.getNodeParameter('url', i) as string;
 			const linkText = this.getNodeParameter('message', i) as string;
-			const linkBody: WSApiMessageBody = { to, url, text: linkText };
+			const linkTitle = this.getNodeParameter('linkTitle', i, '') as string;
+			const linkDescription = this.getNodeParameter('linkDescription', i, '') as string;
+			const jpegThumbnail = this.getNodeParameter('jpegThumbnail', i, '') as string;
+			const linkBody: any = { to, url: linkUrl, text: linkText };
+			if (linkTitle) linkBody.title = linkTitle;
+			if (linkDescription) linkBody.description = linkDescription;
+			if (jpegThumbnail) linkBody.jpegThumbnail = jpegThumbnail;
 			parseAdvancedOptions(advancedOptions, linkBody);
 
 			responseData = await this.helpers.requestWithAuthentication.call(
@@ -52,9 +58,15 @@ export async function executeMessageOperation(
 			break;
 
 		case 'sendImage':
-			const imageUrl = this.getNodeParameter('mediaUrl', i) as string;
+			const imageInputType = this.getNodeParameter('mediaInputType', i, 'url') as string;
 			const imageCaption = this.getNodeParameter('caption', i, '') as string;
-			const imageBody: any = { to, imageURL: imageUrl, mimeType: 'image/jpeg' };
+			const imageMimeType = this.getNodeParameter('mimeType', i, '') as string || 'image/jpeg';
+			const imageBody: any = { to, mimeType: imageMimeType };
+			if (imageInputType === 'base64') {
+				imageBody.imageBase64 = this.getNodeParameter('mediaBase64', i) as string;
+			} else {
+				imageBody.imageURL = this.getNodeParameter('mediaUrl', i) as string;
+			}
 			if (imageCaption) imageBody.caption = imageCaption;
 			parseAdvancedOptions(advancedOptions, imageBody);
 
@@ -72,9 +84,15 @@ export async function executeMessageOperation(
 			break;
 
 		case 'sendVideo':
-			const videoUrl = this.getNodeParameter('mediaUrl', i) as string;
+			const videoInputType = this.getNodeParameter('mediaInputType', i, 'url') as string;
 			const videoCaption = this.getNodeParameter('caption', i, '') as string;
-			const videoBody: any = { to, videoURL: videoUrl, mimeType: 'video/mp4' };
+			const videoMimeType = this.getNodeParameter('mimeType', i, '') as string || 'video/mp4';
+			const videoBody: any = { to, mimeType: videoMimeType };
+			if (videoInputType === 'base64') {
+				videoBody.videoBase64 = this.getNodeParameter('mediaBase64', i) as string;
+			} else {
+				videoBody.videoURL = this.getNodeParameter('mediaUrl', i) as string;
+			}
 			if (videoCaption) videoBody.caption = videoCaption;
 			parseAdvancedOptions(advancedOptions, videoBody);
 
@@ -92,8 +110,14 @@ export async function executeMessageOperation(
 			break;
 
 		case 'sendAudio':
-			const audioUrl = this.getNodeParameter('mediaUrl', i) as string;
-			const audioBody: any = { to, audioURL: audioUrl, mimeType: 'audio/mpeg' };
+			const audioInputType = this.getNodeParameter('mediaInputType', i, 'url') as string;
+			const audioMimeType = this.getNodeParameter('mimeType', i, '') as string || 'audio/mpeg';
+			const audioBody: any = { to, mimeType: audioMimeType };
+			if (audioInputType === 'base64') {
+				audioBody.audioBase64 = this.getNodeParameter('mediaBase64', i) as string;
+			} else {
+				audioBody.audioURL = this.getNodeParameter('mediaUrl', i) as string;
+			}
 			parseAdvancedOptions(advancedOptions, audioBody);
 
 			responseData = await this.helpers.requestWithAuthentication.call(
@@ -110,8 +134,13 @@ export async function executeMessageOperation(
 			break;
 
 		case 'sendVoice':
-			const voiceUrl = this.getNodeParameter('mediaUrl', i) as string;
-			const voiceBody: any = { to, voiceURL: voiceUrl };
+			const voiceInputType = this.getNodeParameter('mediaInputType', i, 'url') as string;
+			const voiceBody: any = { to };
+			if (voiceInputType === 'base64') {
+				voiceBody.voiceBase64 = this.getNodeParameter('mediaBase64', i) as string;
+			} else {
+				voiceBody.voiceURL = this.getNodeParameter('mediaUrl', i) as string;
+			}
 			parseAdvancedOptions(advancedOptions, voiceBody);
 
 			responseData = await this.helpers.requestWithAuthentication.call(
@@ -128,9 +157,15 @@ export async function executeMessageOperation(
 			break;
 
 		case 'sendDocument':
-			const documentUrl = this.getNodeParameter('mediaUrl', i) as string;
+			const documentInputType = this.getNodeParameter('mediaInputType', i, 'url') as string;
 			const documentCaption = this.getNodeParameter('caption', i, '') as string;
-			const documentBody: any = { to, documentURL: documentUrl, fileName: 'document' };
+			const documentFileName = this.getNodeParameter('fileName', i) as string;
+			const documentBody: any = { to, fileName: documentFileName };
+			if (documentInputType === 'base64') {
+				documentBody.documentBase64 = this.getNodeParameter('mediaBase64', i) as string;
+			} else {
+				documentBody.documentURL = this.getNodeParameter('mediaUrl', i) as string;
+			}
 			if (documentCaption) documentBody.caption = documentCaption;
 			parseAdvancedOptions(advancedOptions, documentBody);
 
@@ -170,11 +205,13 @@ export async function executeMessageOperation(
 			const latitude = this.getNodeParameter('latitude', i) as number;
 			const longitude = this.getNodeParameter('longitude', i) as number;
 			const address = this.getNodeParameter('address', i, '') as string;
+			const locationUrl = this.getNodeParameter('locationUrl', i, '') as string;
 			const locationBody: any = { to, latitude, longitude };
 			if (address) {
 				locationBody.name = address;
 				locationBody.address = address;
 			}
+			if (locationUrl) locationBody.url = locationUrl;
 			parseAdvancedOptions(advancedOptions, locationBody);
 
 			responseData = await this.helpers.requestWithAuthentication.call(
@@ -191,8 +228,15 @@ export async function executeMessageOperation(
 			break;
 
 		case 'sendSticker':
-			const stickerUrl = this.getNodeParameter('mediaUrl', i) as string;
-			const stickerBody: any = { to, stickerURL: stickerUrl, mimeType: 'image/webp', isAnimated: false };
+			const stickerInputType = this.getNodeParameter('mediaInputType', i, 'url') as string;
+			const stickerMimeType = this.getNodeParameter('mimeType', i, '') as string || 'image/webp';
+			const stickerIsAnimated = this.getNodeParameter('isAnimated', i, false) as boolean;
+			const stickerBody: any = { to, mimeType: stickerMimeType, isAnimated: stickerIsAnimated };
+			if (stickerInputType === 'base64') {
+				stickerBody.stickerBase64 = this.getNodeParameter('mediaBase64', i) as string;
+			} else {
+				stickerBody.stickerURL = this.getNodeParameter('mediaUrl', i) as string;
+			}
 			parseAdvancedOptions(advancedOptions, stickerBody);
 
 			responseData = await this.helpers.requestWithAuthentication.call(
@@ -212,6 +256,11 @@ export async function executeMessageOperation(
 			const messageId = this.getNodeParameter('messageId', i) as string;
 			const emoji = this.getNodeParameter('emoji', i) as string;
 			const senderId = this.getNodeParameter('senderId', i) as string;
+			const reactionBody: any = { to, senderId, reaction: emoji };
+			// Add ephemeral expiration if set in advanced options
+			if (advancedOptions.ephemeralExpiration) {
+				reactionBody.ephemeralExpiration = advancedOptions.ephemeralExpiration;
+			}
 
 			responseData = await this.helpers.requestWithAuthentication.call(
 				this,
@@ -219,7 +268,7 @@ export async function executeMessageOperation(
 				{
 					method: 'POST',
 					url: `/messages/${encodeURIComponent(messageId)}/reaction`,
-					body: { to, senderId, reaction: emoji },
+					body: reactionBody,
 					baseURL: baseURL,
 					json: true,
 				},

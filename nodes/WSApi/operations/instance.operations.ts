@@ -24,6 +24,11 @@ export async function executeInstanceOperation(
 
 		case 'updateSettings':
 			const settings = this.getNodeParameter('settings', i) as IDataObject;
+			// Handle eventFilters: send null if empty array, otherwise send the array
+			if (settings.eventFilters !== undefined) {
+				const filters = settings.eventFilters as string[];
+				settings.eventFilters = filters.length > 0 ? filters : null;
+			}
 			return await this.helpers.requestWithAuthentication.call(
 				this,
 				'WSApiApi',
