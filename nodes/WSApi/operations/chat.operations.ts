@@ -176,12 +176,12 @@ export async function executeChatOperation(
 				{
 					method: 'PUT',
 					url: `/chats/${encodeURIComponent(ephemeralChatId)}/ephemeral`,
-					body: { ephemeralExpiration },
+					body: { expiration: ephemeralExpiration },
 					baseURL: baseURL,
 					json: true,
 				},
 			);
-			responseData = { success: true, chatId: ephemeralChatId, ephemeralExpiration };
+			responseData = { success: true, chatId: ephemeralChatId, expiration: ephemeralExpiration };
 			break;
 
 		case 'getPicture':
@@ -237,7 +237,7 @@ export async function executeChatOperation(
 				this,
 				'WSApiApi',
 				{
-					method: 'POST',
+					method: 'PUT',
 					url: `/chats/${encodeURIComponent(clearChatId)}/clear`,
 					baseURL: baseURL,
 					json: true,

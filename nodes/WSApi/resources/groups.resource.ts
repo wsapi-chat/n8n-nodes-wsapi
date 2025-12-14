@@ -18,11 +18,6 @@ export const groupsOperations: INodeProperties = {
 			action: 'Create new group',
 		},
 		{
-			name: 'Delete Group',
-			value: 'delete',
-			action: 'Delete group',
-		},
-		{
 			name: 'Get Group',
 			value: 'get',
 			description: 'Get group information',
@@ -31,7 +26,7 @@ export const groupsOperations: INodeProperties = {
 		{
 			name: 'Get Invite Info',
 			value: 'getInviteInfo',
-			description: 'Get group invite information',
+			description: 'Get group information from invite code',
 			action: 'Get group invite information',
 		},
 		{
@@ -43,7 +38,7 @@ export const groupsOperations: INodeProperties = {
 		{
 			name: 'Get Invite Requests',
 			value: 'getInviteRequests',
-			description: 'List group invite requests',
+			description: 'List pending join requests',
 			action: 'Get group invite requests',
 		},
 		{
@@ -53,10 +48,58 @@ export const groupsOperations: INodeProperties = {
 			action: 'List all groups',
 		},
 		{
+			name: 'Handle Join Requests',
+			value: 'handleJoinRequests',
+			description: 'Approve or reject pending join requests',
+			action: 'Handle join requests',
+		},
+		{
+			name: 'Join with Invite',
+			value: 'joinWithInvite',
+			description: 'Join group using invite message details',
+			action: 'Join group with invite',
+		},
+		{
+			name: 'Join with Link',
+			value: 'joinWithLink',
+			description: 'Join group using invite link code',
+			action: 'Join group with link',
+		},
+		{
+			name: 'Leave Group',
+			value: 'leave',
+			description: 'Leave a WhatsApp group',
+			action: 'Leave group',
+		},
+		{
+			name: 'Set Announce Mode',
+			value: 'setAnnounce',
+			description: 'Set whether only admins can send messages',
+			action: 'Set announce mode',
+		},
+		{
 			name: 'Set Description',
 			value: 'setDescription',
 			description: 'Update group description',
 			action: 'Set group description',
+		},
+		{
+			name: 'Set Join Approval',
+			value: 'setJoinApproval',
+			description: 'Set whether join requests require admin approval',
+			action: 'Set join approval',
+		},
+		{
+			name: 'Set Locked Mode',
+			value: 'setLocked',
+			description: 'Set whether only admins can edit group info',
+			action: 'Set locked mode',
+		},
+		{
+			name: 'Set Member Add Mode',
+			value: 'setMemberAddMode',
+			description: 'Set who can add new members',
+			action: 'Set member add mode',
 		},
 		{
 			name: 'Set Name',
@@ -73,7 +116,7 @@ export const groupsOperations: INodeProperties = {
 		{
 			name: 'Update Participants',
 			value: 'updateParticipants',
-			description: 'Update group participants',
+			description: 'Add, remove, promote or demote group participants',
 			action: 'Update group participants',
 		},
 	],
@@ -94,7 +137,7 @@ export const groupsFields: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				resource: ['groups'],
-				operation: ['get', 'delete', 'setDescription', 'setName', 'setPicture', 'getInviteLink', 'getInviteRequests', 'updateParticipants'],
+				operation: ['get', 'leave', 'setDescription', 'setName', 'setPicture', 'getInviteLink', 'getInviteRequests', 'updateParticipants', 'setAnnounce', 'setLocked', 'setJoinApproval', 'setMemberAddMode', 'joinWithInvite', 'handleJoinRequests'],
 			},
 		},
 	},
@@ -165,7 +208,47 @@ export const groupsFields: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				resource: ['groups'],
-				operation: ['create', 'updateParticipants'],
+				operation: ['create', 'updateParticipants', 'handleJoinRequests'],
+			},
+		},
+	},
+	// Participant Action field
+	{
+		displayName: 'Action',
+		name: 'participantAction',
+		type: 'options',
+		required: true,
+		default: 'add',
+		description: 'Action to perform on the participants',
+		options: [
+			{ name: 'Add', value: 'add', description: 'Add participants to the group' },
+			{ name: 'Remove', value: 'remove', description: 'Remove participants from the group' },
+			{ name: 'Promote', value: 'promote', description: 'Promote participants to admin' },
+			{ name: 'Demote', value: 'demote', description: 'Demote admins to regular members' },
+		],
+		displayOptions: {
+			show: {
+				resource: ['groups'],
+				operation: ['updateParticipants'],
+			},
+		},
+	},
+	// Request Action field
+	{
+		displayName: 'Action',
+		name: 'requestAction',
+		type: 'options',
+		required: true,
+		default: 'approve',
+		description: 'Action to perform on the join requests',
+		options: [
+			{ name: 'Approve', value: 'approve', description: 'Approve join requests' },
+			{ name: 'Reject', value: 'reject', description: 'Reject join requests' },
+		],
+		displayOptions: {
+			show: {
+				resource: ['groups'],
+				operation: ['handleJoinRequests'],
 			},
 		},
 	},
@@ -210,13 +293,117 @@ export const groupsFields: INodeProperties[] = [
 		type: 'string',
 		required: true,
 		default: '',
-		description: 'WhatsApp group invite code to get information about',
+		description: 'WhatsApp group invite code',
 		hint: 'Extract the code from a WhatsApp group invite link (the part after "https://chat.whatsapp.com/")',
 		placeholder: 'AbCdEfGhIjKlMnOpQrStUvWxYz',
 		displayOptions: {
 			show: {
 				resource: ['groups'],
-				operation: ['getInviteInfo'],
+				operation: ['getInviteInfo', 'joinWithLink', 'joinWithInvite'],
+			},
+		},
+	},
+	// Reset Link field
+	{
+		displayName: 'Reset Link',
+		name: 'resetLink',
+		type: 'boolean',
+		default: false,
+		description: 'Whether to revoke the current invite link and generate a new one',
+		displayOptions: {
+			show: {
+				resource: ['groups'],
+				operation: ['getInviteLink'],
+			},
+		},
+	},
+	// Announce Mode field
+	{
+		displayName: 'Announce Mode',
+		name: 'announce',
+		type: 'boolean',
+		required: true,
+		default: false,
+		description: 'Whether only admins can send messages to the group',
+		displayOptions: {
+			show: {
+				resource: ['groups'],
+				operation: ['setAnnounce'],
+			},
+		},
+	},
+	// Locked Mode field
+	{
+		displayName: 'Locked',
+		name: 'locked',
+		type: 'boolean',
+		required: true,
+		default: false,
+		description: 'Whether only admins can edit group info (name, description, picture)',
+		displayOptions: {
+			show: {
+				resource: ['groups'],
+				operation: ['setLocked'],
+			},
+		},
+	},
+	// Join Approval field
+	{
+		displayName: 'Require Approval',
+		name: 'joinApproval',
+		type: 'boolean',
+		required: true,
+		default: false,
+		description: 'Whether join requests require admin approval',
+		displayOptions: {
+			show: {
+				resource: ['groups'],
+				operation: ['setJoinApproval'],
+			},
+		},
+	},
+	// Only Admins Can Add Members field
+	{
+		displayName: 'Only Admins Can Add',
+		name: 'onlyAdmins',
+		type: 'boolean',
+		required: true,
+		default: false,
+		description: 'Whether only admins can add new members (false = all members can add)',
+		displayOptions: {
+			show: {
+				resource: ['groups'],
+				operation: ['setMemberAddMode'],
+			},
+		},
+	},
+	// Inviter ID field (for joinWithInvite)
+	{
+		displayName: 'Inviter ID',
+		name: 'inviterId',
+		type: 'string',
+		required: true,
+		default: '',
+		description: 'The JID of the user who sent the invite',
+		placeholder: '1234567890@s.whatsapp.net',
+		displayOptions: {
+			show: {
+				resource: ['groups'],
+				operation: ['joinWithInvite'],
+			},
+		},
+	},
+	// Expiration field (for joinWithInvite)
+	{
+		displayName: 'Expiration',
+		name: 'expiration',
+		type: 'number',
+		default: 0,
+		description: 'The invite expiration timestamp in Unix seconds (optional)',
+		displayOptions: {
+			show: {
+				resource: ['groups'],
+				operation: ['joinWithInvite'],
 			},
 		},
 	},

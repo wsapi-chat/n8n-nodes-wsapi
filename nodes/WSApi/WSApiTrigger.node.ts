@@ -62,7 +62,7 @@ export class WSApiTrigger implements INodeType {
 					{
 						name: 'On Chat Event',
 						value: 'chat',
-						description: 'Trigger on chat events (settings, presence)',
+						description: 'Trigger on chat events (settings, presence, picture, status)',
 						action: 'Trigger on chat events',
 					},
 					{
@@ -80,13 +80,13 @@ export class WSApiTrigger implements INodeType {
 					{
 						name: 'On Session Event',
 						value: 'session',
-						description: 'Trigger on session events (login, logout, authentication)',
+						description: 'Trigger on session events (login, logout, authentication, sync)',
 						action: 'Trigger on session events',
 					},
 					{
 						name: 'On User Event',
 						value: 'user',
-						description: 'Trigger on user events (profile, presence updates)',
+						description: 'Trigger on user events (presence updates)',
 						action: 'Trigger on user events',
 					},
 				],
@@ -113,14 +113,29 @@ export class WSApiTrigger implements INodeType {
 						description: 'Call was terminated',
 					},
 					{
+						name: 'Chat Picture',
+						value: 'chat_picture',
+						description: 'Chat profile picture updated',
+					},
+					{
 						name: 'Chat Presence',
 						value: 'chat_presence',
 						description: 'Chat presence updated (typing, recording, paused)',
 					},
 					{
+						name: 'Chat Push Name',
+						value: 'chat_push_name',
+						description: 'Chat display name updated',
+					},
+					{
 						name: 'Chat Setting',
 						value: 'chat_setting',
 						description: 'Chat settings changed (mute, pin, archive, ephemeral)',
+					},
+					{
+						name: 'Chat Status',
+						value: 'chat_status',
+						description: 'Chat status message updated',
 					},
 					{
 						name: 'Contact',
@@ -131,6 +146,11 @@ export class WSApiTrigger implements INodeType {
 						name: 'Group',
 						value: 'group',
 						description: 'Group information updated',
+					},
+					{
+						name: 'Initial Sync Finished',
+						value: 'initial_sync_finished',
+						description: 'Initial sync finished after login',
 					},
 					{
 						name: 'Logged In',
@@ -173,24 +193,9 @@ export class WSApiTrigger implements INodeType {
 						description: 'Message was starred/unstarred',
 					},
 					{
-						name: 'User Picture',
-						value: 'user_picture',
-						description: 'User profile picture updated',
-					},
-					{
 						name: 'User Presence',
 						value: 'user_presence',
 						description: 'User online presence updated (available/unavailable)',
-					},
-					{
-						name: 'User Push Name',
-						value: 'user_push_name',
-						description: 'User display name updated',
-					},
-					{
-						name: 'User Status',
-						value: 'user_status',
-						description: 'User status message updated',
 					},
 				],
 				default: ['message'],
@@ -206,6 +211,11 @@ export class WSApiTrigger implements INodeType {
 				name: 'events',
 				type: 'multiOptions',
 				options: [
+					{
+						name: 'Initial Sync Finished',
+						value: 'initial_sync_finished',
+						description: 'Initial sync finished after login',
+					},
 					{
 						name: 'Login Error',
 						value: 'logged_error',
@@ -275,14 +285,29 @@ export class WSApiTrigger implements INodeType {
 				type: 'multiOptions',
 				options: [
 					{
+						name: 'Chat Picture',
+						value: 'chat_picture',
+						description: 'Chat profile picture updated',
+					},
+					{
 						name: 'Chat Presence',
 						value: 'chat_presence',
 						description: 'Chat presence updated (typing, recording, paused)',
 					},
 					{
+						name: 'Chat Push Name',
+						value: 'chat_push_name',
+						description: 'Chat display name updated',
+					},
+					{
 						name: 'Chat Setting',
 						value: 'chat_setting',
 						description: 'Chat settings changed (mute, pin, archive, ephemeral)',
+					},
+					{
+						name: 'Chat Status',
+						value: 'chat_status',
+						description: 'Chat status message updated',
 					},
 				],
 				default: ['chat_setting'],
@@ -328,27 +353,12 @@ export class WSApiTrigger implements INodeType {
 				type: 'multiOptions',
 				options: [
 					{
-						name: 'User Picture',
-						value: 'user_picture',
-						description: 'User profile picture updated',
-					},
-					{
 						name: 'User Presence',
 						value: 'user_presence',
 						description: 'User online presence updated (available/unavailable)',
 					},
-					{
-						name: 'User Push Name',
-						value: 'user_push_name',
-						description: 'User display name updated',
-					},
-					{
-						name: 'User Status',
-						value: 'user_status',
-						description: 'User status message updated',
-					},
 				],
-				default: ['user_push_name'],
+				default: ['user_presence'],
 				description: 'Select which user events to listen for',
 				displayOptions: {
 					show: {

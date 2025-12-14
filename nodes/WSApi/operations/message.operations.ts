@@ -313,7 +313,7 @@ export async function executeMessageOperation(
 		case 'deleteForMe':
 			const deleteForMeMessageId = this.getNodeParameter('messageId', i) as string;
 			const deleteForMeSenderId = this.getNodeParameter('senderId', i) as string;
-			const ifFromMe = this.getNodeParameter('ifFromMe', i) as boolean;
+			const isFromMe = this.getNodeParameter('isFromMe', i) as boolean;
 			const deleteTimestamp = this.getNodeParameter('deleteTimestamp', i) as string;
 			if (!deleteTimestamp) {
 				throw new Error('Deletion timestamp is required to delete message for me.');
@@ -325,7 +325,7 @@ export async function executeMessageOperation(
 				{
 					method: 'PUT',
 					url: `/messages/${encodeURIComponent(deleteForMeMessageId)}/delete/forme`,
-					body: { chatId: to, senderId: deleteForMeSenderId, ifFromMe, Time: deleteTimestamp },
+					body: { chatId: to, senderId: deleteForMeSenderId, isFromMe, Time: deleteTimestamp },
 					baseURL: baseURL,
 					json: true,
 				},

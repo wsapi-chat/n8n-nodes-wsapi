@@ -18,12 +18,6 @@ export const contactsOperations: INodeProperties = {
 			action: 'Create new contact',
 		},
 		{
-			name: 'Get Business Profile',
-			value: 'getBusiness',
-			description: 'Get contact business profile',
-			action: 'Get contact business profile',
-		},
-		{
 			name: 'Get Contact',
 			value: 'get',
 			description: 'Get contact information',
@@ -36,28 +30,10 @@ export const contactsOperations: INodeProperties = {
 			action: 'List all contacts',
 		},
 		{
-			name: 'Get Picture',
-			value: 'getPicture',
-			description: 'Get contact profile picture',
-			action: 'Get contact profile picture',
-		},
-		{
-			name: 'Subscribe to Presence',
-			value: 'subscribePresence',
-			description: 'Subscribe to contact presence updates',
-			action: 'Subscribe to contact presence',
-		},
-		{
 			name: 'Update Contact',
 			value: 'update',
 			description: 'Update contact information',
 			action: 'Update contact information',
-		},
-		{
-			name: 'Update Full Name',
-			value: 'updateFullName',
-			description: 'Update contact full name',
-			action: 'Update contact full name',
 		},
 	],
 	default: 'getAll',
@@ -77,7 +53,7 @@ export const contactsFields: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				resource: ['contacts'],
-				operation: ['get', 'update', 'getPicture', 'getBusiness', 'updateFullName', 'subscribePresence'],
+				operation: ['get', 'update'],
 			},
 		},
 	},
@@ -91,7 +67,7 @@ export const contactsFields: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				resource: ['contacts'],
-				operation: ['get', 'getPicture', 'getBusiness'],
+				operation: ['get'],
 			},
 		},
 	},
@@ -105,7 +81,7 @@ export const contactsFields: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				resource: ['contacts'],
-				operation: ['get', 'getPicture', 'getBusiness'],
+				operation: ['get'],
 				cacheResults: [true],
 			},
 		},
@@ -140,7 +116,7 @@ export const contactsFields: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				resource: ['contacts'],
-				operation: ['create', 'update', 'updateFullName'],
+				operation: ['create', 'update'],
 			},
 		},
 	},

@@ -41,9 +41,9 @@ paths:
       summary: Get account information
       description: Retrieve the current account information including ID, name, and status.
       parameters:
-        - $ref: "#/components/parameters/InstanceIdHeader"
+        - $ref: '#/components/parameters/InstanceIdHeader'
       responses:
-        "200":
+        '200':
           description: Account information
           content:
             application/json:
@@ -59,18 +59,18 @@ paths:
                   status:
                     type: string
                     description: Account status
-        "400":
+        '400':
           description: Bad request
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "500":
+                $ref: '#/components/schemas/Error'
+        '500':
           description: Internal server error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
   /account/name:
     put:
       operationId: setAccountName
@@ -78,7 +78,7 @@ paths:
         - Account
       summary: Set account name
       parameters:
-        - $ref: "#/components/parameters/InstanceIdHeader"
+        - $ref: '#/components/parameters/InstanceIdHeader'
       requestBody:
         required: true
         content:
@@ -92,20 +92,20 @@ paths:
                   type: string
                   description: New account name
       responses:
-        "204":
+        '204':
           description: Account name updated successfully
-        "400":
+        '400':
           description: Bad request
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "500":
+                $ref: '#/components/schemas/Error'
+        '500':
           description: Internal server error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
   /account/picture:
     post:
       operationId: setAccountPicture
@@ -113,7 +113,7 @@ paths:
         - Account
       summary: Set account profile picture
       parameters:
-        - $ref: "#/components/parameters/InstanceIdHeader"
+        - $ref: '#/components/parameters/InstanceIdHeader'
       requestBody:
         required: true
         content:
@@ -127,7 +127,7 @@ paths:
                   type: string
                   description: Base64 encoded image data
       responses:
-        "201":
+        '201':
           description: Profile picture updated successfully
           content:
             application/json:
@@ -137,18 +137,18 @@ paths:
                   id:
                     type: string
                     description: Picture ID
-        "400":
+        '400':
           description: Bad request
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "500":
+                $ref: '#/components/schemas/Error'
+        '500':
           description: Internal server error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
   /account/presence:
     put:
       operationId: setAccountPresence
@@ -156,7 +156,7 @@ paths:
         - Account
       summary: Set account presence
       parameters:
-        - $ref: "#/components/parameters/InstanceIdHeader"
+        - $ref: '#/components/parameters/InstanceIdHeader'
       requestBody:
         required: true
         content:
@@ -173,20 +173,20 @@ paths:
                     - available
                     - unavailable
       responses:
-        "204":
+        '204':
           description: Presence updated successfully
-        "400":
+        '400':
           description: Bad request
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "500":
+                $ref: '#/components/schemas/Error'
+        '500':
           description: Internal server error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
   /account/status:
     put:
       operationId: setAccountStatus
@@ -194,7 +194,7 @@ paths:
         - Account
       summary: Set account status
       parameters:
-        - $ref: "#/components/parameters/InstanceIdHeader"
+        - $ref: '#/components/parameters/InstanceIdHeader'
       requestBody:
         required: true
         content:
@@ -208,20 +208,20 @@ paths:
                   type: string
                   description: Account status message
       responses:
-        "204":
+        '204':
           description: Status updated successfully
-        "400":
+        '400':
           description: Bad request
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "500":
+                $ref: '#/components/schemas/Error'
+        '500':
           description: Internal server error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
   /calls/{callId}/reject:
     put:
       operationId: updateCallsReject
@@ -234,28 +234,28 @@ paths:
           required: true
           schema:
             type: string
-        - $ref: "#/components/parameters/InstanceIdHeader"
+        - $ref: '#/components/parameters/InstanceIdHeader'
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/RejectCallRequest"
+              $ref: '#/components/schemas/RejectCallRequest'
       responses:
-        "204":
+        '204':
           description: Call rejected successfully
-        "400":
+        '400':
           description: Bad request
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "500":
+                $ref: '#/components/schemas/Error'
+        '500':
           description: Internal server error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
   /chats:
     get:
       operationId: getChats
@@ -263,28 +263,28 @@ paths:
         - Chats
       summary: List all WhatsApp chats
       parameters:
-        - $ref: "#/components/parameters/InstanceIdHeader"
+        - $ref: '#/components/parameters/InstanceIdHeader'
       responses:
-        "200":
+        '200':
           description: List of chats
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/ChatInfo"
-        "400":
+                  $ref: '#/components/schemas/ChatInfo'
+        '400':
           description: Bad request
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "500":
+                $ref: '#/components/schemas/Error'
+        '500':
           description: Internal server error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
   /chats/{chatId}:
     get:
       operationId: getChat
@@ -297,26 +297,26 @@ paths:
           required: true
           schema:
             type: string
-        - $ref: "#/components/parameters/InstanceIdHeader"
+        - $ref: '#/components/parameters/InstanceIdHeader'
       responses:
-        "200":
+        '200':
           description: Chat information
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ChatInfo"
-        "400":
+                $ref: '#/components/schemas/ChatInfo'
+        '400':
           description: Bad request
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "500":
+                $ref: '#/components/schemas/Error'
+        '500':
           description: Internal server error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
     delete:
       operationId: deleteChat
       tags:
@@ -328,22 +328,22 @@ paths:
           required: true
           schema:
             type: string
-        - $ref: "#/components/parameters/InstanceIdHeader"
+        - $ref: '#/components/parameters/InstanceIdHeader'
       responses:
-        "204":
+        '204':
           description: Chat deleted successfully
-        "400":
+        '400':
           description: Bad request
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "500":
+                $ref: '#/components/schemas/Error'
+        '500':
           description: Internal server error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
   /chats/{chatId}/picture:
     get:
       operationId: getChatsPicture
@@ -356,26 +356,26 @@ paths:
           required: true
           schema:
             type: string
-        - $ref: "#/components/parameters/InstanceIdHeader"
+        - $ref: '#/components/parameters/InstanceIdHeader'
       responses:
-        "200":
+        '200':
           description: Chat profile picture
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ChatPicture"
-        "400":
+                $ref: '#/components/schemas/ChatPicture'
+        '400':
           description: Bad request
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "500":
+                $ref: '#/components/schemas/Error'
+        '500':
           description: Internal server error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
   /chats/{chatId}/business:
     get:
       operationId: getChatsBusiness
@@ -388,26 +388,26 @@ paths:
           required: true
           schema:
             type: string
-        - $ref: "#/components/parameters/InstanceIdHeader"
+        - $ref: '#/components/parameters/InstanceIdHeader'
       responses:
-        "200":
+        '200':
           description: Business profile information
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ChatBusinessProfile"
-        "400":
+                $ref: '#/components/schemas/ChatBusinessProfile'
+        '400':
           description: Bad request
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "500":
+                $ref: '#/components/schemas/Error'
+        '500':
           description: Internal server error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
   /chats/{chatId}/presence/set:
     put:
       operationId: setChatPresence
@@ -420,7 +420,7 @@ paths:
           required: true
           schema:
             type: string
-        - $ref: "#/components/parameters/InstanceIdHeader"
+        - $ref: '#/components/parameters/InstanceIdHeader'
       requestBody:
         required: true
         content:
@@ -438,20 +438,20 @@ paths:
                     - recording
                     - paused
       responses:
-        "204":
+        '204':
           description: Presence updated successfully
-        "400":
+        '400':
           description: Bad request
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "500":
+                $ref: '#/components/schemas/Error'
+        '500':
           description: Internal server error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
   /chats/{chatId}/presence/subscribe:
     put:
       operationId: subscribeChatsPresence
@@ -464,22 +464,22 @@ paths:
           required: true
           schema:
             type: string
-        - $ref: "#/components/parameters/InstanceIdHeader"
+        - $ref: '#/components/parameters/InstanceIdHeader'
       responses:
-        "204":
+        '204':
           description: Successfully subscribed to presence updates
-        "400":
+        '400':
           description: Bad request
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "500":
+                $ref: '#/components/schemas/Error'
+        '500':
           description: Internal server error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
   /chats/{chatId}/ephemeral:
     put:
       operationId: updateChatEphemeral
@@ -492,7 +492,7 @@ paths:
           required: true
           schema:
             type: string
-        - $ref: "#/components/parameters/InstanceIdHeader"
+        - $ref: '#/components/parameters/InstanceIdHeader'
       requestBody:
         required: true
         content:
@@ -500,31 +500,31 @@ paths:
             schema:
               type: object
               required:
-                - ephemeralExpiration
+                - expiration
               properties:
-                ephemeralExpiration:
+                expiration:
                   type: string
                   description: Message expiration time
                   enum:
-                    - "off"
+                    - 'off'
                     - 24h
                     - 7d
                     - 90d
       responses:
-        "204":
+        '204':
           description: Ephemeral expiration set successfully
-        "400":
+        '400':
           description: Bad request
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "500":
+                $ref: '#/components/schemas/Error'
+        '500':
           description: Internal server error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
   /chats/{chatId}/mute:
     put:
       operationId: updateChatMute
@@ -537,7 +537,7 @@ paths:
           required: true
           schema:
             type: string
-        - $ref: "#/components/parameters/InstanceIdHeader"
+        - $ref: '#/components/parameters/InstanceIdHeader'
       requestBody:
         required: true
         content:
@@ -548,23 +548,28 @@ paths:
                 duration:
                   type:
                     - string
-                    - "null"
-                  description: Duration preset for muting the chat (for example '8h', '1w', 'always'); omit or set to null to unmute
+                    - 'null'
+                  description: Duration preset for muting the chat; omit or set to null to unmute
+                  enum:
+                    - 8h
+                    - 1w
+                    - always
+                    - null
       responses:
-        "204":
+        '204':
           description: Chat muted successfully
-        "400":
+        '400':
           description: Bad request
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "500":
+                $ref: '#/components/schemas/Error'
+        '500':
           description: Internal server error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
   /chats/{chatId}/pin:
     put:
       operationId: updateChatPin
@@ -577,7 +582,7 @@ paths:
           required: true
           schema:
             type: string
-        - $ref: "#/components/parameters/InstanceIdHeader"
+        - $ref: '#/components/parameters/InstanceIdHeader'
       requestBody:
         required: true
         content:
@@ -591,20 +596,20 @@ paths:
                   type: boolean
                   description: Whether to pin or unpin the chat
       responses:
-        "204":
+        '204':
           description: Chat pin status updated successfully
-        "400":
+        '400':
           description: Bad request
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "500":
+                $ref: '#/components/schemas/Error'
+        '500':
           description: Internal server error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
   /chats/{chatId}/archive:
     put:
       operationId: updateChatArchive
@@ -617,7 +622,7 @@ paths:
           required: true
           schema:
             type: string
-        - $ref: "#/components/parameters/InstanceIdHeader"
+        - $ref: '#/components/parameters/InstanceIdHeader'
       requestBody:
         required: true
         content:
@@ -631,20 +636,20 @@ paths:
                   type: boolean
                   description: Whether to archive or unarchive the chat
       responses:
-        "204":
+        '204':
           description: Chat archive status updated successfully
-        "400":
+        '400':
           description: Bad request
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "500":
+                $ref: '#/components/schemas/Error'
+        '500':
           description: Internal server error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
   /chats/{chatId}/read:
     put:
       operationId: markChatAsRead
@@ -657,7 +662,7 @@ paths:
           required: true
           schema:
             type: string
-        - $ref: "#/components/parameters/InstanceIdHeader"
+        - $ref: '#/components/parameters/InstanceIdHeader'
       requestBody:
         required: true
         content:
@@ -671,22 +676,22 @@ paths:
                   type: boolean
                   description: Whether to mark the chat as read
       responses:
-        "204":
+        '204':
           description: Chat marked as read successfully
-        "400":
+        '400':
           description: Bad request
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "500":
+                $ref: '#/components/schemas/Error'
+        '500':
           description: Internal server error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
   /chats/{chatId}/clear:
-    post:
+    put:
       operationId: clearChat
       tags:
         - Chats
@@ -698,22 +703,22 @@ paths:
           required: true
           schema:
             type: string
-        - $ref: "#/components/parameters/InstanceIdHeader"
+        - $ref: '#/components/parameters/InstanceIdHeader'
       responses:
-        "204":
+        '204':
           description: Chat messages cleared successfully
-        "400":
+        '400':
           description: Bad request
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "500":
+                $ref: '#/components/schemas/Error'
+        '500':
           description: Internal server error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
   /contacts:
     get:
       operationId: getContacts
@@ -721,35 +726,35 @@ paths:
         - Contacts
       summary: List all WhatsApp contacts
       parameters:
-        - $ref: "#/components/parameters/InstanceIdHeader"
+        - $ref: '#/components/parameters/InstanceIdHeader'
       responses:
-        "200":
+        '200':
           description: List of contacts
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/ContactInfo"
-        "400":
+                  $ref: '#/components/schemas/ContactInfo'
+        '400':
           description: Bad request
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "500":
+                $ref: '#/components/schemas/Error'
+        '500':
           description: Internal server error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
     post:
       operationId: createContact
       tags:
         - Contacts
       summary: Create a new WhatsApp contact
       parameters:
-        - $ref: "#/components/parameters/InstanceIdHeader"
+        - $ref: '#/components/parameters/InstanceIdHeader'
       requestBody:
         required: true
         content:
@@ -771,20 +776,20 @@ paths:
                   type: string
                   description: Contact's first name
       responses:
-        "204":
+        '204':
           description: Contact created successfully
-        "400":
+        '400':
           description: Bad request
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "500":
+                $ref: '#/components/schemas/Error'
+        '500':
           description: Internal server error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
   /contacts/{contactId}:
     get:
       operationId: getContact
@@ -797,26 +802,26 @@ paths:
           required: true
           schema:
             type: string
-        - $ref: "#/components/parameters/InstanceIdHeader"
+        - $ref: '#/components/parameters/InstanceIdHeader'
       responses:
-        "200":
+        '200':
           description: Contact information
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ContactInfo"
-        "400":
+                $ref: '#/components/schemas/ContactInfo'
+        '400':
           description: Bad request
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "500":
+                $ref: '#/components/schemas/Error'
+        '500':
           description: Internal server error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
     put:
       operationId: updateContact
       tags:
@@ -828,7 +833,7 @@ paths:
           required: true
           schema:
             type: string
-        - $ref: "#/components/parameters/InstanceIdHeader"
+        - $ref: '#/components/parameters/InstanceIdHeader'
       requestBody:
         required: true
         content:
@@ -846,20 +851,20 @@ paths:
                   type: string
                   description: Contact's first name
       responses:
-        "204":
+        '204':
           description: Contact updated successfully
-        "400":
+        '400':
           description: Bad request
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "500":
+                $ref: '#/components/schemas/Error'
+        '500':
           description: Internal server error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
   /groups:
     get:
       operationId: getGroups
@@ -867,9 +872,9 @@ paths:
         - Groups
       summary: List all WhatsApp groups
       parameters:
-        - $ref: "#/components/parameters/InstanceIdHeader"
+        - $ref: '#/components/parameters/InstanceIdHeader'
       responses:
-        "200":
+        '200':
           description: List of groups
           content:
             application/json:
@@ -898,25 +903,25 @@ paths:
                       items:
                         type: string
                         description: Group participant
-        "400":
+        '400':
           description: Bad request
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "500":
+                $ref: '#/components/schemas/Error'
+        '500':
           description: Internal server error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
     post:
       operationId: createGroup
       tags:
         - Groups
       summary: Create a new WhatsApp group
       parameters:
-        - $ref: "#/components/parameters/InstanceIdHeader"
+        - $ref: '#/components/parameters/InstanceIdHeader'
       requestBody:
         required: true
         content:
@@ -936,7 +941,7 @@ paths:
                     type: string
                     description: Group participant
       responses:
-        "201":
+        '201':
           description: Group created successfully
           content:
             application/json:
@@ -946,18 +951,18 @@ paths:
                   id:
                     type: string
                     description: Group ID
-        "400":
+        '400':
           description: Bad request
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "500":
+                $ref: '#/components/schemas/Error'
+        '500':
           description: Internal server error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
   /groups/{groupId}:
     get:
       operationId: getGroup
@@ -970,9 +975,9 @@ paths:
           required: true
           schema:
             type: string
-        - $ref: "#/components/parameters/InstanceIdHeader"
+        - $ref: '#/components/parameters/InstanceIdHeader'
       responses:
-        "200":
+        '200':
           description: Group information
           content:
             application/json:
@@ -999,45 +1004,47 @@ paths:
                     items:
                       type: string
                       description: Group participant
-        "400":
+        '400':
           description: Bad request
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "500":
+                $ref: '#/components/schemas/Error'
+        '500':
           description: Internal server error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-    delete:
-      operationId: deleteGroup
+                $ref: '#/components/schemas/Error'
+  /groups/{groupId}/leave:
+    put:
+      operationId: leaveGroup
       tags:
         - Groups
-      summary: Delete group
+      summary: Leave group
+      description: Leave a group. If you are the only member, the group will be deleted.
       parameters:
         - name: groupId
           in: path
           required: true
           schema:
             type: string
-        - $ref: "#/components/parameters/InstanceIdHeader"
+        - $ref: '#/components/parameters/InstanceIdHeader'
       responses:
-        "204":
-          description: Group deleted successfully
-        "400":
+        '204':
+          description: Successfully left the group
+        '400':
           description: Bad request
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "500":
+                $ref: '#/components/schemas/Error'
+        '500':
           description: Internal server error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
   /groups/{groupId}/description:
     put:
       operationId: setGroupsDescription
@@ -1050,7 +1057,7 @@ paths:
           required: true
           schema:
             type: string
-        - $ref: "#/components/parameters/InstanceIdHeader"
+        - $ref: '#/components/parameters/InstanceIdHeader'
       requestBody:
         required: true
         content:
@@ -1064,20 +1071,20 @@ paths:
                   type: string
                   description: New group description
       responses:
-        "204":
+        '204':
           description: Group description updated successfully
-        "400":
+        '400':
           description: Bad request
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "500":
+                $ref: '#/components/schemas/Error'
+        '500':
           description: Internal server error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
   /groups/{groupId}/name:
     put:
       operationId: setGroupsName
@@ -1090,7 +1097,7 @@ paths:
           required: true
           schema:
             type: string
-        - $ref: "#/components/parameters/InstanceIdHeader"
+        - $ref: '#/components/parameters/InstanceIdHeader'
       requestBody:
         required: true
         content:
@@ -1104,20 +1111,20 @@ paths:
                   type: string
                   description: New group name
       responses:
-        "204":
+        '204':
           description: Group name updated successfully
-        "400":
+        '400':
           description: Bad request
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "500":
+                $ref: '#/components/schemas/Error'
+        '500':
           description: Internal server error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
   /groups/{groupId}/picture:
     post:
       operationId: createGroupsPicture
@@ -1130,7 +1137,7 @@ paths:
           required: true
           schema:
             type: string
-        - $ref: "#/components/parameters/InstanceIdHeader"
+        - $ref: '#/components/parameters/InstanceIdHeader'
       requestBody:
         required: true
         content:
@@ -1144,7 +1151,7 @@ paths:
                   type: string
                   description: Base64 encoded image data
       responses:
-        "201":
+        '201':
           description: Group picture updated successfully
           content:
             application/json:
@@ -1154,98 +1161,385 @@ paths:
                   id:
                     type: string
                     description: Picture ID
-        "400":
+        '400':
           description: Bad request
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "500":
+                $ref: '#/components/schemas/Error'
+        '500':
           description: Internal server error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
   /groups/{groupId}/invite-link:
     get:
       operationId: getGroupInviteLink
       tags:
         - Groups
       summary: Get group invite link
+      description: Get the invite link for a group. Optionally reset to generate a new link.
       parameters:
         - name: groupId
           in: path
           required: true
           schema:
             type: string
-        - $ref: "#/components/parameters/InstanceIdHeader"
+        - name: reset
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - '1'
+          description: Set to '1' to revoke the current link and generate a new one
+        - $ref: '#/components/parameters/InstanceIdHeader'
       responses:
-        "200":
+        '200':
           description: Group invite link
           content:
             application/json:
               schema:
-                type: string
-        "400":
+                type: object
+                properties:
+                  inviteLink:
+                    type: string
+                    description: The group invite link
+        '400':
           description: Bad request
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "500":
+                $ref: '#/components/schemas/Error'
+        '500':
           description: Internal server error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
+  /groups/{groupId}/announce:
+    put:
+      operationId: setGroupAnnounce
+      tags:
+        - Groups
+      summary: Set group announce mode
+      description: When enabled, only admins can send messages to the group.
+      parameters:
+        - name: groupId
+          in: path
+          required: true
+          schema:
+            type: string
+        - $ref: '#/components/parameters/InstanceIdHeader'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - announce
+              properties:
+                announce:
+                  type: boolean
+                  description: Whether to enable announce mode (only admins can send messages)
+      responses:
+        '204':
+          description: Group announce mode updated successfully
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /groups/{groupId}/locked:
+    put:
+      operationId: setGroupLocked
+      tags:
+        - Groups
+      summary: Set group locked mode
+      description: When enabled, only admins can edit group info (name, description, picture).
+      parameters:
+        - name: groupId
+          in: path
+          required: true
+          schema:
+            type: string
+        - $ref: '#/components/parameters/InstanceIdHeader'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - locked
+              properties:
+                locked:
+                  type: boolean
+                  description: Whether to lock group settings (only admins can edit group info)
+      responses:
+        '204':
+          description: Group locked mode updated successfully
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /groups/{groupId}/join-approval:
+    put:
+      operationId: setGroupJoinApproval
+      tags:
+        - Groups
+      summary: Set group join approval mode
+      description: When enabled, join requests require admin approval.
+      parameters:
+        - name: groupId
+          in: path
+          required: true
+          schema:
+            type: string
+        - $ref: '#/components/parameters/InstanceIdHeader'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - joinApproval
+              properties:
+                joinApproval:
+                  type: boolean
+                  description: Whether to require admin approval for join requests
+      responses:
+        '204':
+          description: Group join approval mode updated successfully
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /groups/{groupId}/member-add-mode:
+    put:
+      operationId: setGroupMemberAddMode
+      tags:
+        - Groups
+      summary: Set who can add members
+      description: Control whether all members or only admins can add new participants.
+      parameters:
+        - name: groupId
+          in: path
+          required: true
+          schema:
+            type: string
+        - $ref: '#/components/parameters/InstanceIdHeader'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - onlyAdmins
+              properties:
+                onlyAdmins:
+                  type: boolean
+                  description: When true, only admins can add members. When false, all members can add.
+      responses:
+        '204':
+          description: Group member add mode updated successfully
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /groups/join/link:
+    post:
+      operationId: joinGroupWithLink
+      tags:
+        - Groups
+      summary: Join group via invite link
+      description: Join a group using an invite link code (the part after chat.whatsapp.com/).
+      parameters:
+        - $ref: '#/components/parameters/InstanceIdHeader'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - code
+              properties:
+                code:
+                  type: string
+                  description: The invite link code (e.g., "AbCdEfGhIjK" from https://chat.whatsapp.com/AbCdEfGhIjK)
+            example:
+              code: AbCdEfGhIjKlMnOp
+      responses:
+        '200':
+          description: Successfully joined group
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  groupId:
+                    type: string
+                    description: The JID of the joined group
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /groups/join/invite:
+    post:
+      operationId: joinGroupWithInvite
+      tags:
+        - Groups
+      summary: Join group via invite message
+      description: Join a group using details from a group invite message.
+      parameters:
+        - $ref: '#/components/parameters/InstanceIdHeader'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - groupId
+                - inviterId
+                - code
+              properties:
+                groupId:
+                  type: string
+                  description: The group JID
+                inviterId:
+                  type: string
+                  description: The JID of the user who sent the invite
+                code:
+                  type: string
+                  description: The invite code from the message
+                expiration:
+                  type: integer
+                  format: int64
+                  description: The invite expiration timestamp (Unix seconds)
+      responses:
+        '200':
+          description: Successfully joined group
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  groupId:
+                    type: string
+                    description: The JID of the joined group
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
   /groups/{groupId}/requests:
     get:
       operationId: getGroupsRequests
       tags:
         - Groups
-      summary: List group invite requests
+      summary: List pending join requests
+      description: Get the list of users who have requested to join the group (when join approval is enabled).
       parameters:
         - name: groupId
           in: path
           required: true
           schema:
             type: string
-        - $ref: "#/components/parameters/InstanceIdHeader"
+        - $ref: '#/components/parameters/InstanceIdHeader'
       responses:
-        "200":
-          description: List of invite requests
+        '200':
+          description: List of pending join requests
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  type: string
-                  description: Invite request
-        "400":
+                  type: object
+                  properties:
+                    userId:
+                      type: string
+                      description: JID of the user requesting to join
+                    requestedAt:
+                      type: string
+                      format: date-time
+                      description: When the request was made
+        '400':
           description: Bad request
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "500":
+                $ref: '#/components/schemas/Error'
+        '500':
           description: Internal server error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-  /groups/{groupId}/participants:
+                $ref: '#/components/schemas/Error'
     put:
-      operationId: updateGroupsParticipants
+      operationId: updateGroupsRequests
       tags:
         - Groups
-      summary: Update group participants
+      summary: Approve or reject join requests
+      description: Approve or reject pending join requests for a group.
       parameters:
         - name: groupId
           in: path
           required: true
           schema:
             type: string
-        - $ref: "#/components/parameters/InstanceIdHeader"
+        - $ref: '#/components/parameters/InstanceIdHeader'
       requestBody:
         required: true
         content:
@@ -1254,69 +1548,202 @@ paths:
               type: object
               required:
                 - participants
+                - action
               properties:
                 participants:
                   type: array
                   items:
                     type: string
-                    description: Group participant
+                  description: List of user JIDs to approve or reject
+                action:
+                  type: string
+                  enum:
+                    - approve
+                    - reject
+                  description: Action to perform on the join requests
+            examples:
+              approve:
+                summary: Approve join requests
+                value:
+                  participants:
+                    - 1234567890@s.whatsapp.net
+                  action: approve
+              reject:
+                summary: Reject join requests
+                value:
+                  participants:
+                    - 1234567890@s.whatsapp.net
+                  action: reject
       responses:
-        "204":
-          description: Group participants updated successfully
-        "400":
+        '204':
+          description: Join requests updated successfully
+        '400':
           description: Bad request
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "500":
+                $ref: '#/components/schemas/Error'
+        '500':
           description: Internal server error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-  /group-invites/{inviteCode}:
-    get:
-      operationId: getGroupInviteInfo
+                $ref: '#/components/schemas/Error'
+  /groups/{groupId}/participants:
+    put:
+      operationId: updateGroupsParticipants
       tags:
         - Groups
-      summary: Get group invite information
+      summary: Manage group participants
+      description: Add, remove, promote, or demote participants in a group. Requires admin privileges for most actions.
+      parameters:
+        - name: groupId
+          in: path
+          required: true
+          schema:
+            type: string
+        - $ref: '#/components/parameters/InstanceIdHeader'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - participants
+                - action
+              properties:
+                participants:
+                  type: array
+                  items:
+                    type: string
+                  description: List of participant JIDs (e.g., "1234567890@s.whatsapp.net")
+                action:
+                  type: string
+                  enum:
+                    - add
+                    - remove
+                    - promote
+                    - demote
+                  description: Action to perform on the participants
+            examples:
+              addParticipants:
+                summary: Add participants to group
+                value:
+                  participants:
+                    - 1234567890@s.whatsapp.net
+                  action: add
+              removeParticipants:
+                summary: Remove participants from group
+                value:
+                  participants:
+                    - 1234567890@s.whatsapp.net
+                  action: remove
+              promoteToAdmin:
+                summary: Promote participants to admin
+                value:
+                  participants:
+                    - 1234567890@s.whatsapp.net
+                  action: promote
+              demoteFromAdmin:
+                summary: Demote admins to regular members
+                value:
+                  participants:
+                    - 1234567890@s.whatsapp.net
+                  action: demote
+      responses:
+        '204':
+          description: Group participants updated successfully
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /groups/invite/{inviteCode}:
+    get:
+      operationId: getGroupInfoFromInvite
+      tags:
+        - Groups
+      summary: Get group info from invite code
+      description: Preview group information from an invite code before joining. Use this to show group details to the user before they decide to join.
       parameters:
         - name: inviteCode
           in: path
           required: true
           schema:
             type: string
-        - $ref: "#/components/parameters/InstanceIdHeader"
+          description: The invite link code (e.g., "AbCdEfGhIjK" from https://chat.whatsapp.com/AbCdEfGhIjK)
+        - $ref: '#/components/parameters/InstanceIdHeader'
       responses:
-        "200":
-          description: Group invite information
+        '200':
+          description: Group information from invite
           content:
             application/json:
               schema:
                 type: object
                 properties:
-                  code:
+                  id:
                     type: string
-                    description: Invite code
-                  group:
+                    description: Group JID
+                  ownerId:
                     type: string
-                    description: Group ID
-                  expires:
+                    description: Group owner JID
+                  name:
                     type: string
-                    description: Invite expiration date
-        "400":
+                    description: Group name
+                  created:
+                    type: string
+                    format: date-time
+                    description: Group creation date
+                  description:
+                    type: string
+                    description: Group description
+                  isAnnounce:
+                    type: boolean
+                    description: Whether only admins can send messages
+                  isLocked:
+                    type: boolean
+                    description: Whether only admins can edit group info
+                  isEphemeral:
+                    type: boolean
+                    description: Whether ephemeral messages are enabled
+                  ephemeralExpiration:
+                    type: integer
+                    format: int64
+                    description: Ephemeral message expiration in seconds
+                  participants:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          description: Participant JID
+                        isAdmin:
+                          type: boolean
+                        isSuperAdmin:
+                          type: boolean
+                        displayName:
+                          type: string
+        '400':
           description: Bad request
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "500":
+                $ref: '#/components/schemas/Error'
+        '500':
           description: Internal server error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
   /instance/settings:
     get:
       operationId: getInstanceSettings
@@ -1324,54 +1751,54 @@ paths:
         - Instance
       summary: Get instance settings
       parameters:
-        - $ref: "#/components/parameters/InstanceIdHeader"
+        - $ref: '#/components/parameters/InstanceIdHeader'
       responses:
-        "200":
+        '200':
           description: Instance settings
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/InstanceSettings"
-        "400":
+                $ref: '#/components/schemas/InstanceSettings'
+        '400':
           description: Bad request
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "500":
+                $ref: '#/components/schemas/Error'
+        '500':
           description: Internal server error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
     put:
       operationId: updateInstanceSettings
       tags:
         - Instance
       summary: Update instance settings
       parameters:
-        - $ref: "#/components/parameters/InstanceIdHeader"
+        - $ref: '#/components/parameters/InstanceIdHeader'
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/InstanceSettingsRequest"
+              $ref: '#/components/schemas/InstanceSettingsRequest'
       responses:
-        "204":
+        '204':
           description: Instance settings updated successfully
-        "400":
+        '400':
           description: Bad request
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "500":
+                $ref: '#/components/schemas/Error'
+        '500':
           description: Internal server error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
   /instance/apikey:
     put:
       operationId: updateApiKey
@@ -1379,27 +1806,27 @@ paths:
         - Instance
       summary: Update instance API key
       parameters:
-        - $ref: "#/components/parameters/InstanceIdHeader"
+        - $ref: '#/components/parameters/InstanceIdHeader'
       responses:
-        "200":
+        '200':
           description: Instance settings
           content:
             application/json:
               schema:
                 type: string
                 description: The new API key
-        "400":
+        '400':
           description: Bad request
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "500":
+                $ref: '#/components/schemas/Error'
+        '500':
           description: Internal server error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
   /instance/restart:
     put:
       operationId: restartInstance
@@ -1407,22 +1834,22 @@ paths:
         - Instance
       summary: Restart instance
       parameters:
-        - $ref: "#/components/parameters/InstanceIdHeader"
+        - $ref: '#/components/parameters/InstanceIdHeader'
       responses:
-        "204":
+        '204':
           description: Instance restarted successfully
-        "400":
+        '400':
           description: Bad request
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "500":
+                $ref: '#/components/schemas/Error'
+        '500':
           description: Internal server error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
   /media/download:
     get:
       operationId: getMediaDownload
@@ -1431,7 +1858,7 @@ paths:
       summary: Download media file
       description: Download a media file that was received via webhooks. The id corresponds to the media.id field received in the webhook.
       parameters:
-        - $ref: "#/components/parameters/InstanceIdHeader"
+        - $ref: '#/components/parameters/InstanceIdHeader'
         - name: id
           description: The ID of the media file to download
           in: query
@@ -1439,25 +1866,25 @@ paths:
           schema:
             type: string
       responses:
-        "200":
+        '200':
           description: Media file
           content:
             application/octet-stream:
               schema:
                 type: string
                 format: binary
-        "400":
+        '400':
           description: Bad request
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "500":
+                $ref: '#/components/schemas/Error'
+        '500':
           description: Internal server error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
   /messages/text:
     post:
       operationId: sendTextMessage
@@ -1466,13 +1893,13 @@ paths:
       summary: Send a text message
       description: Send a text message to a WhatsApp contact or group. The response contains the MessageID, that can be used later for different actions, like reply, delete, forward, star, etc.
       parameters:
-        - $ref: "#/components/parameters/InstanceIdHeader"
+        - $ref: '#/components/parameters/InstanceIdHeader'
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/SendTextRequest"
+              $ref: '#/components/schemas/SendTextRequest'
             examples:
               simpleMessage:
                 summary: Plain text
@@ -1491,10 +1918,10 @@ paths:
                 value:
                   to: 1234567890@s.whatsapp.net
                   text: On it!
-                  replyTo: "01234567890123456"
+                  replyTo: '01234567890123456'
                   replyToSenderId: 1234567890:12@s.whatsapp.net
       responses:
-        "201":
+        '201':
           description: Message sent successfully
           content:
             application/json:
@@ -1505,19 +1932,19 @@ paths:
                     type: string
                     description: Unique message ID
               example:
-                id: "01234567890123456"
-        "400":
+                id: '01234567890123456'
+        '400':
           description: Bad request
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "500":
+                $ref: '#/components/schemas/Error'
+        '500':
           description: Internal server error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
   /messages/link:
     post:
       operationId: sendLinkMessage
@@ -1526,13 +1953,13 @@ paths:
       summary: Send a link message
       description: Send a link message to a WhatsApp contact or group. The url contains the link. It can also contain a title and description and additionally a thumbnail (jpeg base64 encoded). The response contains the MessageID
       parameters:
-        - $ref: "#/components/parameters/InstanceIdHeader"
+        - $ref: '#/components/parameters/InstanceIdHeader'
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/SendLinkRequest"
+              $ref: '#/components/schemas/SendLinkRequest'
             examples:
               minimal:
                 summary: Minimal link
@@ -1550,7 +1977,7 @@ paths:
                   description: This post explains things.
                   jpegThumbnail: /9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/wAALCAABAAEBAREA/8QAFAABAAAAAAAAAAAAAAAAAAAACf/EABQQAQAAAAAAAAAAAAAAAAAAAAD/2gAIAQEAAD8AVN//2Q==
       responses:
-        "201":
+        '201':
           description: Link message sent successfully
           content:
             application/json:
@@ -1560,19 +1987,19 @@ paths:
                   id:
                     type: string
               example:
-                id: "01234567890123457"
-        "400":
+                id: '01234567890123457'
+        '400':
           description: Bad request
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "500":
+                $ref: '#/components/schemas/Error'
+        '500':
           description: Internal server error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
   /messages/image:
     post:
       operationId: sendImageMessage
@@ -1581,13 +2008,13 @@ paths:
       summary: Send an image message
       description: Send an image message to a WhatsApp contact or group. The image can be sent as a URL (that will be downloaded and sent as an image) or as a base64 encoded string. The response contains the MessageID.
       parameters:
-        - $ref: "#/components/parameters/InstanceIdHeader"
+        - $ref: '#/components/parameters/InstanceIdHeader'
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/SendImageRequest"
+              $ref: '#/components/schemas/SendImageRequest'
             examples:
               byURL:
                 summary: Image by URL
@@ -1605,7 +2032,7 @@ paths:
                   caption: One-time secret
                   viewOnce: true
       responses:
-        "201":
+        '201':
           description: Image message sent successfully
           content:
             application/json:
@@ -1615,19 +2042,19 @@ paths:
                   id:
                     type: string
               example:
-                id: "01234567890123458"
-        "400":
+                id: '01234567890123458'
+        '400':
           description: Bad request
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "500":
+                $ref: '#/components/schemas/Error'
+        '500':
           description: Internal server error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
   /messages/video:
     post:
       operationId: sendVideoMessage
@@ -1636,13 +2063,13 @@ paths:
       summary: Send a video message
       description: Send a video message to a WhatsApp contact or group. The video can be sent as a URL (that will be downloaded and sent as a video) or as a base64 encoded string. The response contains the MessageID.
       parameters:
-        - $ref: "#/components/parameters/InstanceIdHeader"
+        - $ref: '#/components/parameters/InstanceIdHeader'
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/SendVideoRequest"
+              $ref: '#/components/schemas/SendVideoRequest'
             examples:
               byURL:
                 summary: Video by URL with caption
@@ -1659,7 +2086,7 @@ paths:
                   mimeType: video/mp4
                   viewOnce: true
       responses:
-        "201":
+        '201':
           description: Video message sent successfully
           content:
             application/json:
@@ -1669,19 +2096,19 @@ paths:
                   id:
                     type: string
               example:
-                id: "01234567890123458"
-        "400":
+                id: '01234567890123458'
+        '400':
           description: Bad request
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "500":
+                $ref: '#/components/schemas/Error'
+        '500':
           description: Internal server error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
   /messages/sticker:
     post:
       operationId: sendStickerMessage
@@ -1690,13 +2117,13 @@ paths:
       summary: Send a sticker message
       description: Send a sticker message to a WhatsApp contact or group. The sticker can be sent as a URL (that will be downloaded and sent as a sticker) or as a base64 encoded string. The response contains the MessageID.
       parameters:
-        - $ref: "#/components/parameters/InstanceIdHeader"
+        - $ref: '#/components/parameters/InstanceIdHeader'
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/SendStickerRequest"
+              $ref: '#/components/schemas/SendStickerRequest'
             examples:
               byURL:
                 summary: Sticker by URL (static)
@@ -1713,7 +2140,7 @@ paths:
                   mimeType: image/webp
                   isAnimated: true
       responses:
-        "201":
+        '201':
           description: Sticker message sent successfully
           content:
             application/json:
@@ -1723,19 +2150,19 @@ paths:
                   id:
                     type: string
               example:
-                id: "01234567890123459"
-        "400":
+                id: '01234567890123459'
+        '400':
           description: Bad request
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "500":
+                $ref: '#/components/schemas/Error'
+        '500':
           description: Internal server error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
   /messages/audio:
     post:
       operationId: sendAudioMessage
@@ -1743,13 +2170,13 @@ paths:
         - Messages
       summary: Send an audio message
       parameters:
-        - $ref: "#/components/parameters/InstanceIdHeader"
+        - $ref: '#/components/parameters/InstanceIdHeader'
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/SendAudioRequest"
+              $ref: '#/components/schemas/SendAudioRequest'
             examples:
               byURL:
                 summary: Audio by URL
@@ -1765,7 +2192,7 @@ paths:
                   mimeType: audio/mp3
                   viewOnce: true
       responses:
-        "201":
+        '201':
           description: Audio message sent successfully
           content:
             application/json:
@@ -1775,19 +2202,19 @@ paths:
                   id:
                     type: string
               example:
-                id: "01234567890123460"
-        "400":
+                id: '01234567890123460'
+        '400':
           description: Bad request
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "500":
+                $ref: '#/components/schemas/Error'
+        '500':
           description: Internal server error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
   /messages/voice:
     post:
       operationId: sendVoiceMessage
@@ -1795,13 +2222,13 @@ paths:
         - Messages
       summary: Send a voice message
       parameters:
-        - $ref: "#/components/parameters/InstanceIdHeader"
+        - $ref: '#/components/parameters/InstanceIdHeader'
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/SendVoiceRequest"
+              $ref: '#/components/schemas/SendVoiceRequest'
             examples:
               byURL:
                 summary: Voice by URL
@@ -1814,7 +2241,7 @@ paths:
                   to: 1234567890@g.us
                   voiceBase64: T2dnUwACAAAAAAAAAABVnwAAAAAAAEctEk4BHgF2b3JiaXMAAAAAAUSsAAAAAAAAgLsAAAAAAAC4AU9nZ1MAAAAAAAAAAAAA
       responses:
-        "201":
+        '201':
           description: Voice message sent successfully
           content:
             application/json:
@@ -1824,19 +2251,19 @@ paths:
                   id:
                     type: string
               example:
-                id: "01234567890123461"
-        "400":
+                id: '01234567890123461'
+        '400':
           description: Bad request
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "500":
+                $ref: '#/components/schemas/Error'
+        '500':
           description: Internal server error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
   /messages/document:
     post:
       operationId: sendDocumentMessage
@@ -1844,13 +2271,13 @@ paths:
         - Messages
       summary: Send a document message
       parameters:
-        - $ref: "#/components/parameters/InstanceIdHeader"
+        - $ref: '#/components/parameters/InstanceIdHeader'
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/SendDocumentRequest"
+              $ref: '#/components/schemas/SendDocumentRequest'
             examples:
               byURL:
                 summary: Document by URL with caption
@@ -1866,7 +2293,7 @@ paths:
                   documentBase64: JVBERi0xLjQKJeLjz9MKMSAwIG9iago8PC9UeXBlL0NhdGFsb2cvUGFnZXMgMiAwIFI+PgplbmRvYmoKMiAwIG9iago8PC9UeXBlL1BhZ2VzL0tpZHNbMyAwIFJdL0NvdW50IDE+PgplbmRvYmoKMyAwIG9iago8PC9UeXBlL1BhZ2UvTWVkaWFCb3hbMCAwIDYxMiA3OTJdL1BhcmVudCAyIDAgUj4+CmVuZG9iagp4cmVmCjAgNAowMDAwMDAwMDAwIDY1NTM1IGYgCjAwMDAwMDAwMTUgMDAwMDAgbiAKMDAwMDAwMDA2OCAwMDAwMCBuIAowMDAwMDAwMTI1IDAwMDAwIG4gCnRyYWlsZXIKPDwvU2l6ZSA0L1Jvb3QgMSAwIFI+PgpzdGFydHhyZWYKMjA1CiUlRU9G
                   fileName: numbers.xlsx
       responses:
-        "201":
+        '201':
           description: Document message sent successfully
           content:
             application/json:
@@ -1876,19 +2303,19 @@ paths:
                   id:
                     type: string
               example:
-                id: "01234567890123462"
-        "400":
+                id: '01234567890123462'
+        '400':
           description: Bad request
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "500":
+                $ref: '#/components/schemas/Error'
+        '500':
           description: Internal server error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
   /messages/contact:
     post:
       operationId: sendContactMessage
@@ -1896,13 +2323,13 @@ paths:
         - Messages
       summary: Send a contact message
       parameters:
-        - $ref: "#/components/parameters/InstanceIdHeader"
+        - $ref: '#/components/parameters/InstanceIdHeader'
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/SendContactRequest"
+              $ref: '#/components/schemas/SendContactRequest'
             examples:
               withDisplayName:
                 summary: Contact with display name
@@ -1921,7 +2348,7 @@ paths:
                     TEL;TYPE=CELL:+19876543210
                     END:VCARD
       responses:
-        "201":
+        '201':
           description: Contact message sent successfully
           content:
             application/json:
@@ -1931,19 +2358,19 @@ paths:
                   id:
                     type: string
               example:
-                id: "01234567890123463"
-        "400":
+                id: '01234567890123463'
+        '400':
           description: Bad request
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "500":
+                $ref: '#/components/schemas/Error'
+        '500':
           description: Internal server error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
   /messages/location:
     post:
       operationId: sendLocationMessage
@@ -1951,13 +2378,13 @@ paths:
         - Messages
       summary: Send a location message
       parameters:
-        - $ref: "#/components/parameters/InstanceIdHeader"
+        - $ref: '#/components/parameters/InstanceIdHeader'
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/SendLocationRequest"
+              $ref: '#/components/schemas/SendLocationRequest'
             examples:
               basic:
                 summary: Basic location
@@ -1975,7 +2402,7 @@ paths:
                   address: Westminster, London SW1A 0AA, UK
                   url: https://maps.google.com/?q=Big+Ben
       responses:
-        "201":
+        '201':
           description: Location message sent successfully
           content:
             application/json:
@@ -1985,19 +2412,19 @@ paths:
                   id:
                     type: string
               example:
-                id: "01234567890123464"
-        "400":
+                id: '01234567890123464'
+        '400':
           description: Bad request
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "500":
+                $ref: '#/components/schemas/Error'
+        '500':
           description: Internal server error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
   /messages/{messageId}/reaction:
     post:
       operationId: sendReactionMessage
@@ -2010,13 +2437,13 @@ paths:
           required: true
           schema:
             type: string
-        - $ref: "#/components/parameters/InstanceIdHeader"
+        - $ref: '#/components/parameters/InstanceIdHeader'
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/SendReactionRequest"
+              $ref: '#/components/schemas/SendReactionRequest'
             examples:
               thumbsUp:
                 summary: React with thumbs up
@@ -2031,7 +2458,7 @@ paths:
                   senderId: 9876543210@s.whatsapp.net
                   reaction: ❤️
       responses:
-        "201":
+        '201':
           description: Reaction sent successfully
           content:
             application/json:
@@ -2041,19 +2468,19 @@ paths:
                   id:
                     type: string
               example:
-                id: "01234567890123465"
-        "400":
+                id: '01234567890123465'
+        '400':
           description: Bad request
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "500":
+                $ref: '#/components/schemas/Error'
+        '500':
           description: Internal server error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
   /messages/{messageId}/text:
     put:
       operationId: updateMessagesText
@@ -2066,13 +2493,13 @@ paths:
           required: true
           schema:
             type: string
-        - $ref: "#/components/parameters/InstanceIdHeader"
+        - $ref: '#/components/parameters/InstanceIdHeader'
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/SendTextRequest"
+              $ref: '#/components/schemas/SendTextRequest'
             examples:
               editText:
                 summary: Edit text content
@@ -2080,7 +2507,7 @@ paths:
                   to: 1234567890@s.whatsapp.net
                   text: Updated message
       responses:
-        "201":
+        '201':
           description: Message edited successfully
           content:
             application/json:
@@ -2090,19 +2517,19 @@ paths:
                   id:
                     type: string
               example:
-                id: "01234567890123466"
-        "400":
+                id: '01234567890123466'
+        '400':
           description: Bad request
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "500":
+                $ref: '#/components/schemas/Error'
+        '500':
           description: Internal server error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
   /messages/{messageId}/read:
     put:
       operationId: updateMessagesRead
@@ -2115,32 +2542,32 @@ paths:
           required: true
           schema:
             type: string
-        - $ref: "#/components/parameters/InstanceIdHeader"
+        - $ref: '#/components/parameters/InstanceIdHeader'
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/MarkMessageAsReadRequest"
+              $ref: '#/components/schemas/MarkMessageAsReadRequest'
             example:
               chatId: 1234567890@s.whatsapp.net
               senderId: 1234567890@s.whatsapp.net
               receiptType: read
       responses:
-        "200":
+        '204':
           description: Message marked as read successfully
-        "400":
+        '400':
           description: Bad request
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "500":
+                $ref: '#/components/schemas/Error'
+        '500':
           description: Internal server error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
   /messages/{messageId}/star:
     put:
       operationId: updateMessagesStar
@@ -2153,31 +2580,31 @@ paths:
           required: true
           schema:
             type: string
-        - $ref: "#/components/parameters/InstanceIdHeader"
+        - $ref: '#/components/parameters/InstanceIdHeader'
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/StarMessageRequest"
+              $ref: '#/components/schemas/StarMessageRequest'
             example:
               chatId: 1234567890@s.whatsapp.net
               senderId: 1234567890@s.whatsapp.net
       responses:
-        "200":
+        '204':
           description: Message starred successfully
-        "400":
+        '400':
           description: Bad request
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "500":
+                $ref: '#/components/schemas/Error'
+        '500':
           description: Internal server error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
   /messages/{messageId}/delete:
     put:
       operationId: updateMessagesDelete
@@ -2190,31 +2617,31 @@ paths:
           required: true
           schema:
             type: string
-        - $ref: "#/components/parameters/InstanceIdHeader"
+        - $ref: '#/components/parameters/InstanceIdHeader'
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/DeleteMessageRequest"
+              $ref: '#/components/schemas/DeleteMessageRequest'
             example:
               chatId: 1234567890@s.whatsapp.net
               senderId: 1234567890@s.whatsapp.net
       responses:
-        "200":
+        '204':
           description: Message deleted successfully
-        "400":
+        '400':
           description: Bad request
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "500":
+                $ref: '#/components/schemas/Error'
+        '500':
           description: Internal server error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
   /messages/{messageId}/delete/forme:
     put:
       operationId: updateMessagesDeleteForme
@@ -2227,33 +2654,33 @@ paths:
           required: true
           schema:
             type: string
-        - $ref: "#/components/parameters/InstanceIdHeader"
+        - $ref: '#/components/parameters/InstanceIdHeader'
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/DeleteMessageForMeRequest"
+              $ref: '#/components/schemas/DeleteMessageForMeRequest'
             example:
               chatId: 1234567890@s.whatsapp.net
               senderId: 1234567890@s.whatsapp.net
-              ifFromMe: true
-              Time: "2025-05-19T00:51:44.816Z"
+              isFromMe: true
+              Time: '2025-05-19T00:51:44.816Z'
       responses:
-        "200":
+        '204':
           description: Message deleted for me successfully
-        "400":
+        '400':
           description: Bad request
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "500":
+                $ref: '#/components/schemas/Error'
+        '500':
           description: Internal server error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
   /session/login/qr/image:
     get:
       operationId: getSessionLoginQrImage
@@ -2262,27 +2689,27 @@ paths:
       summary: Get QR code image for WhatsApp login
       description: Retrieve the QR code image for logging into WhatsApp. The image can be displayed to the user for scanning.
       parameters:
-        - $ref: "#/components/parameters/InstanceIdHeader"
+        - $ref: '#/components/parameters/InstanceIdHeader'
       responses:
-        "200":
+        '200':
           description: QR code image
           content:
             image/png:
               schema:
                 type: string
                 format: binary
-        "400":
+        '400':
           description: Bad request
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "500":
+                $ref: '#/components/schemas/Error'
+        '500':
           description: Internal server error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
   /session/login/qr/code:
     get:
       operationId: getSessionLoginQrCode
@@ -2290,26 +2717,26 @@ paths:
         - Session
       summary: Get QR code string for WhatsApp login
       parameters:
-        - $ref: "#/components/parameters/InstanceIdHeader"
+        - $ref: '#/components/parameters/InstanceIdHeader'
       responses:
-        "200":
+        '200':
           description: QR code string
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/GenerateQRCodeResponse"
-        "400":
+                $ref: '#/components/schemas/GenerateQRCodeResponse'
+        '400':
           description: Bad request
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "500":
+                $ref: '#/components/schemas/Error'
+        '500':
           description: Internal server error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
   /session/login/code/{phone}:
     get:
       operationId: getSessionLoginCode
@@ -2323,26 +2750,26 @@ paths:
           required: true
           schema:
             type: string
-        - $ref: "#/components/parameters/InstanceIdHeader"
+        - $ref: '#/components/parameters/InstanceIdHeader'
       responses:
-        "200":
+        '200':
           description: Login code
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/GeneratePairCodeResponse"
-        "400":
+                $ref: '#/components/schemas/GeneratePairCodeResponse'
+        '400':
           description: Bad request
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "500":
+                $ref: '#/components/schemas/Error'
+        '500':
           description: Internal server error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
   /session/status:
     get:
       operationId: getSessionStatus
@@ -2350,26 +2777,26 @@ paths:
         - Session
       summary: Get WhatsApp session status
       parameters:
-        - $ref: "#/components/parameters/InstanceIdHeader"
+        - $ref: '#/components/parameters/InstanceIdHeader'
       responses:
-        "200":
+        '200':
           description: Session status
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/SessionStatusResponse"
-        "400":
+                $ref: '#/components/schemas/SessionStatusResponse'
+        '400':
           description: Bad request
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "500":
+                $ref: '#/components/schemas/Error'
+        '500':
           description: Internal server error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
   /session/logout:
     post:
       operationId: createSessionLogout
@@ -2377,22 +2804,22 @@ paths:
         - Session
       summary: Logout from WhatsApp
       parameters:
-        - $ref: "#/components/parameters/InstanceIdHeader"
+        - $ref: '#/components/parameters/InstanceIdHeader'
       responses:
-        "204":
+        '204':
           description: Logged out successfully
-        "400":
+        '400':
           description: Bad request
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "500":
+                $ref: '#/components/schemas/Error'
+        '500':
           description: Internal server error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
   /users/{phone}:
     get:
       operationId: getUser
@@ -2405,9 +2832,9 @@ paths:
           required: true
           schema:
             type: string
-        - $ref: "#/components/parameters/InstanceIdHeader"
+        - $ref: '#/components/parameters/InstanceIdHeader'
       responses:
-        "200":
+        '200':
           description: User information
           content:
             application/json:
@@ -2423,18 +2850,18 @@ paths:
                   status:
                     type: string
                     description: User status
-        "400":
+        '400':
           description: Bad request
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "500":
+                $ref: '#/components/schemas/Error'
+        '500':
           description: Internal server error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
 components:
   securitySchemes:
     ApiKeyHeader:
@@ -2517,7 +2944,7 @@ components:
         eventFilters:
           type:
             - array
-            - "null"
+            - 'null'
           description: Optional list of event types to receive via webhook. If null or not set, all events are received.
           items:
             type: string
@@ -2529,11 +2956,11 @@ components:
               - message_history_sync
               - chat_setting
               - chat_presence
+              - chat_push_name
+              - chat_status
+              - chat_picture
               - contact
               - group
-              - user_push_name
-              - user_status
-              - user_picture
               - user_presence
               - call_offer
               - call_terminate
@@ -2541,6 +2968,7 @@ components:
               - logged_error
               - logged_out
               - logged_in
+              - initial_sync_finished
     InstanceSettingsRequest:
       type: object
       properties:
@@ -2565,7 +2993,7 @@ components:
         eventFilters:
           type:
             - array
-            - "null"
+            - 'null'
           description: Optional list of event types to receive via webhook. If null or not set, all events are received.
           items:
             type: string
@@ -2577,11 +3005,11 @@ components:
               - message_history_sync
               - chat_setting
               - chat_presence
+              - chat_push_name
+              - chat_status
+              - chat_picture
               - contact
               - group
-              - user_push_name
-              - user_status
-              - user_picture
               - user_presence
               - call_offer
               - call_terminate
@@ -2589,6 +3017,7 @@ components:
               - logged_error
               - logged_out
               - logged_in
+              - initial_sync_finished
     SendTextRequest:
       type: object
       required:
@@ -2918,17 +3347,11 @@ components:
           type: string
         reaction:
           type: string
-        ephemeralExpiration:
-          type: string
-          description: Custom expiration time for this message, overriding the chat's ephemeral settings.
-          enum:
-            - 24h
-            - 7d
-            - 90d
     SendContactRequest:
       type: object
       required:
         - to
+        - vCard
       properties:
         to:
           type: string
@@ -2982,15 +3405,6 @@ components:
           type: string
         url:
           type: string
-        replyTo:
-          type: string
-          description: ID of the message being replied to
-        isForwarded:
-          type: boolean
-          description: Whether the message is forwarded (if true, it will be marked as forwarded in WhatsApp)
-        replyToSenderId:
-          type: string
-          description: The ID of the sender of the message being replied to. Should be set when replyTo is specified.
         ephemeralExpiration:
           type: string
           description: Custom expiration time for this message, overriding the chat's ephemeral settings.
@@ -3029,9 +3443,9 @@ components:
     RejectCallRequest:
       type: object
       required:
-        - callerId
+        - caller
       properties:
-        callerId:
+        caller:
           type: string
           description: JID of the call creator
     DeleteMessageRequest:
@@ -3051,8 +3465,8 @@ components:
       required:
         - chatId
         - senderId
-        - ifFromMe
-        - Time
+        - isFromMe
+        - timestamp
       properties:
         chatId:
           type: string
@@ -3060,10 +3474,10 @@ components:
         senderId:
           type: string
           description: ID of the message sender
-        ifFromMe:
+        isFromMe:
           type: boolean
           description: If the message to delete is from the sender
-        Time:
+        timestamp:
           type: string
           format: date-time
           description: Time when the message was sent (could be aproximate, but is required)
@@ -3085,7 +3499,7 @@ components:
         lid:
           type:
             - string
-            - "null"
+            - 'null'
           description: LID associated with the chat when available
         isReadOnly:
           type: boolean
@@ -3105,10 +3519,10 @@ components:
         ephemeralExpiration:
           type:
             - string
-            - "null"
+            - 'null'
           description: Ephemeral message expiration policy
           enum:
-            - "off"
+            - 'off'
             - 24h
             - 7d
             - 90d
@@ -3118,7 +3532,7 @@ components:
         muteEndTime:
           type:
             - string
-            - "null"
+            - 'null'
           format: date-time
           description: When the mute configuration expires, if applicable
         isSpam:
@@ -3146,7 +3560,7 @@ components:
         lid:
           type:
             - string
-            - "null"
+            - 'null'
           description: LID associated with the contact when available
         fullName:
           type: string
@@ -3200,7 +3614,7 @@ components:
           type: array
           description: Categories associated with the business
           items:
-            $ref: "#/components/schemas/ChatBusinessCategory"
+            $ref: '#/components/schemas/ChatBusinessCategory'
         businessHoursTimeZone:
           type: string
           description: Time zone used for the business hours
@@ -3208,7 +3622,7 @@ components:
           type: array
           description: Opening hours for the business
           items:
-            $ref: "#/components/schemas/BusinessHours"
+            $ref: '#/components/schemas/BusinessHours'
         profileOptions:
           type: object
           additionalProperties:

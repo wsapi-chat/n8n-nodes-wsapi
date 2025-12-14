@@ -24,7 +24,7 @@ export interface WSApiMessageBody {
 	senderId?: string;
 	reaction?: string;
 	receiptType?: string;
-	ifFromMe?: boolean;
+	isFromMe?: boolean;
 	Time?: string;
 }
 

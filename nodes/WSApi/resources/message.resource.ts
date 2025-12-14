@@ -511,8 +511,8 @@ export const messageFields: INodeProperties[] = [
 		hint: 'Provide the new message text. Only text messages can be edited in WhatsApp.',
 	},
 	{
-		displayName: 'If From Me',
-		name: 'ifFromMe',
+		displayName: 'Is From Me',
+		name: 'isFromMe',
 		type: 'boolean',
 		required: true,
 		displayOptions: {
