@@ -41,6 +41,7 @@ Before using the node, you'll need to set up your WSAPI credentials:
    - **API Key**: Your WSAPI API key
    - **Instance ID**: Your WhatsApp instance ID
    - **Base URL**: The WSAPI service URL (defaults to `https://wsapi.chat`)
+   - **Webhook Signing Secret**: Secret used to verify HMAC-SHA256 signatures on incoming webhooks (configure in your WSAPI dashboard)
 
 You can obtain these credentials from your [WSAPI dashboard](https://wsapi.chat).
 
@@ -80,21 +81,6 @@ You can obtain these credentials from your [WSAPI dashboard](https://wsapi.chat)
 - **Mark as Read** - Mark entire chats as read
 - **Subscribe to Presence** - Get real-time presence updates
 - **Request Messages** - Request message history
-
-### Account Management
-- **List Instances** - List all instances
-- **Get Instance** - Retrieve instance details
-- **Create Instance** - Create a new instance
-- **Delete Instance** - Delete an instance
-- **Update Instance Name** - Update instance display name
-- **Update Instance Settings** - Modify instance settings (webhooks, event filters, etc.)
-- **Get Instance Defaults** - Get default instance configuration
-- **Update Instance Defaults** - Update default instance configuration
-- **Regenerate API Key** - Generate new API keys
-- **Restart Instance** - Restart WhatsApp instance
-- **List Subscriptions** - List available subscriptions
-- **List Subscription Instances** - List instances for a subscription
-- **Get Subscription Changes** - Get subscription change history
 
 ### Session Control
 - **Get QR Code Image** - Generate QR code image for login
@@ -185,14 +171,7 @@ You can obtain these credentials from your [WSAPI dashboard](https://wsapi.chat)
 - **Download Media** - Download images, videos, audio, and documents from messages
 
 ### Webhook Triggers
-- **On Any Event** - Trigger on all event types
-- **On Message Event** - Trigger on message, read, delete, star, and history sync events
-- **On Chat Event** - Trigger on chat picture, presence, push name, setting, and status events
-- **On Call Event** - Trigger on call offer, accept, and terminate events
-- **On User Event** - Trigger on user presence events
-- **On Contact, Group & Newsletter Event** - Trigger on contact, group, and newsletter events
-- **On Newsletter Event** - Trigger on newsletter events
-- **On Session Event** - Trigger on login, logout, authentication, and sync events
+- **WSAPI Trigger** - Select any combination of event types to listen for: messages, chats, calls, contacts, groups, newsletters, sessions, and user presence
 
 ## Examples
 
@@ -231,19 +210,18 @@ Text: Hello from n8n automation!
 ### Set Up Message Webhook Trigger
 ```
 Trigger: WSAPI
-Operation: On Message Event
 Events: Message, Message Read
 Auto-Download Media: enabled
-Webhook Authentication: optional
+Verify Webhook Signature: enabled
 ```
 
 ## Webhook Configuration
 
 The WSAPI Trigger node supports advanced webhook features:
 
-- **Event Filtering**: Choose specific events (messages, chats, calls, newsletters, etc.)
+- **Event Filtering**: Choose any combination of event types from a single flat list
+- **Signature Verification**: Verify incoming webhooks using HMAC-SHA256 signatures (requires a signing secret in credentials)
 - **Auto-Download Media**: Automatically download media files from messages
-- **Custom Authentication**: Secure webhooks with custom headers
 - **Event Parsing**: Automatic parsing of webhook payloads
 - **Raw Event Data**: Optionally include raw event data in output
 

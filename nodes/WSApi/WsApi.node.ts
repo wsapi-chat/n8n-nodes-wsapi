@@ -10,7 +10,6 @@ import {
 import { messageOperations, messageFields } from "./resources/message.resource";
 import { chatOperations, chatFields } from "./resources/chat.resource";
 import { mediaOperations, mediaFields } from "./resources/media.resource";
-import { accountOperations, accountFields } from "./resources/account.resource";
 import { sessionOperations, sessionFields } from "./resources/session.resource";
 import {
   contactsOperations,
@@ -31,7 +30,6 @@ import { statusOperations, statusFields } from "./resources/status.resource";
 import { executeMessageOperation } from "./operations/message.operations";
 import { executeChatOperation } from "./operations/chat.operations";
 import { executeMediaOperation } from "./operations/media.operations";
-import { executeAccountOperation } from "./operations/account.operations";
 import { executeSessionOperation } from "./operations/session.operations";
 import { executeContactsOperation } from "./operations/contacts.operations";
 import { executeGroupsOperation } from "./operations/groups.operations";
@@ -77,10 +75,6 @@ export class WSApi implements INodeType {
         type: "options",
         noDataExpression: true,
         options: [
-          {
-            name: "Account",
-            value: "account",
-          },
           {
             name: "Call",
             value: "calls",
@@ -129,7 +123,6 @@ export class WSApi implements INodeType {
         default: "message",
       },
       // Operations for each resource
-      accountOperations,
       callsOperations,
       chatOperations,
       communityOperations,
@@ -142,7 +135,6 @@ export class WSApi implements INodeType {
       statusOperations,
       usersOperations,
       // Fields for all resources
-      ...accountFields,
       ...callsFields,
       ...chatFields,
       ...communityFields,
@@ -172,9 +164,7 @@ export class WSApi implements INodeType {
         let responseData: any;
 
         // Route to appropriate resource operation handler
-        if (resource === "account") {
-          responseData = await executeAccountOperation.call(this, operation, i);
-        } else if (resource === "calls") {
+        if (resource === "calls") {
           responseData = await executeCallsOperation.call(this, operation, i);
         } else if (resource === "chat") {
           responseData = await executeChatOperation.call(

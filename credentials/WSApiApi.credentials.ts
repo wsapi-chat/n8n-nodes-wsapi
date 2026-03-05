@@ -8,7 +8,7 @@ import {
 export class WSApiApi implements ICredentialType {
   name = "WSApiApi";
   displayName = "WSAPI API";
-  documentationUrl = "https://docs.wsapi.chat";
+  documentationUrl = "https://docs.wsapi.chat/integrations/n8n-wsapi";
   properties: INodeProperties[] = [
     {
       displayName: "API Key",
@@ -33,19 +33,19 @@ export class WSApiApi implements ICredentialType {
       displayName: "Base URL",
       name: "baseUrl",
       type: "string",
-      default: "https://wsapi.chat",
+      default: "https://api.wsapi.chat",
       required: true,
       description:
         "The base URL for the WSAPI service. Use default unless you have a custom deployment.",
     },
     {
-      displayName: "Customer API Key",
-      name: "customerApiKey",
+      displayName: "Webhook Signing Secret",
+      name: "signingSecret",
       type: "string",
       typeOptions: { password: true },
       default: "",
       description:
-        "Optional customer-level API key for Account management endpoints (instances, subscriptions). Not required for regular WhatsApp operations.",
+        "Secret used to verify HMAC-SHA256 signatures on incoming webhooks. Configure this in your WSAPI dashboard.",
     },
   ];
 

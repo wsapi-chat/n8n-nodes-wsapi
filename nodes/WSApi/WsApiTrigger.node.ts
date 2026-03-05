@@ -1,3 +1,4 @@
+import { createHmac, timingSafeEqual } from "crypto";
 import {
   IHookFunctions,
   IWebhookFunctions,
@@ -179,38 +180,12 @@ export class WSApiTrigger implements INodeType {
           "Whether to include the original webhook payload in the output",
       },
       {
-        displayName: "Webhook Authentication",
-        name: "enableAuth",
+        displayName: "Verify Webhook Signature",
+        name: "verifySignature",
         type: "boolean",
-        default: false,
+        default: true,
         description:
-          "Whether to enable custom header authentication for incoming webhooks",
-      },
-      {
-        displayName: "Auth Header Name",
-        name: "authHeaderName",
-        type: "string",
-        required: true,
-        default: "X-Webhook-Auth",
-        description: "Custom header name for webhook authentication",
-        displayOptions: {
-          show: {
-            enableAuth: [true],
-          },
-        },
-      },
-      {
-        displayName: "Auth Header Value",
-        name: "authHeaderValue",
-        type: "string",
-        required: true,
-        default: "",
-        description: "Expected value for the authentication header",
-        displayOptions: {
-          show: {
-            enableAuth: [true],
-          },
-        },
+          "Whether to verify the HMAC-SHA256 signature of incoming webhooks using the signing secret from credentials",
       },
     ],
   };
@@ -223,27 +198,63 @@ export class WSApiTrigger implements INodeType {
     ) as boolean;
     const parseEventData = this.getNodeParameter("parseEventData") as boolean;
     const includeRawEvent = this.getNodeParameter("includeRawEvent") as boolean;
-    const enableAuth = this.getNodeParameter("enableAuth") as boolean;
+    const verifySignature = this.getNodeParameter("verifySignature") as boolean;
 
-    // Validate webhook authentication if enabled
-    if (enableAuth) {
-      const authHeaderName = this.getNodeParameter("authHeaderName") as string;
-      const authHeaderValue = this.getNodeParameter(
-        "authHeaderValue",
-      ) as string;
+    // Verify HMAC-SHA256 webhook signature if enabled
+    if (verifySignature) {
+      const credentials = await this.getCredentials("WSApiApi");
+      const signingSecret = credentials.signingSecret as string;
+
+      if (!signingSecret) {
+        return {
+          webhookResponse: {
+            status: 500,
+            body: {
+              error: "Configuration Error",
+              message:
+                "Signature verification is enabled but no signing secret is configured in credentials",
+            },
+          },
+        };
+      }
+
       const headers = this.getHeaderData();
+      const signatureHeader = (headers["x-webhook-signature"] ||
+        "") as string;
 
-      // Check if the auth header exists and matches the expected value
-      const receivedAuthValue =
-        headers[authHeaderName.toLowerCase()] || headers[authHeaderName];
-
-      if (!receivedAuthValue || receivedAuthValue !== authHeaderValue) {
+      if (!signatureHeader) {
         return {
           webhookResponse: {
             status: 401,
             body: {
               error: "Unauthorized",
-              message: "Invalid or missing authentication header",
+              message: "Missing X-Webhook-Signature header",
+            },
+          },
+        };
+      }
+
+      const req = this.getRequestObject();
+      const rawBody = (req as any).rawBody as Buffer | undefined;
+      const bodyBytes = rawBody || Buffer.from(JSON.stringify(body), "utf-8");
+
+      const expected =
+        "sha256=" +
+        createHmac("sha256", signingSecret).update(bodyBytes).digest("hex");
+
+      const expectedBuf = Buffer.from(expected, "utf-8");
+      const receivedBuf = Buffer.from(signatureHeader, "utf-8");
+
+      if (
+        expectedBuf.length !== receivedBuf.length ||
+        !timingSafeEqual(expectedBuf, receivedBuf)
+      ) {
+        return {
+          webhookResponse: {
+            status: 401,
+            body: {
+              error: "Unauthorized",
+              message: "Invalid webhook signature",
             },
           },
         };
