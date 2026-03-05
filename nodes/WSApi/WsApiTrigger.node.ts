@@ -219,8 +219,7 @@ export class WSApiTrigger implements INodeType {
       }
 
       const headers = this.getHeaderData();
-      const signatureHeader = (headers["x-webhook-signature"] ||
-        "") as string;
+      const signatureHeader = (headers["x-webhook-signature"] || "") as string;
 
       if (!signatureHeader) {
         return {
