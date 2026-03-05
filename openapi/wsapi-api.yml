@@ -8,7 +8,7 @@ info:
   version: 2.0.0
 
 servers:
-  - url: https://wsapi.chat
+  - url: https://api.wsapi.chat
     description: WSAPI API
 
 tags:
