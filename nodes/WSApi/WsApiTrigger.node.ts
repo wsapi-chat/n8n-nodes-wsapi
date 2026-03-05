@@ -15,7 +15,7 @@ export class WSApiTrigger implements INodeType {
     icon: "file:wsapi.svg",
     group: ["trigger"],
     version: 1,
-    subtitle: '={{$parameter["operation"]}}',
+    subtitle: '={{$parameter["events"].length + " event type(s)"}}',
     description:
       "Trigger on WSAPI webhook events (messages, chats, calls, users, etc.)",
     defaults: {
@@ -38,66 +38,6 @@ export class WSApiTrigger implements INodeType {
       },
     ],
     properties: [
-      {
-        displayName: "Operation",
-        name: "operation",
-        type: "options",
-        noDataExpression: true,
-        options: [
-          {
-            name: "On Any Event",
-            value: "all",
-            description: "Trigger on all event types",
-            action: "Trigger on all events",
-          },
-          {
-            name: "On Call Event",
-            value: "call",
-            description: "Trigger on call events (offer, accept, terminate)",
-            action: "Trigger on call events",
-          },
-          {
-            name: "On Chat Event",
-            value: "chat",
-            description:
-              "Trigger on chat events (settings, presence, picture, status)",
-            action: "Trigger on chat events",
-          },
-          {
-            name: "On Contact, Group & Newsletter Event",
-            value: "contact",
-            description: "Trigger on contact, group, and newsletter events",
-            action: "Trigger on contact group and newsletter events",
-          },
-          {
-            name: "On Message Event",
-            value: "message",
-            description:
-              "Trigger on message events (message, read, delete, star, etc.)",
-            action: "Trigger on message events",
-          },
-          {
-            name: "On Newsletter Event",
-            value: "newsletter",
-            description: "Trigger on newsletter events",
-            action: "Trigger on newsletter events",
-          },
-          {
-            name: "On Session Event",
-            value: "session",
-            description:
-              "Trigger on session events (login, logout, authentication, sync)",
-            action: "Trigger on session events",
-          },
-          {
-            name: "On User Event",
-            value: "user",
-            description: "Trigger on user events (presence updates)",
-            action: "Trigger on user events",
-          },
-        ],
-        default: "message",
-      },
       {
         displayName: "Event Types",
         name: "events",
@@ -213,222 +153,6 @@ export class WSApiTrigger implements INodeType {
         ],
         default: ["message"],
         description: "Select which event types to listen for",
-        displayOptions: {
-          show: {
-            operation: ["all"],
-          },
-        },
-      },
-      {
-        displayName: "Session Events",
-        name: "events",
-        type: "multiOptions",
-        options: [
-          {
-            name: "Initial Sync Finished",
-            value: "initial_sync_finished",
-            description: "Initial sync finished after login",
-          },
-          {
-            name: "Login Error",
-            value: "login_error",
-            description: "Error during login process",
-          },
-          {
-            name: "Logged In",
-            value: "logged_in",
-            description: "User successfully logged in",
-          },
-          {
-            name: "Logged Out",
-            value: "logged_out",
-            description: "User logged out",
-          },
-        ],
-        default: ["logged_in"],
-        description: "Select which session events to listen for",
-        displayOptions: {
-          show: {
-            operation: ["session"],
-          },
-        },
-      },
-      {
-        displayName: "Message Events",
-        name: "events",
-        type: "multiOptions",
-        options: [
-          {
-            name: "Message",
-            value: "message",
-            description:
-              "New message received (text, media, reaction, contact, etc.)",
-          },
-          {
-            name: "Message Deleted",
-            value: "message_delete",
-            description: "Message was deleted",
-          },
-          {
-            name: "Message History Sync",
-            value: "message_history_sync",
-            description: "Initial message history sync during pairing",
-          },
-          {
-            name: "Message Read",
-            value: "message_read",
-            description: "Message read receipt received",
-          },
-          {
-            name: "Message Starred",
-            value: "message_star",
-            description: "Message was starred/unstarred",
-          },
-        ],
-        default: ["message"],
-        description: "Select which message events to listen for",
-        displayOptions: {
-          show: {
-            operation: ["message"],
-          },
-        },
-      },
-      {
-        displayName: "Chat Events",
-        name: "events",
-        type: "multiOptions",
-        options: [
-          {
-            name: "Chat Picture",
-            value: "chat_picture",
-            description: "Chat profile picture updated",
-          },
-          {
-            name: "Chat Presence",
-            value: "chat_presence",
-            description: "Chat presence updated (typing, recording, paused)",
-          },
-          {
-            name: "Chat Push Name",
-            value: "chat_push_name",
-            description: "Chat display name updated",
-          },
-          {
-            name: "Chat Setting",
-            value: "chat_setting",
-            description:
-              "Chat settings changed (mute, pin, archive, ephemeral)",
-          },
-          {
-            name: "Chat Status",
-            value: "chat_status",
-            description: "Chat status message updated",
-          },
-        ],
-        default: ["chat_setting"],
-        description: "Select which chat events to listen for",
-        displayOptions: {
-          show: {
-            operation: ["chat"],
-          },
-        },
-      },
-      {
-        displayName: "Call Events",
-        name: "events",
-        type: "multiOptions",
-        options: [
-          {
-            name: "Call Accept",
-            value: "call_accept",
-            description: "Call was accepted",
-          },
-          {
-            name: "Call Offer",
-            value: "call_offer",
-            description: "Incoming call offer received",
-          },
-          {
-            name: "Call Terminate",
-            value: "call_terminate",
-            description: "Call was terminated",
-          },
-        ],
-        default: ["call_offer"],
-        description: "Select which call events to listen for",
-        displayOptions: {
-          show: {
-            operation: ["call"],
-          },
-        },
-      },
-      {
-        displayName: "User Events",
-        name: "events",
-        type: "multiOptions",
-        options: [
-          {
-            name: "User Presence",
-            value: "user_presence",
-            description: "User online presence updated (available/unavailable)",
-          },
-        ],
-        default: ["user_presence"],
-        description: "Select which user events to listen for",
-        displayOptions: {
-          show: {
-            operation: ["user"],
-          },
-        },
-      },
-      {
-        displayName: "Contact, Group & Newsletter Events",
-        name: "events",
-        type: "multiOptions",
-        options: [
-          {
-            name: "Contact",
-            value: "contact",
-            description: "Contact information updated",
-          },
-          {
-            name: "Group",
-            value: "group",
-            description: "Group information updated",
-          },
-          {
-            name: "Newsletter",
-            value: "newsletter",
-            description: "Newsletter event",
-          },
-        ],
-        default: ["contact"],
-        description:
-          "Select which contact, group, and newsletter events to listen for",
-        displayOptions: {
-          show: {
-            operation: ["contact"],
-          },
-        },
-      },
-      {
-        displayName: "Newsletter Events",
-        name: "events",
-        type: "multiOptions",
-        options: [
-          {
-            name: "Newsletter",
-            value: "newsletter",
-            description: "Newsletter event",
-          },
-        ],
-        default: ["newsletter"],
-        description: "Select which newsletter events to listen for",
-        displayOptions: {
-          show: {
-            operation: ["newsletter"],
-          },
-        },
       },
       {
         displayName: "Auto-Download Media",
@@ -437,12 +161,6 @@ export class WSApiTrigger implements INodeType {
         default: false,
         description:
           "Whether to automatically download media files when message events contain media",
-        displayOptions: {
-          show: {
-            operation: ["all", "message"],
-            events: ["message"],
-          },
-        },
       },
       {
         displayName: "Parse Event Data",
@@ -506,10 +224,6 @@ export class WSApiTrigger implements INodeType {
     const parseEventData = this.getNodeParameter("parseEventData") as boolean;
     const includeRawEvent = this.getNodeParameter("includeRawEvent") as boolean;
     const enableAuth = this.getNodeParameter("enableAuth") as boolean;
-    const responseMode = this.getNodeParameter(
-      "responseMode",
-      "lastNode",
-    ) as string;
 
     // Validate webhook authentication if enabled
     if (enableAuth) {

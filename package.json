@@ -56,13 +56,14 @@
     "n8n-workflow": "*"
   },
   "devDependencies": {
-    "@types/node": "^18.19.0",
-    "@typescript-eslint/parser": "^6.0.0",
+    "@eslint/eslintrc": "^3.3.4",
+    "@types/node": "^25.3.3",
+    "@typescript-eslint/parser": "^8.56.1",
     "copyfiles": "^2.4.1",
-    "eslint": "^8.0.0",
-    "eslint-plugin-n8n-nodes-base": "^1.16.0",
-    "n8n-workflow": "^1.82.0",
-    "prettier": "^3.0.0",
-    "typescript": "^5.3.0"
+    "eslint": "^9.39.3",
+    "eslint-plugin-n8n-nodes-base": "^1.16.6",
+    "n8n-workflow": "^2.11.0",
+    "prettier": "^3.8.1",
+    "typescript": "^5.9.3"
   }
 }

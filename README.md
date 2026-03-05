@@ -254,8 +254,8 @@ The WSAPI node has `usableAsTool` enabled, making it directly usable as a tool w
 ## Development
 
 ### Prerequisites
-- Node.js 16 or later
-- npm 7 or later
+- Node.js 20.19.0 or later
+- npm 9 or later
 
 ### Setup
 ```bash
@@ -288,7 +288,7 @@ npm run format:check
 npm link
 
 # In your n8n directory
-npm link n8n-nodes-wsapi
+npm link @wsapichat/n8n-nodes-wsapi
 ```
 
 ## Support

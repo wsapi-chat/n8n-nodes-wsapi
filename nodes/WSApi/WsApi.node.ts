@@ -46,7 +46,7 @@ export class WSApi implements INodeType {
     displayName: "WSAPI",
     name: "wsApi",
     icon: "file:wsapi.svg",
-    group: ["communication"],
+    group: ["output"],
     version: 1,
     subtitle: '={{$parameter["resource"] + ": " + $parameter["operation"]}}',
     description: "Interact with WSAPI WhatsApp API",
