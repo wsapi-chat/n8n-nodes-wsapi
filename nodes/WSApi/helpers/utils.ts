@@ -1,102 +1,122 @@
-import { IExecuteFunctions, INodeProperties } from 'n8n-workflow';
+import { IExecuteFunctions, INodeProperties } from "n8n-workflow";
 
 export function createAdvancedOptions(): INodeProperties {
-	return {
-		displayName: 'Advanced Options',
-		name: 'advancedOptions',
-		type: 'collection',
-		placeholder: 'Add Option',
-		default: {},
-		options: [
-			{
-				displayName: 'Mentions',
-				name: 'mentions',
-				type: 'string',
-				default: '',
-				description: 'Comma-separated list of phone numbers to mention (without @)',
-			},
-			{
-				displayName: 'Reply To Message ID',
-				name: 'replyTo',
-				type: 'string',
-				default: '',
-				description: 'ID of the message to reply to',
-			},
-			{
-				displayName: 'Reply To Sender ID',
-				name: 'replyToSenderId',
-				type: 'string',
-				default: '',
-				description: 'The ID of the sender of the message being replied to. Should be set when replyTo is specified.',
-				placeholder: '1234567890@s.whatsapp.net',
-			},
-			{
-				displayName: 'Is Forwarded',
-				name: 'isForwarded',
-				type: 'boolean',
-				default: false,
-				description: 'Whether this message is forwarded',
-			},
-			{
-				displayName: 'View Once',
-				name: 'viewOnce',
-				type: 'boolean',
-				default: false,
-				description: 'Whether the message should disappear after being viewed (media only)',
-				displayOptions: {
-					show: {
-						'/resource': ['message'],
-						'/operation': ['sendImage', 'sendVideo', 'sendAudio', 'sendVoice'],
-					},
-				},
-			},
-			{
-				displayName: 'Ephemeral Expiration',
-				name: 'ephemeralExpiration',
-				type: 'options',
-				default: '',
-				description: 'Custom expiration time for this message, overriding the chat\'s ephemeral settings',
-				options: [
-					{ name: 'Use Chat Default', value: '' },
-					{ name: '24 Hours', value: '24h' },
-					{ name: '7 Days', value: '7d' },
-					{ name: '90 Days', value: '90d' },
-				],
-			},
-		],
-	};
+  return {
+    displayName: "Advanced Options",
+    name: "advancedOptions",
+    type: "collection",
+    placeholder: "Add Option",
+    default: {},
+    options: [
+      {
+        displayName: "Ephemeral Expiration",
+        name: "ephemeralExpiration",
+        type: "options",
+        default: "",
+        description:
+          "Custom expiration time for this message, overriding the chat's ephemeral settings",
+        options: [
+          { name: "Use Chat Default", value: "" },
+          { name: "24 Hours", value: "24h" },
+          { name: "7 Days", value: "7d" },
+          { name: "90 Days", value: "90d" },
+        ],
+      },
+      {
+        displayName: "Is Forwarded",
+        name: "isForwarded",
+        type: "boolean",
+        default: false,
+        description: "Whether this message is forwarded",
+      },
+      {
+        displayName: "Mentions",
+        name: "mentions",
+        type: "string",
+        default: "",
+        description:
+          "Comma-separated list of phone numbers to mention (without @)",
+      },
+      {
+        displayName: "Reply To Message ID",
+        name: "replyTo",
+        type: "string",
+        default: "",
+        description: "ID of the message to reply to",
+      },
+      {
+        displayName: "Reply To Sender ID",
+        name: "replyToSenderId",
+        type: "string",
+        default: "",
+        description:
+          "The ID of the sender of the message being replied to. Should be set when replyTo is specified.",
+        placeholder: "1234567890@s.whatsapp.net",
+      },
+      {
+        displayName: "View Once",
+        name: "viewOnce",
+        type: "boolean",
+        default: false,
+        description:
+          "Whether the message should disappear after being viewed (media only)",
+        displayOptions: {
+          show: {
+            "/resource": ["message"],
+            "/operation": ["sendImage", "sendVideo", "sendAudio", "sendVoice"],
+          },
+        },
+      },
+    ],
+  };
 }
 
 export function parseAdvancedOptions(advancedOptions: any, body: any): void {
-	if (advancedOptions.mentions) {
-		body.mentions = advancedOptions.mentions.split(',').map((m: string) => m.trim());
-	}
-	if (advancedOptions.replyTo) body.replyTo = advancedOptions.replyTo;
-	if (advancedOptions.replyToSenderId) body.replyToSenderId = advancedOptions.replyToSenderId;
-	if (advancedOptions.isForwarded) body.isForwarded = advancedOptions.isForwarded;
-	if (advancedOptions.viewOnce) body.viewOnce = advancedOptions.viewOnce;
-	if (advancedOptions.ephemeralExpiration) body.ephemeralExpiration = advancedOptions.ephemeralExpiration;
+  if (advancedOptions.mentions) {
+    body.mentions = advancedOptions.mentions
+      .split(",")
+      .map((m: string) => m.trim());
+  }
+  if (advancedOptions.replyTo) body.replyTo = advancedOptions.replyTo;
+  if (advancedOptions.replyToSenderId)
+    body.replyToSenderId = advancedOptions.replyToSenderId;
+  if (advancedOptions.isForwarded)
+    body.isForwarded = advancedOptions.isForwarded;
+  if (advancedOptions.viewOnce) body.viewOnce = advancedOptions.viewOnce;
+  if (advancedOptions.ephemeralExpiration)
+    body.ephemeralExpiration = advancedOptions.ephemeralExpiration;
 }
 
 // Simple per-node static-data cache helpers
 type CacheEntry = { value: any; expiresAt: number };
 
-export function cacheRead(ctx: IExecuteFunctions, key: string): any | undefined {
-    const sd = ctx.getWorkflowStaticData('node') as any;
-    sd.wsapiCache = sd.wsapiCache || {};
-    const entry: CacheEntry | undefined = sd.wsapiCache[key];
-    if (!entry) return undefined;
-    if (typeof entry.expiresAt !== 'number' || entry.expiresAt <= Date.now()) return undefined;
-    return entry.value;
+export function cacheRead(
+  ctx: IExecuteFunctions,
+  key: string,
+): any | undefined {
+  const sd = ctx.getWorkflowStaticData("node") as any;
+  sd.wsapiCache = sd.wsapiCache || {};
+  const entry: CacheEntry | undefined = sd.wsapiCache[key];
+  if (!entry) return undefined;
+  if (typeof entry.expiresAt !== "number" || entry.expiresAt <= Date.now())
+    return undefined;
+  return entry.value;
 }
 
-export function cacheWrite(ctx: IExecuteFunctions, key: string, value: any, ttlSeconds: number): void {
-    const sd = ctx.getWorkflowStaticData('node') as any;
-    sd.wsapiCache = sd.wsapiCache || {};
-    const ttlMs = Math.max(1, Math.floor(ttlSeconds)) * 1000;
-    sd.wsapiCache[key] = { value, expiresAt: Date.now() + ttlMs } as CacheEntry;
+export function cacheWrite(
+  ctx: IExecuteFunctions,
+  key: string,
+  value: any,
+  ttlSeconds: number,
+): void {
+  const sd = ctx.getWorkflowStaticData("node") as any;
+  sd.wsapiCache = sd.wsapiCache || {};
+  const ttlMs = Math.max(1, Math.floor(ttlSeconds)) * 1000;
+  sd.wsapiCache[key] = { value, expiresAt: Date.now() + ttlMs } as CacheEntry;
 }
 
-export function makeCacheKey(parts: Array<string | number | boolean | undefined | null>): string {
-    return parts.map((v) => encodeURIComponent(String(v ?? ''))).join('|');
+export function makeCacheKey(
+  parts: Array<string | number | boolean | undefined | null>,
+): string {
+  return parts.map((v) => encodeURIComponent(String(v ?? ""))).join("|");
 }

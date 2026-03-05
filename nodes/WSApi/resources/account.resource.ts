@@ -1,126 +1,340 @@
-import { INodeProperties } from 'n8n-workflow';
+import { INodeProperties } from "n8n-workflow";
 
 export const accountOperations: INodeProperties = {
-	displayName: 'Operation',
-	name: 'operation',
-	type: 'options',
-	noDataExpression: true,
-	displayOptions: {
-		show: {
-			resource: ['account'],
-		},
-	},
-	options: [
-		{
-			name: 'Get Info',
-			value: 'getInfo',
-			description: 'Get account information',
-			action: 'Get account information',
-		},
-		{
-			name: 'Set Name',
-			value: 'setName',
-			description: 'Set account name',
-			action: 'Set account name',
-		},
-		{
-			name: 'Set Picture',
-			value: 'setPicture',
-			description: 'Set account profile picture',
-			action: 'Set account profile picture',
-		},
-		{
-			name: 'Set Presence',
-			value: 'setPresence',
-			description: 'Set account presence',
-			action: 'Set account presence',
-		},
-		{
-			name: 'Set Status',
-			value: 'setStatus',
-			description: 'Set account status',
-			action: 'Set account status',
-		},
-	],
-	default: 'getInfo',
+  displayName: "Operation",
+  name: "operation",
+  type: "options",
+  noDataExpression: true,
+  displayOptions: {
+    show: {
+      resource: ["account"],
+    },
+  },
+  options: [
+    {
+      name: "Create Instance",
+      value: "createInstance",
+      description: "Create a new instance on a subscription (reseller only)",
+      action: "Create instance",
+    },
+    {
+      name: "Delete Instance",
+      value: "deleteInstance",
+      description: "Delete an instance from a subscription (reseller only)",
+      action: "Delete instance",
+    },
+    {
+      name: "Get Instance",
+      value: "getInstance",
+      description: "Get instance detail",
+      action: "Get instance detail",
+    },
+    {
+      name: "Get Instance Defaults",
+      value: "getInstanceDefaults",
+      description: "Get customer-level default settings for instances",
+      action: "Get instance defaults",
+    },
+    {
+      name: "Get Subscription Changes",
+      value: "getSubscriptionChanges",
+      description: "Get subscription change audit log",
+      action: "Get subscription changes",
+    },
+    {
+      name: "List Instances",
+      value: "listInstances",
+      description: "List all customer instances",
+      action: "List instances",
+    },
+    {
+      name: "List Subscription Instances",
+      value: "listSubscriptionInstances",
+      description: "List instances belonging to a subscription",
+      action: "List subscription instances",
+    },
+    {
+      name: "List Subscriptions",
+      value: "listSubscriptions",
+      description: "List customer subscriptions",
+      action: "List subscriptions",
+    },
+    {
+      name: "Regenerate API Key",
+      value: "regenerateApiKey",
+      description: "Regenerate instance API key",
+      action: "Regenerate API key",
+    },
+    {
+      name: "Restart Instance",
+      value: "restartInstance",
+      description: "Restart an instance",
+      action: "Restart instance",
+    },
+    {
+      name: "Update Instance Defaults",
+      value: "updateInstanceDefaults",
+      description: "Update customer-level default settings",
+      action: "Update instance defaults",
+    },
+    {
+      name: "Update Instance Name",
+      value: "updateInstanceName",
+      description: "Update instance display name",
+      action: "Update instance name",
+    },
+    {
+      name: "Update Instance Settings",
+      value: "updateInstanceSettings",
+      action: "Update instance settings",
+    },
+  ],
+  default: "listInstances",
 };
 
 export const accountFields: INodeProperties[] = [
-	// Set Name fields (tool-compatible)
-	{
-		displayName: 'Name',
-		name: 'name',
-		type: 'string',
-		required: true,
-		default: '',
-		description: 'The new display name for your WhatsApp account',
-		hint: 'Enter the name that will be visible to your WhatsApp contacts',
-		placeholder: 'My name',
-		displayOptions: {
-			show: {
-				resource: ['account'],
-				operation: ['setName'],
-			},
-		},
-	},
-	// Set Picture fields (tool-compatible)
-	{
-		displayName: 'Picture Base64',
-		name: 'pictureBase64',
-		type: 'string',
-		required: true,
-		default: '',
-		description: 'Base64 encoded image data for the profile picture',
-		hint: 'Provide image data in base64 format. Supported formats: JPEG, PNG. Recommended size: 640x640 pixels',
-		placeholder: 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQ...',
-		displayOptions: {
-			show: {
-				resource: ['account'],
-				operation: ['setPicture'],
-			},
-		},
-	},
-	// Set Presence fields (tool-compatible)
-	{
-		displayName: 'Status',
-		name: 'status',
-		type: 'options',
-		required: true,
-		options: [
-			{
-				name: 'Available',
-				value: 'available',
-			},
-			{
-				name: 'Unavailable',
-				value: 'unavailable',
-			},
-		],
-		default: 'available',
-		description: 'Set your WhatsApp presence status visibility',
-		hint: 'Available = show online status to contacts, Unavailable = appear offline',
-		displayOptions: {
-			show: {
-				resource: ['account'],
-				operation: ['setPresence'],
-			},
-		},
-	},
-	// Set Status fields (tool-compatible)
-	{
-		displayName: 'Status Message',
-		name: 'statusMessage',
-		type: 'string',
-		required: true,
-		default: '',
-		description: 'Status message that appears in your WhatsApp profile',
-		hint: 'Enter a status message that will be visible to your contacts. Keep it concise and professional.',
-		placeholder: 'Available for business inquiries',
-		displayOptions: {
-			show: {
-				resource: ['account'],
-				operation: ['setStatus'],
-			},
-		},
-	},
+  {
+    displayName: "Instance ID",
+    name: "accountInstanceId",
+    type: "string",
+    required: true,
+    default: "",
+    displayOptions: {
+      show: {
+        resource: ["account"],
+        operation: [
+          "getInstance",
+          "updateInstanceName",
+          "updateInstanceSettings",
+          "regenerateApiKey",
+          "restartInstance",
+        ],
+      },
+    },
+  },
+  {
+    displayName: "Subscription ID",
+    name: "subscriptionId",
+    type: "string",
+    required: true,
+    default: "",
+    displayOptions: {
+      show: {
+        resource: ["account"],
+        operation: [
+          "listSubscriptionInstances",
+          "createInstance",
+          "deleteInstance",
+          "getSubscriptionChanges",
+        ],
+      },
+    },
+  },
+  {
+    displayName: "Instance ID",
+    name: "deleteInstanceId",
+    type: "string",
+    required: true,
+    default: "",
+    description: "The instance ID to delete",
+    displayOptions: {
+      show: {
+        resource: ["account"],
+        operation: ["deleteInstance"],
+      },
+    },
+  },
+  {
+    displayName: "Name",
+    name: "name",
+    type: "string",
+    required: true,
+    default: "",
+    description: "The new display name for the instance",
+    displayOptions: {
+      show: {
+        resource: ["account"],
+        operation: ["updateInstanceName"],
+      },
+    },
+  },
+  {
+    displayName: "Settings",
+    name: "settings",
+    type: "collection",
+    placeholder: "Add Setting",
+    default: {},
+    description: "Instance configuration settings to update",
+    options: [
+      {
+        displayName: "Description",
+        name: "description",
+        type: "string",
+        default: "",
+        description: "Descriptive text about the instance purpose",
+      },
+      {
+        displayName: "Event Filters",
+        name: "eventFilters",
+        type: "multiOptions",
+        default: [],
+        description:
+          "Filter which event types to receive via webhook. Leave empty to receive all events.",
+        options: [
+          { name: "Call Accept", value: "call_accept" },
+          { name: "Call Offer", value: "call_offer" },
+          { name: "Call Terminate", value: "call_terminate" },
+          { name: "Chat Picture", value: "chat_picture" },
+          { name: "Chat Presence", value: "chat_presence" },
+          { name: "Chat Push Name", value: "chat_push_name" },
+          { name: "Chat Setting", value: "chat_setting" },
+          { name: "Chat Status", value: "chat_status" },
+          { name: "Contact", value: "contact" },
+          { name: "Group", value: "group" },
+          { name: "Message", value: "message" },
+          { name: "Message Delete", value: "message_delete" },
+          { name: "Message History Sync", value: "message_history_sync" },
+          { name: "Message Read", value: "message_read" },
+          { name: "Message Star", value: "message_star" },
+          { name: "Newsletter", value: "newsletter" },
+          { name: "User Presence", value: "user_presence" },
+        ],
+      },
+      {
+        displayName: "History Sync",
+        name: "historySync",
+        type: "boolean",
+        default: false,
+        description: "Whether to enable history sync on pairing",
+      },
+      {
+        displayName: "Name",
+        name: "name",
+        type: "string",
+        default: "",
+        description: "Display name for the instance",
+      },
+      {
+        displayName: "Pull Mode",
+        name: "pullMode",
+        type: "boolean",
+        default: false,
+        description:
+          "Whether to enable pull mode to fetch events instead of receiving webhooks",
+      },
+      {
+        displayName: "Signing Secret",
+        name: "signingSecret",
+        type: "string",
+        typeOptions: { password: true },
+        default: "",
+        description:
+          "Secret key for HMAC-SHA256 webhook signature verification",
+      },
+      {
+        displayName: "Webhook Auth Header",
+        name: "webhookAuthHeader",
+        type: "string",
+        default: "",
+        description: "HTTP header name for webhook authentication",
+      },
+      {
+        displayName: "Webhook Auth Value",
+        name: "webhookAuthValue",
+        type: "string",
+        default: "",
+        description: "Authentication value to send with webhook requests",
+      },
+      {
+        displayName: "Webhook URL",
+        name: "webhookUrl",
+        type: "string",
+        default: "",
+        description: "HTTPS endpoint to receive WhatsApp events",
+      },
+    ],
+    displayOptions: {
+      show: {
+        resource: ["account"],
+        operation: ["updateInstanceSettings"],
+      },
+    },
+  },
+  {
+    displayName: "Defaults",
+    name: "defaults",
+    type: "collection",
+    placeholder: "Add Default",
+    default: {},
+    description: "Customer-level default settings for new instances",
+    options: [
+      {
+        displayName: "Event Filters",
+        name: "eventFilters",
+        type: "multiOptions",
+        default: [],
+        description: "Default event filters for new instances",
+        options: [
+          { name: "Call Accept", value: "call_accept" },
+          { name: "Call Offer", value: "call_offer" },
+          { name: "Call Terminate", value: "call_terminate" },
+          { name: "Chat Picture", value: "chat_picture" },
+          { name: "Chat Presence", value: "chat_presence" },
+          { name: "Chat Push Name", value: "chat_push_name" },
+          { name: "Chat Setting", value: "chat_setting" },
+          { name: "Chat Status", value: "chat_status" },
+          { name: "Contact", value: "contact" },
+          { name: "Group", value: "group" },
+          { name: "Message", value: "message" },
+          { name: "Message Delete", value: "message_delete" },
+          { name: "Message History Sync", value: "message_history_sync" },
+          { name: "Message Read", value: "message_read" },
+          { name: "Message Star", value: "message_star" },
+          { name: "Newsletter", value: "newsletter" },
+          { name: "User Presence", value: "user_presence" },
+        ],
+      },
+      {
+        displayName: "History Sync",
+        name: "historySync",
+        type: "boolean",
+        default: false,
+        description: "Whether to enable history sync by default",
+      },
+      {
+        displayName: "Pull Mode",
+        name: "pullMode",
+        type: "boolean",
+        default: false,
+        description: "Whether to enable pull mode by default",
+      },
+      {
+        displayName: "Webhook Auth Header",
+        name: "webhookAuthHeader",
+        type: "string",
+        default: "",
+        description: "Default webhook auth header",
+      },
+      {
+        displayName: "Webhook Auth Value",
+        name: "webhookAuthValue",
+        type: "string",
+        default: "",
+        description: "Default webhook auth value",
+      },
+      {
+        displayName: "Webhook URL",
+        name: "webhookUrl",
+        type: "string",
+        default: "",
+        description: "Default webhook URL for new instances",
+      },
+    ],
+    displayOptions: {
+      show: {
+        resource: ["account"],
+        operation: ["updateInstanceDefaults"],
+      },
+    },
+  },
 ];
