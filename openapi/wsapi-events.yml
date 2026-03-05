@@ -1,67 +1,13 @@
 openapi: 3.1.0
 info:
-  title: WSAPI v2 Events
-  description: |
-    This document describes the events that can be received from the WSAPI v2 API.
-    Each event represents a specific type of notification or update from WSAPI.
-    The /events endpoint represents the complete schema that is received in the
-    webhook configured. The rest of the endpoints describe each event schema in
-    particular.
-
-    Four events are classified as **system events**: `logged_in`, `logged_out`,
-    `login_error`, and `initial_sync_finished`. System events represent instance
-    lifecycle state changes and are **always delivered** regardless of event filter
-    configuration. They are silently stripped from user-provided `eventFilters` lists
-    and cannot be opted out of.
-
-    ## Webhook delivery headers
-
-    Every webhook `POST` request includes the following HTTP headers:
-
-    | Header | Description |
-    |--------|-------------|
-    | `Content-Type` | Always `application/json`. |
-    | `X-Instance-Id` | The ID of the instance that generated the event. |
-    | `X-Webhook-Signature` | HMAC-SHA256 signature of the request body. **Only present when a `signingSecret` is configured for the instance.** |
-
-    ## Verifying webhook signatures
-
-    When a `signingSecret` is configured, WSAPI signs every webhook payload using
-    HMAC-SHA256. The signature is sent in the `X-Webhook-Signature` header with the
-    format:
-
-    ```
-    sha256=<hex-encoded HMAC-SHA256>
-    ```
-
-    To verify a webhook delivery:
-
-    1. Compute the HMAC-SHA256 of the raw request body using your signing secret as the key.
-    2. Hex-encode the result and prepend `sha256=`.
-    3. Compare the computed value with the `X-Webhook-Signature` header using a
-       constant-time comparison to prevent timing attacks.
-
-    **Example (Node.js):**
-    ```js
-    const crypto = require('crypto');
-
-    function verifySignature(body, secret, headerValue) {
-      const expected = 'sha256=' + crypto
-        .createHmac('sha256', secret)
-        .update(body)
-        .digest('hex');
-      return crypto.timingSafeEqual(
-        Buffer.from(expected),
-        Buffer.from(headerValue),
-      );
-    }
-    ```
+  title: WSAPI Events
+  description: This document describes the events that can be received from the WSAPI API. Each event represents a specific type of notification or update from WSAPI.
   version: 2.0.0
   license:
-    name: Proprietary
-    url: https://wsapi.chat/terms
+    name: MIT
+    url: https://opensource.org/licenses/MIT
 servers:
-  - url: https://your-webhook-endpoint.yourcompany.com
+  - url: https://yourcompany.com/your-webook-endpoint
     description: Your webhook endpoint that receives WSAPI events
 security: []
 tags:

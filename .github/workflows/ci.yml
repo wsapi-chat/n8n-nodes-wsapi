@@ -49,7 +49,7 @@ jobs:
       - run: npm ci
       - run: npm run build
       - run: npm pack
-      - uses: actions/upload-artifact@v6
+      - uses: actions/upload-artifact@v7
         with:
           name: package
-          path: '*.tgz'
+          path: "*.tgz"
