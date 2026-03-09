@@ -1,3 +1,3 @@
-export { WsApi } from './nodes/WSApi/WsApi.node';
-export { WsApiTrigger } from './nodes/WSApi/WsApiTrigger.node';
+export { WSApi } from './nodes/WSApi/WSApi.node';
+export { WSApiTrigger } from './nodes/WSApi/WSApiTrigger.node';
 export { WSApiApi } from './credentials/WSApiApi.credentials';

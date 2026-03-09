@@ -39,7 +39,7 @@ import { executeCommunityOperation } from "./operations/community.operations";
 import { executeNewsletterOperation } from "./operations/newsletter.operations";
 import { executeStatusOperation } from "./operations/status.operations";
 
-export class WsApi implements INodeType {
+export class WSApi implements INodeType {
   description: INodeTypeDescription = {
     displayName: "WSAPI",
     name: "wsApi",

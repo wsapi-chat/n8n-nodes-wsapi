@@ -9,7 +9,7 @@ import {
   NodeConnectionType,
 } from "n8n-workflow";
 
-export class WsApiTrigger implements INodeType {
+export class WSApiTrigger implements INodeType {
   description: INodeTypeDescription = {
     displayName: "WSAPI Trigger",
     name: "wsApiTrigger",

@@ -21,7 +21,9 @@ export default [
 			},
 		},
 		rules: {
-			'n8n-nodes-base/node-filename-against-convention': 'error',
+			// n8n requires class names to match filenames exactly (e.g. WSApi, not WsApi)
+			// but this rule enforces camelCase filenames which breaks n8n node loading
+			'n8n-nodes-base/node-filename-against-convention': 'off',
 			'n8n-nodes-base/node-class-description-inputs-wrong-regular-node': 'error',
 			'n8n-nodes-base/node-class-description-outputs-wrong': 'error',
 		},
