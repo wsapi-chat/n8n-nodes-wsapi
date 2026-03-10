@@ -71,7 +71,10 @@ export function createAdvancedOptions(): INodeProperties {
   };
 }
 
-export function parseAdvancedOptions(advancedOptions: IDataObject, body: IDataObject): void {
+export function parseAdvancedOptions(
+  advancedOptions: IDataObject,
+  body: IDataObject,
+): void {
   if (advancedOptions.mentions) {
     body.mentions = (advancedOptions.mentions as string)
       .split(",")
@@ -112,7 +115,10 @@ export function cacheWrite(
   const sd = ctx.getWorkflowStaticData("node") as IDataObject;
   sd.wsapiCache = (sd.wsapiCache as IDataObject) || {};
   const ttlMs = Math.max(1, Math.floor(ttlSeconds)) * 1000;
-  (sd.wsapiCache as IDataObject)[key] = { value, expiresAt: Date.now() + ttlMs } as unknown as IDataObject;
+  (sd.wsapiCache as IDataObject)[key] = {
+    value,
+    expiresAt: Date.now() + ttlMs,
+  } as unknown as IDataObject;
 }
 
 export function makeCacheKey(

@@ -34,7 +34,8 @@
     "lint:fix": "n8n-node lint --fix",
     "deploy:local": "npm run build && rm -rf .local-deploy && mkdir -p .local-deploy && cp package.json .local-deploy/ && cp -r dist .local-deploy/",
     "release": "n8n-node release",
-    "prepublishOnly": "n8n-node prerelease"
+    "prepublishOnly": "n8n-node prerelease",
+    "test": "echo \"No tests specified\" && exit 0"
   },
   "files": [
     "dist"

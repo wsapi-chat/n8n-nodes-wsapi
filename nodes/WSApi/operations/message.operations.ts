@@ -447,7 +447,11 @@ export async function executeMessageOperation(
       const pinSenderId = this.getNodeParameter("senderId", i) as string;
       const pinChatId = this.getNodeParameter("chatId", i) as string;
       const pinned = this.getNodeParameter("pinned", i) as boolean;
-      const pinBody: IDataObject = { chatId: pinChatId, senderId: pinSenderId, pinned };
+      const pinBody: IDataObject = {
+        chatId: pinChatId,
+        senderId: pinSenderId,
+        pinned,
+      };
       if (pinned) {
         const pinExpiration = this.getNodeParameter(
           "pinExpiration",

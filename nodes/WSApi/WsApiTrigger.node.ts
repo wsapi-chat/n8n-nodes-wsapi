@@ -329,15 +329,20 @@ export class WsApiTrigger implements INodeType {
             const baseURL = credentials.baseUrl as string;
 
             // Download the media file with full response to get headers
-            const response = (await this.helpers.httpRequestWithAuthentication.call(this, "wsApiApi", {
-              method: "GET",
-              url: "/media/download",
-              baseURL: baseURL,
-              qs: { id: mediaId },
-              encoding: "arraybuffer",
-              json: false,
-              returnFullResponse: true,
-            })) as { body: ArrayBuffer; headers: Record<string, string> };
+            const response =
+              (await this.helpers.httpRequestWithAuthentication.call(
+                this,
+                "wsApiApi",
+                {
+                  method: "GET",
+                  url: "/media/download",
+                  baseURL: baseURL,
+                  qs: { id: mediaId },
+                  encoding: "arraybuffer",
+                  json: false,
+                  returnFullResponse: true,
+                },
+              )) as { body: ArrayBuffer; headers: Record<string, string> };
 
             // Extract filename and content type from headers
             const headers = response.headers || {};
