@@ -1,4 +1,4 @@
-import { IExecuteFunctions, INodeProperties } from "n8n-workflow";
+import { IDataObject, IExecuteFunctions, INodeProperties } from "n8n-workflow";
 
 export function createAdvancedOptions(): INodeProperties {
   return {
@@ -71,9 +71,9 @@ export function createAdvancedOptions(): INodeProperties {
   };
 }
 
-export function parseAdvancedOptions(advancedOptions: any, body: any): void {
+export function parseAdvancedOptions(advancedOptions: IDataObject, body: IDataObject): void {
   if (advancedOptions.mentions) {
-    body.mentions = advancedOptions.mentions
+    body.mentions = (advancedOptions.mentions as string)
       .split(",")
       .map((m: string) => m.trim());
   }
@@ -88,15 +88,15 @@ export function parseAdvancedOptions(advancedOptions: any, body: any): void {
 }
 
 // Simple per-node static-data cache helpers
-type CacheEntry = { value: any; expiresAt: number };
+type CacheEntry = { value: unknown; expiresAt: number };
 
 export function cacheRead(
   ctx: IExecuteFunctions,
   key: string,
-): any | undefined {
-  const sd = ctx.getWorkflowStaticData("node") as any;
-  sd.wsapiCache = sd.wsapiCache || {};
-  const entry: CacheEntry | undefined = sd.wsapiCache[key];
+): unknown | undefined {
+  const sd = ctx.getWorkflowStaticData("node") as IDataObject;
+  sd.wsapiCache = (sd.wsapiCache as IDataObject) || {};
+  const entry = (sd.wsapiCache as IDataObject)[key] as CacheEntry | undefined;
   if (!entry) return undefined;
   if (typeof entry.expiresAt !== "number" || entry.expiresAt <= Date.now())
     return undefined;
@@ -106,13 +106,13 @@ export function cacheRead(
 export function cacheWrite(
   ctx: IExecuteFunctions,
   key: string,
-  value: any,
+  value: unknown,
   ttlSeconds: number,
 ): void {
-  const sd = ctx.getWorkflowStaticData("node") as any;
-  sd.wsapiCache = sd.wsapiCache || {};
+  const sd = ctx.getWorkflowStaticData("node") as IDataObject;
+  sd.wsapiCache = (sd.wsapiCache as IDataObject) || {};
   const ttlMs = Math.max(1, Math.floor(ttlSeconds)) * 1000;
-  sd.wsapiCache[key] = { value, expiresAt: Date.now() + ttlMs } as CacheEntry;
+  (sd.wsapiCache as IDataObject)[key] = { value, expiresAt: Date.now() + ttlMs } as unknown as IDataObject;
 }
 
 export function makeCacheKey(

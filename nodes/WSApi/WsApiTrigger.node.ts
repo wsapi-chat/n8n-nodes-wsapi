@@ -1,5 +1,6 @@
 import { createHmac, timingSafeEqual } from "crypto";
 import {
+  IBinaryKeyData,
   IHookFunctions,
   IWebhookFunctions,
   IDataObject,
@@ -9,7 +10,7 @@ import {
   NodeConnectionType,
 } from "n8n-workflow";
 
-export class WSApiTrigger implements INodeType {
+export class WsApiTrigger implements INodeType {
   description: INodeTypeDescription = {
     displayName: "WSAPI Trigger",
     name: "wsApiTrigger",
@@ -22,11 +23,12 @@ export class WSApiTrigger implements INodeType {
     defaults: {
       name: "WSAPI Trigger",
     },
+    usableAsTool: true,
     inputs: [],
     outputs: ["main"] as NodeConnectionType[],
     credentials: [
       {
-        name: "WSApiApi",
+        name: "wsApiApi",
         required: false,
       },
     ],
@@ -202,7 +204,7 @@ export class WSApiTrigger implements INodeType {
 
     // Verify HMAC-SHA256 webhook signature if enabled
     if (verifySignature) {
-      const credentials = await this.getCredentials("WSApiApi");
+      const credentials = await this.getCredentials("wsApiApi");
       const signingSecret = credentials.signingSecret as string;
 
       if (!signingSecret) {
@@ -234,7 +236,7 @@ export class WSApiTrigger implements INodeType {
       }
 
       const req = this.getRequestObject();
-      const rawBody = (req as any).rawBody as Buffer | undefined;
+      const rawBody = (req as unknown as { rawBody?: Buffer }).rawBody;
       const bodyBytes = rawBody || Buffer.from(JSON.stringify(body), "utf-8");
 
       const expected =
@@ -312,7 +314,7 @@ export class WSApiTrigger implements INodeType {
     }
 
     // Handle media auto-download - prepare binary data if enabled
-    let binaryData: any = undefined;
+    let binaryData: IBinaryKeyData | undefined = undefined;
     if (autoDownloadMedia && eventType === "message") {
       const eventData = body.eventData as IDataObject;
 
@@ -323,13 +325,11 @@ export class WSApiTrigger implements INodeType {
         if (mediaId) {
           try {
             // Get credentials for media download
-            const credentials = await this.getCredentials("WSApiApi");
+            const credentials = await this.getCredentials("wsApiApi");
             const baseURL = credentials.baseUrl as string;
-            const apiKey = credentials.apiKey as string;
-            const instanceId = credentials.instanceId as string;
 
             // Download the media file with full response to get headers
-            const response = (await this.helpers.httpRequest({
+            const response = (await this.helpers.httpRequestWithAuthentication.call(this, "wsApiApi", {
               method: "GET",
               url: "/media/download",
               baseURL: baseURL,
@@ -337,10 +337,6 @@ export class WSApiTrigger implements INodeType {
               encoding: "arraybuffer",
               json: false,
               returnFullResponse: true,
-              headers: {
-                "X-Api-Key": apiKey,
-                "X-Instance-Id": instanceId,
-              },
             })) as { body: ArrayBuffer; headers: Record<string, string> };
 
             // Extract filename and content type from headers

@@ -1,5 +1,5 @@
-import { IExecuteFunctions } from "n8n-workflow";
-import { WSApiMessageBody, WSApiResponse } from "../types";
+import { IDataObject, IExecuteFunctions } from "n8n-workflow";
+import { WSApiResponse } from "../types";
 import { parseAdvancedOptions } from "../helpers/utils";
 
 export async function executeMessageOperation(
@@ -30,19 +30,19 @@ export async function executeMessageOperation(
     "advancedOptions",
     i,
     {},
-  ) as any;
+  ) as IDataObject;
 
   let responseData: WSApiResponse;
 
   switch (operation) {
-    case "sendText":
+    case "sendText": {
       const message = this.getNodeParameter("message", i) as string;
-      const textBody: any = { to, text: message };
+      const textBody: IDataObject = { to, text: message };
       parseAdvancedOptions(advancedOptions, textBody);
 
-      responseData = await this.helpers.requestWithAuthentication.call(
+      responseData = await this.helpers.httpRequestWithAuthentication.call(
         this,
-        "WSApiApi",
+        "wsApiApi",
         {
           method: "POST",
           url: "/messages/text",
@@ -52,8 +52,9 @@ export async function executeMessageOperation(
         },
       );
       break;
+    }
 
-    case "sendLink":
+    case "sendLink": {
       const linkUrl = this.getNodeParameter("url", i) as string;
       const linkText = this.getNodeParameter("message", i) as string;
       const linkTitle = this.getNodeParameter("linkTitle", i, "") as string;
@@ -67,15 +68,15 @@ export async function executeMessageOperation(
         i,
         "",
       ) as string;
-      const linkBody: any = { to, url: linkUrl, text: linkText };
+      const linkBody: IDataObject = { to, url: linkUrl, text: linkText };
       if (linkTitle) linkBody.title = linkTitle;
       if (linkDescription) linkBody.description = linkDescription;
       if (jpegThumbnail) linkBody.jpegThumbnail = jpegThumbnail;
       parseAdvancedOptions(advancedOptions, linkBody);
 
-      responseData = await this.helpers.requestWithAuthentication.call(
+      responseData = await this.helpers.httpRequestWithAuthentication.call(
         this,
-        "WSApiApi",
+        "wsApiApi",
         {
           method: "POST",
           url: "/messages/link",
@@ -85,8 +86,9 @@ export async function executeMessageOperation(
         },
       );
       break;
+    }
 
-    case "sendImage":
+    case "sendImage": {
       const imageInputType = this.getNodeParameter(
         "mediaInputType",
         i,
@@ -95,7 +97,7 @@ export async function executeMessageOperation(
       const imageCaption = this.getNodeParameter("caption", i, "") as string;
       const imageMimeType =
         (this.getNodeParameter("mimeType", i, "") as string) || "image/jpeg";
-      const imageBody: any = { to, mimeType: imageMimeType };
+      const imageBody: IDataObject = { to, mimeType: imageMimeType };
       if (imageInputType === "base64") {
         imageBody.data = this.getNodeParameter("mediaBase64", i) as string;
       } else {
@@ -104,9 +106,9 @@ export async function executeMessageOperation(
       if (imageCaption) imageBody.caption = imageCaption;
       parseAdvancedOptions(advancedOptions, imageBody);
 
-      responseData = await this.helpers.requestWithAuthentication.call(
+      responseData = await this.helpers.httpRequestWithAuthentication.call(
         this,
-        "WSApiApi",
+        "wsApiApi",
         {
           method: "POST",
           url: "/messages/image",
@@ -116,8 +118,9 @@ export async function executeMessageOperation(
         },
       );
       break;
+    }
 
-    case "sendVideo":
+    case "sendVideo": {
       const videoInputType = this.getNodeParameter(
         "mediaInputType",
         i,
@@ -126,7 +129,7 @@ export async function executeMessageOperation(
       const videoCaption = this.getNodeParameter("caption", i, "") as string;
       const videoMimeType =
         (this.getNodeParameter("mimeType", i, "") as string) || "video/mp4";
-      const videoBody: any = { to, mimeType: videoMimeType };
+      const videoBody: IDataObject = { to, mimeType: videoMimeType };
       if (videoInputType === "base64") {
         videoBody.data = this.getNodeParameter("mediaBase64", i) as string;
       } else {
@@ -135,9 +138,9 @@ export async function executeMessageOperation(
       if (videoCaption) videoBody.caption = videoCaption;
       parseAdvancedOptions(advancedOptions, videoBody);
 
-      responseData = await this.helpers.requestWithAuthentication.call(
+      responseData = await this.helpers.httpRequestWithAuthentication.call(
         this,
-        "WSApiApi",
+        "wsApiApi",
         {
           method: "POST",
           url: "/messages/video",
@@ -147,8 +150,9 @@ export async function executeMessageOperation(
         },
       );
       break;
+    }
 
-    case "sendAudio":
+    case "sendAudio": {
       const audioInputType = this.getNodeParameter(
         "mediaInputType",
         i,
@@ -156,7 +160,7 @@ export async function executeMessageOperation(
       ) as string;
       const audioMimeType =
         (this.getNodeParameter("mimeType", i, "") as string) || "audio/mpeg";
-      const audioBody: any = { to, mimeType: audioMimeType };
+      const audioBody: IDataObject = { to, mimeType: audioMimeType };
       if (audioInputType === "base64") {
         audioBody.data = this.getNodeParameter("mediaBase64", i) as string;
       } else {
@@ -164,9 +168,9 @@ export async function executeMessageOperation(
       }
       parseAdvancedOptions(advancedOptions, audioBody);
 
-      responseData = await this.helpers.requestWithAuthentication.call(
+      responseData = await this.helpers.httpRequestWithAuthentication.call(
         this,
-        "WSApiApi",
+        "wsApiApi",
         {
           method: "POST",
           url: "/messages/audio",
@@ -176,14 +180,15 @@ export async function executeMessageOperation(
         },
       );
       break;
+    }
 
-    case "sendVoice":
+    case "sendVoice": {
       const voiceInputType = this.getNodeParameter(
         "mediaInputType",
         i,
         "url",
       ) as string;
-      const voiceBody: any = { to };
+      const voiceBody: IDataObject = { to };
       if (voiceInputType === "base64") {
         voiceBody.data = this.getNodeParameter("mediaBase64", i) as string;
       } else {
@@ -191,9 +196,9 @@ export async function executeMessageOperation(
       }
       parseAdvancedOptions(advancedOptions, voiceBody);
 
-      responseData = await this.helpers.requestWithAuthentication.call(
+      responseData = await this.helpers.httpRequestWithAuthentication.call(
         this,
-        "WSApiApi",
+        "wsApiApi",
         {
           method: "POST",
           url: "/messages/voice",
@@ -203,8 +208,9 @@ export async function executeMessageOperation(
         },
       );
       break;
+    }
 
-    case "sendDocument":
+    case "sendDocument": {
       const documentInputType = this.getNodeParameter(
         "mediaInputType",
         i,
@@ -212,7 +218,7 @@ export async function executeMessageOperation(
       ) as string;
       const documentCaption = this.getNodeParameter("caption", i, "") as string;
       const documentFileName = this.getNodeParameter("fileName", i) as string;
-      const documentBody: any = { to, filename: documentFileName };
+      const documentBody: IDataObject = { to, filename: documentFileName };
       if (documentInputType === "base64") {
         documentBody.data = this.getNodeParameter("mediaBase64", i) as string;
       } else {
@@ -221,9 +227,9 @@ export async function executeMessageOperation(
       if (documentCaption) documentBody.caption = documentCaption;
       parseAdvancedOptions(advancedOptions, documentBody);
 
-      responseData = await this.helpers.requestWithAuthentication.call(
+      responseData = await this.helpers.httpRequestWithAuthentication.call(
         this,
-        "WSApiApi",
+        "wsApiApi",
         {
           method: "POST",
           url: "/messages/document",
@@ -233,20 +239,21 @@ export async function executeMessageOperation(
         },
       );
       break;
+    }
 
-    case "sendContact":
+    case "sendContact": {
       const contactName = this.getNodeParameter("contactName", i) as string;
       const contactPhone = this.getNodeParameter("contactPhone", i) as string;
-      const contactBody: any = {
+      const contactBody: IDataObject = {
         to,
         displayName: contactName,
         vCard: `BEGIN:VCARD\nVERSION:3.0\nFN:${contactName}\nTEL:${contactPhone}\nEND:VCARD`,
       };
       parseAdvancedOptions(advancedOptions, contactBody);
 
-      responseData = await this.helpers.requestWithAuthentication.call(
+      responseData = await this.helpers.httpRequestWithAuthentication.call(
         this,
-        "WSApiApi",
+        "wsApiApi",
         {
           method: "POST",
           url: "/messages/contact",
@@ -256,13 +263,14 @@ export async function executeMessageOperation(
         },
       );
       break;
+    }
 
-    case "sendLocation":
+    case "sendLocation": {
       const latitude = this.getNodeParameter("latitude", i) as number;
       const longitude = this.getNodeParameter("longitude", i) as number;
       const address = this.getNodeParameter("address", i, "") as string;
       const locationUrl = this.getNodeParameter("locationUrl", i, "") as string;
-      const locationBody: any = { to, latitude, longitude };
+      const locationBody: IDataObject = { to, latitude, longitude };
       if (address) {
         locationBody.name = address;
         locationBody.address = address;
@@ -270,9 +278,9 @@ export async function executeMessageOperation(
       if (locationUrl) locationBody.url = locationUrl;
       parseAdvancedOptions(advancedOptions, locationBody);
 
-      responseData = await this.helpers.requestWithAuthentication.call(
+      responseData = await this.helpers.httpRequestWithAuthentication.call(
         this,
-        "WSApiApi",
+        "wsApiApi",
         {
           method: "POST",
           url: "/messages/location",
@@ -282,8 +290,9 @@ export async function executeMessageOperation(
         },
       );
       break;
+    }
 
-    case "sendSticker":
+    case "sendSticker": {
       const stickerInputType = this.getNodeParameter(
         "mediaInputType",
         i,
@@ -296,7 +305,7 @@ export async function executeMessageOperation(
         i,
         false,
       ) as boolean;
-      const stickerBody: any = {
+      const stickerBody: IDataObject = {
         to,
         mimeType: stickerMimeType,
         isAnimated: stickerIsAnimated,
@@ -308,9 +317,9 @@ export async function executeMessageOperation(
       }
       parseAdvancedOptions(advancedOptions, stickerBody);
 
-      responseData = await this.helpers.requestWithAuthentication.call(
+      responseData = await this.helpers.httpRequestWithAuthentication.call(
         this,
-        "WSApiApi",
+        "wsApiApi",
         {
           method: "POST",
           url: "/messages/sticker",
@@ -320,20 +329,21 @@ export async function executeMessageOperation(
         },
       );
       break;
+    }
 
-    case "sendReaction":
+    case "sendReaction": {
       const messageId = this.getNodeParameter("messageId", i) as string;
       const emoji = this.getNodeParameter("emoji", i) as string;
       const senderId = this.getNodeParameter("senderId", i) as string;
-      const reactionBody: any = { to, senderId, reaction: emoji };
+      const reactionBody: IDataObject = { to, senderId, reaction: emoji };
       // Add ephemeral expiration if set in advanced options
       if (advancedOptions.ephemeralExpiration) {
         reactionBody.ephemeralExpiration = advancedOptions.ephemeralExpiration;
       }
 
-      responseData = await this.helpers.requestWithAuthentication.call(
+      responseData = await this.helpers.httpRequestWithAuthentication.call(
         this,
-        "WSApiApi",
+        "wsApiApi",
         {
           method: "POST",
           url: `/messages/${encodeURIComponent(messageId)}/reaction`,
@@ -343,14 +353,15 @@ export async function executeMessageOperation(
         },
       );
       break;
+    }
 
-    case "editMessage":
+    case "editMessage": {
       const editMessageId = this.getNodeParameter("messageId", i) as string;
       const newMessage = this.getNodeParameter("newMessage", i) as string;
 
-      responseData = await this.helpers.requestWithAuthentication.call(
+      responseData = await this.helpers.httpRequestWithAuthentication.call(
         this,
-        "WSApiApi",
+        "wsApiApi",
         {
           method: "POST",
           url: `/messages/${encodeURIComponent(editMessageId)}/edit`,
@@ -360,13 +371,14 @@ export async function executeMessageOperation(
         },
       );
       break;
+    }
 
-    case "deleteMessage":
+    case "deleteMessage": {
       const deleteMessageId = this.getNodeParameter("messageId", i) as string;
       const deleteSenderId = this.getNodeParameter("senderId", i) as string;
       const deleteChatId = this.getNodeParameter("chatId", i) as string;
 
-      await this.helpers.requestWithAuthentication.call(this, "WSApiApi", {
+      await this.helpers.httpRequestWithAuthentication.call(this, "wsApiApi", {
         method: "POST",
         url: `/messages/${encodeURIComponent(deleteMessageId)}/delete`,
         body: { chatId: deleteChatId, senderId: deleteSenderId },
@@ -375,8 +387,9 @@ export async function executeMessageOperation(
       });
       responseData = { success: true, messageId: deleteMessageId };
       break;
+    }
 
-    case "deleteForMe":
+    case "deleteForMe": {
       const deleteForMeMessageId = this.getNodeParameter(
         "messageId",
         i,
@@ -397,7 +410,7 @@ export async function executeMessageOperation(
         );
       }
 
-      await this.helpers.requestWithAuthentication.call(this, "WSApiApi", {
+      await this.helpers.httpRequestWithAuthentication.call(this, "wsApiApi", {
         method: "POST",
         url: `/messages/${encodeURIComponent(deleteForMeMessageId)}/delete-for-me`,
         body: {
@@ -411,13 +424,14 @@ export async function executeMessageOperation(
       });
       responseData = { success: true, messageId: deleteForMeMessageId };
       break;
+    }
 
-    case "starMessage":
+    case "starMessage": {
       const starMessageId = this.getNodeParameter("messageId", i) as string;
       const starSenderId = this.getNodeParameter("senderId", i) as string;
       const starChatId = this.getNodeParameter("chatId", i) as string;
 
-      await this.helpers.requestWithAuthentication.call(this, "WSApiApi", {
+      await this.helpers.httpRequestWithAuthentication.call(this, "wsApiApi", {
         method: "POST",
         url: `/messages/${encodeURIComponent(starMessageId)}/star`,
         body: { chatId: starChatId, senderId: starSenderId },
@@ -426,13 +440,14 @@ export async function executeMessageOperation(
       });
       responseData = { success: true, messageId: starMessageId };
       break;
+    }
 
-    case "pinMessage":
+    case "pinMessage": {
       const pinMessageId = this.getNodeParameter("messageId", i) as string;
       const pinSenderId = this.getNodeParameter("senderId", i) as string;
       const pinChatId = this.getNodeParameter("chatId", i) as string;
       const pinned = this.getNodeParameter("pinned", i) as boolean;
-      const pinBody: any = { chatId: pinChatId, senderId: pinSenderId, pinned };
+      const pinBody: IDataObject = { chatId: pinChatId, senderId: pinSenderId, pinned };
       if (pinned) {
         const pinExpiration = this.getNodeParameter(
           "pinExpiration",
@@ -442,7 +457,7 @@ export async function executeMessageOperation(
         pinBody.pinExpiration = pinExpiration;
       }
 
-      await this.helpers.requestWithAuthentication.call(this, "WSApiApi", {
+      await this.helpers.httpRequestWithAuthentication.call(this, "wsApiApi", {
         method: "POST",
         url: `/messages/${encodeURIComponent(pinMessageId)}/pin`,
         body: pinBody,
@@ -451,14 +466,15 @@ export async function executeMessageOperation(
       });
       responseData = { success: true, messageId: pinMessageId, pinned };
       break;
+    }
 
-    case "markAsRead":
+    case "markAsRead": {
       const readMessageId = this.getNodeParameter("messageId", i) as string;
       const readSenderId = this.getNodeParameter("senderId", i) as string;
       const receiptType = this.getNodeParameter("receiptType", i) as string;
       const chatId = this.getNodeParameter("chatId", i) as string;
 
-      await this.helpers.requestWithAuthentication.call(this, "WSApiApi", {
+      await this.helpers.httpRequestWithAuthentication.call(this, "wsApiApi", {
         method: "POST",
         url: `/messages/${encodeURIComponent(readMessageId)}/read`,
         body: { chatId, senderId: readSenderId, receiptType },
@@ -472,6 +488,7 @@ export async function executeMessageOperation(
         receiptType,
       };
       break;
+    }
 
     default:
       throw new Error(`Unknown message operation: ${operation}`);

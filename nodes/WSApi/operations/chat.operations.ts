@@ -12,9 +12,9 @@ export async function executeChatOperation(
 
   switch (operation) {
     case "getChats":
-      responseData = await this.helpers.requestWithAuthentication.call(
+      responseData = await this.helpers.httpRequestWithAuthentication.call(
         this,
-        "WSApiApi",
+        "wsApiApi",
         {
           method: "GET",
           url: "/chats",
@@ -24,7 +24,7 @@ export async function executeChatOperation(
       );
       break;
 
-    case "getChat":
+    case "getChat": {
       const getChatId = this.getNodeParameter("chatId", i) as string;
       const cacheResults = this.getNodeParameter(
         "cacheResults",
@@ -34,7 +34,7 @@ export async function executeChatOperation(
       const cacheTtl = this.getNodeParameter("cacheTtl", i, 300) as number;
 
       if (cacheResults) {
-        const credentials = await this.getCredentials("WSApiApi");
+        const credentials = await this.getCredentials("wsApiApi");
         const instanceId = credentials.instanceId as string;
         const key = makeCacheKey([
           "chat",
@@ -50,9 +50,9 @@ export async function executeChatOperation(
         }
       }
 
-      responseData = await this.helpers.requestWithAuthentication.call(
+      responseData = await this.helpers.httpRequestWithAuthentication.call(
         this,
-        "WSApiApi",
+        "wsApiApi",
         {
           method: "GET",
           url: `/chats/${encodeURIComponent(getChatId)}`,
@@ -62,7 +62,7 @@ export async function executeChatOperation(
       );
 
       if (cacheResults) {
-        const credentials = await this.getCredentials("WSApiApi");
+        const credentials = await this.getCredentials("wsApiApi");
         const instanceId = credentials.instanceId as string;
         const key = makeCacheKey([
           "chat",
@@ -74,11 +74,12 @@ export async function executeChatOperation(
         cacheWrite(this, key, responseData, cacheTtl);
       }
       break;
+    }
 
-    case "deleteChat":
+    case "deleteChat": {
       const deleteChatId = this.getNodeParameter("chatId", i) as string;
 
-      await this.helpers.requestWithAuthentication.call(this, "WSApiApi", {
+      await this.helpers.httpRequestWithAuthentication.call(this, "wsApiApi", {
         method: "DELETE",
         url: `/chats/${encodeURIComponent(deleteChatId)}`,
         baseURL: baseURL,
@@ -86,12 +87,13 @@ export async function executeChatOperation(
       });
       responseData = { success: true, chatId: deleteChatId };
       break;
+    }
 
-    case "markChatAsRead":
+    case "markChatAsRead": {
       const readChatId = this.getNodeParameter("chatId", i) as string;
       const read = this.getNodeParameter("read", i) as boolean;
 
-      await this.helpers.requestWithAuthentication.call(this, "WSApiApi", {
+      await this.helpers.httpRequestWithAuthentication.call(this, "wsApiApi", {
         method: "PUT",
         url: `/chats/${encodeURIComponent(readChatId)}/read`,
         body: { read },
@@ -100,12 +102,13 @@ export async function executeChatOperation(
       });
       responseData = { success: true, chatId: readChatId, read };
       break;
+    }
 
-    case "setPresence":
+    case "setPresence": {
       const presenceChatId = this.getNodeParameter("chatId", i) as string;
       const presence = this.getNodeParameter("presence", i) as string;
 
-      await this.helpers.requestWithAuthentication.call(this, "WSApiApi", {
+      await this.helpers.httpRequestWithAuthentication.call(this, "wsApiApi", {
         method: "PUT",
         url: `/chats/${encodeURIComponent(presenceChatId)}/presence`,
         body: { state: presence },
@@ -114,13 +117,14 @@ export async function executeChatOperation(
       });
       responseData = { success: true, chatId: presenceChatId, presence };
       break;
+    }
 
-    case "muteChat":
+    case "muteChat": {
       const muteChatId = this.getNodeParameter("chatId", i) as string;
       const muteDuration = this.getNodeParameter("muteDuration", i) as string;
       const duration = muteDuration === "unmute" ? null : muteDuration;
 
-      await this.helpers.requestWithAuthentication.call(this, "WSApiApi", {
+      await this.helpers.httpRequestWithAuthentication.call(this, "wsApiApi", {
         method: "PUT",
         url: `/chats/${encodeURIComponent(muteChatId)}/mute`,
         body: { duration },
@@ -129,12 +133,13 @@ export async function executeChatOperation(
       });
       responseData = { success: true, chatId: muteChatId, duration };
       break;
+    }
 
-    case "pinChat":
+    case "pinChat": {
       const pinChatId = this.getNodeParameter("chatId", i) as string;
       const pinned = this.getNodeParameter("pinned", i) as boolean;
 
-      await this.helpers.requestWithAuthentication.call(this, "WSApiApi", {
+      await this.helpers.httpRequestWithAuthentication.call(this, "wsApiApi", {
         method: "PUT",
         url: `/chats/${encodeURIComponent(pinChatId)}/pin`,
         body: { pinned },
@@ -143,12 +148,13 @@ export async function executeChatOperation(
       });
       responseData = { success: true, chatId: pinChatId, pinned };
       break;
+    }
 
-    case "archiveChat":
+    case "archiveChat": {
       const archiveChatId = this.getNodeParameter("chatId", i) as string;
       const archived = this.getNodeParameter("archived", i) as boolean;
 
-      await this.helpers.requestWithAuthentication.call(this, "WSApiApi", {
+      await this.helpers.httpRequestWithAuthentication.call(this, "wsApiApi", {
         method: "PUT",
         url: `/chats/${encodeURIComponent(archiveChatId)}/archive`,
         body: { archived },
@@ -157,15 +163,16 @@ export async function executeChatOperation(
       });
       responseData = { success: true, chatId: archiveChatId, archived };
       break;
+    }
 
-    case "setEphemeral":
+    case "setEphemeral": {
       const ephemeralChatId = this.getNodeParameter("chatId", i) as string;
       const ephemeralExpiration = this.getNodeParameter(
         "ephemeralExpiration",
         i,
       ) as string;
 
-      await this.helpers.requestWithAuthentication.call(this, "WSApiApi", {
+      await this.helpers.httpRequestWithAuthentication.call(this, "wsApiApi", {
         method: "PUT",
         url: `/chats/${encodeURIComponent(ephemeralChatId)}/ephemeral`,
         body: { expiration: ephemeralExpiration },
@@ -178,13 +185,14 @@ export async function executeChatOperation(
         expiration: ephemeralExpiration,
       };
       break;
+    }
 
-    case "getPicture":
+    case "getPicture": {
       const pictureChatId = this.getNodeParameter("chatId", i) as string;
 
-      responseData = await this.helpers.requestWithAuthentication.call(
+      responseData = await this.helpers.httpRequestWithAuthentication.call(
         this,
-        "WSApiApi",
+        "wsApiApi",
         {
           method: "GET",
           url: `/chats/${encodeURIComponent(pictureChatId)}/picture`,
@@ -193,13 +201,14 @@ export async function executeChatOperation(
         },
       );
       break;
+    }
 
-    case "getBusinessProfile":
+    case "getBusinessProfile": {
       const businessChatId = this.getNodeParameter("chatId", i) as string;
 
-      responseData = await this.helpers.requestWithAuthentication.call(
+      responseData = await this.helpers.httpRequestWithAuthentication.call(
         this,
-        "WSApiApi",
+        "wsApiApi",
         {
           method: "GET",
           url: `/chats/${encodeURIComponent(businessChatId)}/business`,
@@ -208,11 +217,12 @@ export async function executeChatOperation(
         },
       );
       break;
+    }
 
-    case "subscribePresence":
+    case "subscribePresence": {
       const subscribeChatId = this.getNodeParameter("chatId", i) as string;
 
-      await this.helpers.requestWithAuthentication.call(this, "WSApiApi", {
+      await this.helpers.httpRequestWithAuthentication.call(this, "wsApiApi", {
         method: "PUT",
         url: `/chats/${encodeURIComponent(subscribeChatId)}/presence/subscribe`,
         baseURL: baseURL,
@@ -220,11 +230,12 @@ export async function executeChatOperation(
       });
       responseData = { success: true, chatId: subscribeChatId };
       break;
+    }
 
-    case "clearChat":
+    case "clearChat": {
       const clearChatId = this.getNodeParameter("chatId", i) as string;
 
-      await this.helpers.requestWithAuthentication.call(this, "WSApiApi", {
+      await this.helpers.httpRequestWithAuthentication.call(this, "wsApiApi", {
         method: "POST",
         url: `/chats/${encodeURIComponent(clearChatId)}/clear`,
         baseURL: baseURL,
@@ -232,8 +243,9 @@ export async function executeChatOperation(
       });
       responseData = { success: true, chatId: clearChatId };
       break;
+    }
 
-    case "requestMessages":
+    case "requestMessages": {
       const requestMsgChatId = this.getNodeParameter("chatId", i) as string;
       const lastMessageId = this.getNodeParameter("lastMessageId", i) as string;
       const lastMessageSenderId = this.getNodeParameter(
@@ -242,9 +254,9 @@ export async function executeChatOperation(
       ) as string;
       const messageCount = this.getNodeParameter("messageCount", i) as number;
 
-      responseData = await this.helpers.requestWithAuthentication.call(
+      responseData = await this.helpers.httpRequestWithAuthentication.call(
         this,
-        "WSApiApi",
+        "wsApiApi",
         {
           method: "POST",
           url: `/chats/${encodeURIComponent(requestMsgChatId)}/messages`,
@@ -254,6 +266,7 @@ export async function executeChatOperation(
         },
       );
       break;
+    }
 
     default:
       throw new Error(`Unknown chat operation: ${operation}`);

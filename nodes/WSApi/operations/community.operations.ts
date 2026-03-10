@@ -1,19 +1,18 @@
-import { IExecuteFunctions } from "n8n-workflow";
-import { IDataObject } from "n8n-workflow";
+import { IExecuteFunctions, IDataObject } from "n8n-workflow";
 
 export async function executeCommunityOperation(
   this: IExecuteFunctions,
   operation: string,
   i: number,
 ): Promise<IDataObject> {
-  const credentials = await this.getCredentials("WSApiApi");
+  const credentials = await this.getCredentials("wsApiApi");
   const baseURL = credentials.baseUrl as string;
 
   switch (operation) {
     case "getAll":
-      return await this.helpers.requestWithAuthentication.call(
+      return await this.helpers.httpRequestWithAuthentication.call(
         this,
-        "WSApiApi",
+        "wsApiApi",
         {
           method: "GET",
           url: "/communities",
@@ -24,9 +23,9 @@ export async function executeCommunityOperation(
 
     case "get": {
       const communityId = this.getNodeParameter("communityId", i) as string;
-      return await this.helpers.requestWithAuthentication.call(
+      return await this.helpers.httpRequestWithAuthentication.call(
         this,
-        "WSApiApi",
+        "wsApiApi",
         {
           method: "GET",
           url: `/communities/${encodeURIComponent(communityId)}`,
@@ -46,9 +45,9 @@ export async function executeCommunityOperation(
         .split(",")
         .map((p) => p.trim())
         .filter((p) => p);
-      return await this.helpers.requestWithAuthentication.call(
+      return await this.helpers.httpRequestWithAuthentication.call(
         this,
-        "WSApiApi",
+        "wsApiApi",
         {
           method: "POST",
           url: "/communities",
@@ -61,7 +60,7 @@ export async function executeCommunityOperation(
 
     case "leave": {
       const communityId = this.getNodeParameter("communityId", i) as string;
-      await this.helpers.requestWithAuthentication.call(this, "WSApiApi", {
+      await this.helpers.httpRequestWithAuthentication.call(this, "wsApiApi", {
         method: "POST",
         url: `/communities/${encodeURIComponent(communityId)}/leave`,
         baseURL,
@@ -73,7 +72,7 @@ export async function executeCommunityOperation(
     case "setName": {
       const communityId = this.getNodeParameter("communityId", i) as string;
       const name = this.getNodeParameter("communityName", i) as string;
-      await this.helpers.requestWithAuthentication.call(this, "WSApiApi", {
+      await this.helpers.httpRequestWithAuthentication.call(this, "wsApiApi", {
         method: "PUT",
         url: `/communities/${encodeURIComponent(communityId)}/name`,
         baseURL,
@@ -86,7 +85,7 @@ export async function executeCommunityOperation(
     case "setDescription": {
       const communityId = this.getNodeParameter("communityId", i) as string;
       const description = this.getNodeParameter("description", i) as string;
-      await this.helpers.requestWithAuthentication.call(this, "WSApiApi", {
+      await this.helpers.httpRequestWithAuthentication.call(this, "wsApiApi", {
         method: "PUT",
         url: `/communities/${encodeURIComponent(communityId)}/description`,
         baseURL,
@@ -102,9 +101,9 @@ export async function executeCommunityOperation(
     case "setPicture": {
       const communityId = this.getNodeParameter("communityId", i) as string;
       const pictureBase64 = this.getNodeParameter("pictureBase64", i) as string;
-      return await this.helpers.requestWithAuthentication.call(
+      return await this.helpers.httpRequestWithAuthentication.call(
         this,
-        "WSApiApi",
+        "wsApiApi",
         {
           method: "POST",
           url: `/communities/${encodeURIComponent(communityId)}/picture`,
@@ -118,7 +117,7 @@ export async function executeCommunityOperation(
     case "setLocked": {
       const communityId = this.getNodeParameter("communityId", i) as string;
       const locked = this.getNodeParameter("locked", i) as boolean;
-      await this.helpers.requestWithAuthentication.call(this, "WSApiApi", {
+      await this.helpers.httpRequestWithAuthentication.call(this, "wsApiApi", {
         method: "PUT",
         url: `/communities/${encodeURIComponent(communityId)}/settings/locked`,
         baseURL,
@@ -133,9 +132,9 @@ export async function executeCommunityOperation(
 
     case "getParticipants": {
       const communityId = this.getNodeParameter("communityId", i) as string;
-      return await this.helpers.requestWithAuthentication.call(
+      return await this.helpers.httpRequestWithAuthentication.call(
         this,
-        "WSApiApi",
+        "wsApiApi",
         {
           method: "GET",
           url: `/communities/${encodeURIComponent(communityId)}/participants`,
@@ -159,7 +158,7 @@ export async function executeCommunityOperation(
         .split(",")
         .map((p) => p.trim())
         .filter((p) => p);
-      await this.helpers.requestWithAuthentication.call(this, "WSApiApi", {
+      await this.helpers.httpRequestWithAuthentication.call(this, "wsApiApi", {
         method: "PUT",
         url: `/communities/${encodeURIComponent(communityId)}/participants`,
         baseURL,
@@ -174,9 +173,9 @@ export async function executeCommunityOperation(
 
     case "getInviteLink": {
       const communityId = this.getNodeParameter("communityId", i) as string;
-      return await this.helpers.requestWithAuthentication.call(
+      return await this.helpers.httpRequestWithAuthentication.call(
         this,
-        "WSApiApi",
+        "wsApiApi",
         {
           method: "GET",
           url: `/communities/${encodeURIComponent(communityId)}/invite-link`,
@@ -188,9 +187,9 @@ export async function executeCommunityOperation(
 
     case "resetInviteLink": {
       const communityId = this.getNodeParameter("communityId", i) as string;
-      return await this.helpers.requestWithAuthentication.call(
+      return await this.helpers.httpRequestWithAuthentication.call(
         this,
-        "WSApiApi",
+        "wsApiApi",
         {
           method: "POST",
           url: `/communities/${encodeURIComponent(communityId)}/invite-link/reset`,
@@ -202,9 +201,9 @@ export async function executeCommunityOperation(
 
     case "getSubGroups": {
       const communityId = this.getNodeParameter("communityId", i) as string;
-      return await this.helpers.requestWithAuthentication.call(
+      return await this.helpers.httpRequestWithAuthentication.call(
         this,
-        "WSApiApi",
+        "wsApiApi",
         {
           method: "GET",
           url: `/communities/${encodeURIComponent(communityId)}/groups`,
@@ -217,9 +216,9 @@ export async function executeCommunityOperation(
     case "createSubGroup": {
       const communityId = this.getNodeParameter("communityId", i) as string;
       const name = this.getNodeParameter("subGroupName", i) as string;
-      return await this.helpers.requestWithAuthentication.call(
+      return await this.helpers.httpRequestWithAuthentication.call(
         this,
-        "WSApiApi",
+        "wsApiApi",
         {
           method: "POST",
           url: `/communities/${encodeURIComponent(communityId)}/groups`,
@@ -233,7 +232,7 @@ export async function executeCommunityOperation(
     case "linkGroup": {
       const communityId = this.getNodeParameter("communityId", i) as string;
       const groupId = this.getNodeParameter("groupId", i) as string;
-      await this.helpers.requestWithAuthentication.call(this, "WSApiApi", {
+      await this.helpers.httpRequestWithAuthentication.call(this, "wsApiApi", {
         method: "POST",
         url: `/communities/${encodeURIComponent(communityId)}/groups/link`,
         baseURL,
@@ -249,7 +248,7 @@ export async function executeCommunityOperation(
     case "unlinkGroup": {
       const communityId = this.getNodeParameter("communityId", i) as string;
       const groupId = this.getNodeParameter("groupId", i) as string;
-      await this.helpers.requestWithAuthentication.call(this, "WSApiApi", {
+      await this.helpers.httpRequestWithAuthentication.call(this, "wsApiApi", {
         method: "DELETE",
         url: `/communities/${encodeURIComponent(communityId)}/groups/${encodeURIComponent(groupId)}`,
         baseURL,
