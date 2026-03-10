@@ -1,19 +1,18 @@
-import { IExecuteFunctions } from "n8n-workflow";
-import { IDataObject } from "n8n-workflow";
+import { IExecuteFunctions, IDataObject } from "n8n-workflow";
 
 export async function executeStatusOperation(
   this: IExecuteFunctions,
   operation: string,
   i: number,
 ): Promise<IDataObject> {
-  const credentials = await this.getCredentials("WSApiApi");
+  const credentials = await this.getCredentials("wsApiApi");
   const baseURL = credentials.baseUrl as string;
 
   switch (operation) {
     case "getPrivacy":
-      return await this.helpers.requestWithAuthentication.call(
+      return await this.helpers.httpRequestWithAuthentication.call(
         this,
-        "WSApiApi",
+        "wsApiApi",
         {
           method: "GET",
           url: "/status/privacy",
@@ -24,9 +23,9 @@ export async function executeStatusOperation(
 
     case "postText": {
       const text = this.getNodeParameter("text", i) as string;
-      return await this.helpers.requestWithAuthentication.call(
+      return await this.helpers.httpRequestWithAuthentication.call(
         this,
-        "WSApiApi",
+        "wsApiApi",
         {
           method: "POST",
           url: "/status/text",
@@ -53,9 +52,9 @@ export async function executeStatusOperation(
         body.url = this.getNodeParameter("mediaUrl", i) as string;
       }
       if (caption) body.caption = caption;
-      return await this.helpers.requestWithAuthentication.call(
+      return await this.helpers.httpRequestWithAuthentication.call(
         this,
-        "WSApiApi",
+        "wsApiApi",
         {
           method: "POST",
           url: "/status/image",
@@ -82,9 +81,9 @@ export async function executeStatusOperation(
         body.url = this.getNodeParameter("mediaUrl", i) as string;
       }
       if (caption) body.caption = caption;
-      return await this.helpers.requestWithAuthentication.call(
+      return await this.helpers.httpRequestWithAuthentication.call(
         this,
-        "WSApiApi",
+        "wsApiApi",
         {
           method: "POST",
           url: "/status/video",
@@ -97,7 +96,7 @@ export async function executeStatusOperation(
 
     case "deleteStatus": {
       const messageId = this.getNodeParameter("messageId", i) as string;
-      await this.helpers.requestWithAuthentication.call(this, "WSApiApi", {
+      await this.helpers.httpRequestWithAuthentication.call(this, "wsApiApi", {
         method: "POST",
         url: `/status/${encodeURIComponent(messageId)}/delete`,
         baseURL,

@@ -7,28 +7,23 @@ export async function executeMediaOperation(
   baseURL?: string,
 ): Promise<INodeExecutionData[]> {
   switch (operation) {
-    case "downloadMedia":
+    case "downloadMedia": {
       const mediaId = this.getNodeParameter("mediaId", i) as string;
 
-      // Get credentials for manual authentication
-      const credentials = await this.getCredentials("WSApiApi");
-      const apiKey = credentials.apiKey as string;
-      const instanceId = credentials.instanceId as string;
-
-      // 1) Request raw bytes using httpRequest with manual auth to get full response
-      const response = (await this.helpers.httpRequest({
-        method: "GET",
-        url: "/media/download",
-        baseURL: baseURL,
-        qs: { id: mediaId },
-        encoding: "arraybuffer",
-        json: false,
-        returnFullResponse: true,
-        headers: {
-          "X-Api-Key": apiKey,
-          "X-Instance-Id": instanceId,
+      // 1) Request raw bytes using httpRequestWithAuthentication to get full response
+      const response = (await this.helpers.httpRequestWithAuthentication.call(
+        this,
+        "wsApiApi",
+        {
+          method: "GET",
+          url: "/media/download",
+          baseURL: baseURL,
+          qs: { id: mediaId },
+          encoding: "arraybuffer",
+          json: false,
+          returnFullResponse: true,
         },
-      })) as { body: ArrayBuffer; headers: Record<string, string> };
+      )) as { body: ArrayBuffer; headers: Record<string, string> };
 
       // 2) Extract filename and content type from headers (as sent by Go server)
       const headers = response.headers || {};
@@ -65,6 +60,7 @@ export async function executeMediaOperation(
           binary: { data: binaryData },
         },
       ];
+    }
 
     default:
       throw new Error(`Unknown media operation: ${operation}`);

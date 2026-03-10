@@ -1,5 +1,4 @@
-import { IExecuteFunctions } from "n8n-workflow";
-import { IDataObject } from "n8n-workflow";
+import { IExecuteFunctions, IDataObject } from "n8n-workflow";
 import { cacheRead, cacheWrite, makeCacheKey } from "../helpers/utils";
 
 export async function executeUsersOperation(
@@ -7,7 +6,7 @@ export async function executeUsersOperation(
   operation: string,
   i: number,
 ): Promise<IDataObject> {
-  const credentials = await this.getCredentials("WSApiApi");
+  const credentials = await this.getCredentials("wsApiApi");
   const baseURL = credentials.baseUrl as string;
 
   switch (operation) {
@@ -27,9 +26,9 @@ export async function executeUsersOperation(
         if (cached !== undefined) return cached as IDataObject;
       }
 
-      const resGet = await this.helpers.requestWithAuthentication.call(
+      const resGet = await this.helpers.httpRequestWithAuthentication.call(
         this,
-        "WSApiApi",
+        "wsApiApi",
         {
           method: "GET",
           url: `/users/${phone}/profile`,
@@ -47,9 +46,9 @@ export async function executeUsersOperation(
     }
 
     case "getMyProfile":
-      return await this.helpers.requestWithAuthentication.call(
+      return await this.helpers.httpRequestWithAuthentication.call(
         this,
-        "WSApiApi",
+        "wsApiApi",
         {
           method: "GET",
           url: "/users/me/profile",
@@ -63,7 +62,7 @@ export async function executeUsersOperation(
         "profileFields",
         i,
       ) as IDataObject;
-      await this.helpers.requestWithAuthentication.call(this, "WSApiApi", {
+      await this.helpers.httpRequestWithAuthentication.call(this, "wsApiApi", {
         method: "PUT",
         url: "/users/me/profile",
         baseURL,
@@ -75,7 +74,7 @@ export async function executeUsersOperation(
 
     case "setPresence": {
       const status = this.getNodeParameter("presenceStatus", i) as string;
-      await this.helpers.requestWithAuthentication.call(this, "WSApiApi", {
+      await this.helpers.httpRequestWithAuthentication.call(this, "wsApiApi", {
         method: "PUT",
         url: "/users/me/presence",
         baseURL,
@@ -86,9 +85,9 @@ export async function executeUsersOperation(
     }
 
     case "getPrivacySettings":
-      return await this.helpers.requestWithAuthentication.call(
+      return await this.helpers.httpRequestWithAuthentication.call(
         this,
-        "WSApiApi",
+        "wsApiApi",
         {
           method: "GET",
           url: "/users/me/privacy",
@@ -100,9 +99,9 @@ export async function executeUsersOperation(
     case "setPrivacySetting": {
       const setting = this.getNodeParameter("privacySetting", i) as string;
       const value = this.getNodeParameter("privacyValue", i) as string;
-      return await this.helpers.requestWithAuthentication.call(
+      return await this.helpers.httpRequestWithAuthentication.call(
         this,
-        "WSApiApi",
+        "wsApiApi",
         {
           method: "PUT",
           url: "/users/me/privacy",
@@ -115,9 +114,9 @@ export async function executeUsersOperation(
 
     case "checkUser": {
       const phone = this.getNodeParameter("phone", i) as string;
-      return await this.helpers.requestWithAuthentication.call(
+      return await this.helpers.httpRequestWithAuthentication.call(
         this,
-        "WSApiApi",
+        "wsApiApi",
         {
           method: "GET",
           url: `/users/${phone}/check`,
@@ -133,9 +132,9 @@ export async function executeUsersOperation(
         .split(",")
         .map((p) => p.trim())
         .filter((p) => p);
-      return await this.helpers.requestWithAuthentication.call(
+      return await this.helpers.httpRequestWithAuthentication.call(
         this,
-        "WSApiApi",
+        "wsApiApi",
         {
           method: "POST",
           url: "/users/check",

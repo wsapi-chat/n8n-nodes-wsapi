@@ -6,8 +6,9 @@ import {
 } from "n8n-workflow";
 
 export class WSApiApi implements ICredentialType {
-  name = "WSApiApi";
+  name = "wsApiApi";
   displayName = "WSAPI API";
+  icon = "file:wsapi.svg" as const;
   documentationUrl = "https://docs.wsapi.chat/integrations/n8n-wsapi";
   properties: INodeProperties[] = [
     {

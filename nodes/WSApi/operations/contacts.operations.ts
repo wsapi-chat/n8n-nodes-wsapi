@@ -1,5 +1,4 @@
-import { IExecuteFunctions } from "n8n-workflow";
-import { IDataObject } from "n8n-workflow";
+import { IExecuteFunctions, IDataObject } from "n8n-workflow";
 import { cacheRead, cacheWrite, makeCacheKey } from "../helpers/utils";
 
 export async function executeContactsOperation(
@@ -7,14 +6,14 @@ export async function executeContactsOperation(
   operation: string,
   i: number,
 ): Promise<IDataObject> {
-  const credentials = await this.getCredentials("WSApiApi");
+  const credentials = await this.getCredentials("wsApiApi");
   const baseURL = credentials.baseUrl as string;
 
   switch (operation) {
     case "getAll":
-      return await this.helpers.requestWithAuthentication.call(
+      return await this.helpers.httpRequestWithAuthentication.call(
         this,
-        "WSApiApi",
+        "wsApiApi",
         {
           method: "GET",
           url: "/contacts",
@@ -45,9 +44,9 @@ export async function executeContactsOperation(
         if (cached !== undefined) return cached as IDataObject;
       }
 
-      const resGet = await this.helpers.requestWithAuthentication.call(
+      const resGet = await this.helpers.httpRequestWithAuthentication.call(
         this,
-        "WSApiApi",
+        "wsApiApi",
         {
           method: "GET",
           url: `/contacts/${contactId}`,
@@ -75,7 +74,7 @@ export async function executeContactsOperation(
       const createFullName = this.getNodeParameter("fullName", i) as string;
       const createFirstName = this.getNodeParameter("firstName", i) as string;
 
-      await this.helpers.requestWithAuthentication.call(this, "WSApiApi", {
+      await this.helpers.httpRequestWithAuthentication.call(this, "wsApiApi", {
         method: "POST",
         url: "/contacts",
         baseURL,
@@ -90,7 +89,7 @@ export async function executeContactsOperation(
     }
 
     case "syncContacts":
-      await this.helpers.requestWithAuthentication.call(this, "WSApiApi", {
+      await this.helpers.httpRequestWithAuthentication.call(this, "wsApiApi", {
         method: "POST",
         url: "/contacts/sync",
         baseURL,
@@ -99,9 +98,9 @@ export async function executeContactsOperation(
       return { success: true, message: "Contact sync triggered" };
 
     case "getBlocklist":
-      return await this.helpers.requestWithAuthentication.call(
+      return await this.helpers.httpRequestWithAuthentication.call(
         this,
-        "WSApiApi",
+        "wsApiApi",
         {
           method: "GET",
           url: "/contacts/blocklist",
@@ -112,7 +111,7 @@ export async function executeContactsOperation(
 
     case "blockContact": {
       const contactId = this.getNodeParameter("contactId", i) as string;
-      await this.helpers.requestWithAuthentication.call(this, "WSApiApi", {
+      await this.helpers.httpRequestWithAuthentication.call(this, "wsApiApi", {
         method: "PUT",
         url: `/contacts/${encodeURIComponent(contactId)}/block`,
         baseURL,
@@ -123,7 +122,7 @@ export async function executeContactsOperation(
 
     case "unblockContact": {
       const contactId = this.getNodeParameter("contactId", i) as string;
-      await this.helpers.requestWithAuthentication.call(this, "WSApiApi", {
+      await this.helpers.httpRequestWithAuthentication.call(this, "wsApiApi", {
         method: "PUT",
         url: `/contacts/${encodeURIComponent(contactId)}/unblock`,
         baseURL,

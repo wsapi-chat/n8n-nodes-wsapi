@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: WSAPI - WhatsApp API
-  description: RESTful HTTP API for WhatsApp via whatsmeow. Supports multi-instance connections, webhook event delivery, and HMAC-SHA256 signing. Includes self-service instance management endpoints served by the API Gateway.
+  description: RESTful HTTP API for WhatsApp via whatsmeow. Supports multi-instance connections, connections, webhook event delivery, and HMAC-SHA256 signing.
   version: 2.0.0
 
 servers:
@@ -9,8 +9,6 @@ servers:
     description: WSAPI API
 
 tags:
-  - name: Account
-    description: Customer account management — instances, subscriptions, and default settings (CustomerApiKey auth)
   - name: Session
     description: WhatsApp session management (login, logout, status)
   - name: Messages
@@ -38,342 +36,6 @@ security:
   - ApiKeyAuth: []
 
 paths:
-  # ─── Account Management (CustomerApiKey auth) ──────────────────────
-
-  /account/instances:
-    get:
-      tags: [Account]
-      summary: List all instances
-      description: Returns a paginated list of all customer instances with optional filtering.
-      operationId: listAccountInstances
-      security:
-        - CustomerApiKey: []
-      parameters:
-        - $ref: "#/components/parameters/PageNumber"
-        - $ref: "#/components/parameters/PageSize"
-        - name: createdFrom
-          in: query
-          schema:
-            type: string
-            format: date-time
-        - name: createdTo
-          in: query
-          schema:
-            type: string
-            format: date-time
-        - name: status
-          in: query
-          schema:
-            type: string
-      responses:
-        "200":
-          description: Paginated list of instances
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/PagedAccountInstances"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-
-  /account/instances/{id}:
-    get:
-      tags: [Account]
-      summary: Get instance detail
-      description: Returns full instance information including settings.
-      operationId: getAccountInstance
-      security:
-        - CustomerApiKey: []
-      parameters:
-        - $ref: "#/components/parameters/AccountInstanceId"
-      responses:
-        "200":
-          description: Instance detail
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/AccountInstanceDetail"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "404":
-          $ref: "#/components/responses/NotFound"
-
-  /account/instances/{id}/name:
-    put:
-      tags: [Account]
-      summary: Update instance name
-      operationId: updateAccountInstanceName
-      security:
-        - CustomerApiKey: []
-      parameters:
-        - $ref: "#/components/parameters/AccountInstanceId"
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/UpdateInstanceNameRequest"
-      responses:
-        "204":
-          description: Name updated
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "404":
-          $ref: "#/components/responses/NotFound"
-
-  /account/instances/{id}/settings:
-    put:
-      tags: [Account]
-      summary: Update instance settings
-      operationId: updateAccountInstanceSettings
-      security:
-        - CustomerApiKey: []
-      parameters:
-        - $ref: "#/components/parameters/AccountInstanceId"
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/AccountInstanceSettings"
-      responses:
-        "204":
-          description: Settings updated
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "404":
-          $ref: "#/components/responses/NotFound"
-
-  /account/instances/{id}/apikey:
-    put:
-      tags: [Account]
-      summary: Regenerate instance API key
-      description: Generates a new API key for the instance. Previous key is immediately invalidated.
-      operationId: regenerateAccountInstanceApiKey
-      security:
-        - CustomerApiKey: []
-      parameters:
-        - $ref: "#/components/parameters/AccountInstanceId"
-      responses:
-        "200":
-          description: New API key
-          content:
-            application/json:
-              schema:
-                type: string
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "404":
-          $ref: "#/components/responses/NotFound"
-
-  /account/instances/{id}/restart:
-    put:
-      tags: [Account]
-      summary: Restart instance
-      operationId: restartAccountInstance
-      security:
-        - CustomerApiKey: []
-      parameters:
-        - $ref: "#/components/parameters/AccountInstanceId"
-      responses:
-        "204":
-          description: Instance restarted
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "404":
-          $ref: "#/components/responses/NotFound"
-
-  /account/subscriptions:
-    get:
-      tags: [Account]
-      summary: List subscriptions
-      description: Returns a paginated list of customer subscriptions.
-      operationId: listAccountSubscriptions
-      security:
-        - CustomerApiKey: []
-      parameters:
-        - $ref: "#/components/parameters/PageNumber"
-        - $ref: "#/components/parameters/PageSize"
-      responses:
-        "200":
-          description: Paginated list of subscriptions
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/PagedAccountSubscriptions"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-
-  /account/subscriptions/{id}/instances:
-    get:
-      tags: [Account]
-      summary: List subscription instances
-      description: Returns instances belonging to a specific subscription.
-      operationId: listAccountSubscriptionInstances
-      security:
-        - CustomerApiKey: []
-      parameters:
-        - $ref: "#/components/parameters/SubscriptionId"
-        - $ref: "#/components/parameters/PageNumber"
-        - $ref: "#/components/parameters/PageSize"
-        - name: createdFrom
-          in: query
-          schema:
-            type: string
-            format: date-time
-        - name: createdTo
-          in: query
-          schema:
-            type: string
-            format: date-time
-        - name: status
-          in: query
-          schema:
-            type: string
-      responses:
-        "200":
-          description: Paginated list of instances
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/PagedAccountInstances"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-
-    post:
-      tags: [Account]
-      summary: Create instance
-      description: Creates a new instance on the subscription. Reseller customers only.
-      operationId: createAccountSubscriptionInstance
-      security:
-        - CustomerApiKey: []
-      parameters:
-        - $ref: "#/components/parameters/SubscriptionId"
-      responses:
-        "200":
-          description: Instance ID
-          content:
-            application/json:
-              schema:
-                type: string
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-
-  /account/subscriptions/{id}/instances/{instanceId}:
-    delete:
-      tags: [Account]
-      summary: Delete instance
-      description: Expires an instance on the subscription. Reseller customers only.
-      operationId: deleteAccountSubscriptionInstance
-      security:
-        - CustomerApiKey: []
-      parameters:
-        - $ref: "#/components/parameters/SubscriptionId"
-        - name: instanceId
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        "204":
-          description: Instance deleted
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-
-  /account/subscriptions/{id}/changes:
-    get:
-      tags: [Account]
-      summary: Subscription change audit log
-      description: Returns a paginated, filterable log of subscription changes.
-      operationId: listAccountSubscriptionChanges
-      security:
-        - CustomerApiKey: []
-      parameters:
-        - $ref: "#/components/parameters/SubscriptionId"
-        - $ref: "#/components/parameters/PageNumber"
-        - $ref: "#/components/parameters/PageSize"
-        - name: timestampFrom
-          in: query
-          schema:
-            type: string
-            format: date-time
-        - name: timestampTo
-          in: query
-          schema:
-            type: string
-            format: date-time
-        - name: changeType
-          in: query
-          schema:
-            type: string
-        - name: instanceId
-          in: query
-          schema:
-            type: string
-      responses:
-        "200":
-          description: Paginated list of changes
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/PagedAccountSubscriptionChanges"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "404":
-          $ref: "#/components/responses/NotFound"
-
-  /account/instances/defaults:
-    get:
-      tags: [Account]
-      summary: Get instance defaults
-      description: Returns customer-level default settings applied to instances with UseCustomDefaults enabled.
-      operationId: getAccountInstanceDefaults
-      security:
-        - CustomerApiKey: []
-      responses:
-        "200":
-          description: Instance defaults
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/AccountInstanceDefaults"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "404":
-          $ref: "#/components/responses/NotFound"
-
-    put:
-      tags: [Account]
-      summary: Update instance defaults
-      description: Updates customer-level default settings.
-      operationId: updateAccountInstanceDefaults
-      security:
-        - CustomerApiKey: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/AccountInstanceDefaults"
-      responses:
-        "204":
-          description: Defaults updated
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-
   # ─── Session ───────────────────────────────────────────────────────
 
   /session/qr:
@@ -1243,6 +905,8 @@ paths:
           $ref: "#/components/responses/BadRequest"
         "401":
           $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
         "409":
           $ref: "#/components/responses/DeviceNotPaired"
         "503":
@@ -1676,6 +1340,8 @@ paths:
           $ref: "#/components/responses/BadRequest"
         "401":
           $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
         "409":
           $ref: "#/components/responses/DeviceNotPaired"
         "503":
@@ -1703,6 +1369,8 @@ paths:
           $ref: "#/components/responses/BadRequest"
         "401":
           $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
         "409":
           $ref: "#/components/responses/DeviceNotPaired"
         "503":
@@ -1818,6 +1486,8 @@ paths:
           $ref: "#/components/responses/BadRequest"
         "401":
           $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
         "409":
           $ref: "#/components/responses/DeviceNotPaired"
         "503":
@@ -1981,6 +1651,8 @@ paths:
           $ref: "#/components/responses/BadRequest"
         "401":
           $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
         "409":
           $ref: "#/components/responses/DeviceNotPaired"
         "503":
@@ -3378,14 +3050,6 @@ components:
         or the customer's API key is accepted. Must be paired with the
         X-Instance-Id header to identify the target instance.
 
-    CustomerApiKey:
-      type: apiKey
-      in: header
-      name: X-Api-Key
-      description: >-
-        Customer API key. Only the customer-level key is accepted for
-        /account/* endpoints. No X-Instance-Id header is required.
-
   parameters:
     XInstanceId:
       name: X-Instance-Id
@@ -3395,34 +3059,6 @@ components:
       schema:
         type: string
         default: "{{instanceId}}"
-
-    AccountInstanceId:
-      name: id
-      in: path
-      required: true
-      schema:
-        type: string
-
-    SubscriptionId:
-      name: id
-      in: path
-      required: true
-      schema:
-        type: string
-
-    PageNumber:
-      name: pageNumber
-      in: query
-      schema:
-        type: integer
-        default: 1
-
-    PageSize:
-      name: pageSize
-      in: query
-      schema:
-        type: integer
-        default: 20
 
     MessageIdPath:
       name: messageId
@@ -3553,17 +3189,17 @@ components:
   schemas:
     Error:
       type: object
-      description: Standard error response returned by all API endpoints
-      required: [detail, status]
+      description: Standard error response returned by all endpoints on failure.
+      required: [status, detail]
       properties:
-        detail:
-          type: string
-          description: Human-readable error message
-          example: "invalid request body"
         status:
           type: integer
           description: HTTP status code
           example: 400
+        detail:
+          type: string
+          description: Human-readable error message
+          example: "invalid request body"
 
     # ─── Session Schemas ───────────────────────────────────────────
 
@@ -4571,202 +4207,3 @@ components:
         isDefault:
           type: boolean
           description: Whether this is the default privacy setting
-
-    # ─── Gateway Account Schemas ────────────────────────────────────────
-
-    AccountInstance:
-      type: object
-      properties:
-        id:
-          type: string
-        created:
-          type: string
-          format: date-time
-        name:
-          type: string
-        useCustomDefaults:
-          type: boolean
-        status:
-          type: string
-        deviceId:
-          type: string
-          nullable: true
-        expiredAt:
-          type: string
-          format: date-time
-          nullable: true
-        trialEndsAt:
-          type: string
-          format: date-time
-          nullable: true
-        isInTrial:
-          type: boolean
-        hasApiKey:
-          type: boolean
-
-    AccountInstanceDetail:
-      type: object
-      properties:
-        name:
-          type: string
-        hasApiKey:
-          type: boolean
-        settings:
-          $ref: "#/components/schemas/AccountInstanceSettings"
-        status:
-          type: string
-        deviceId:
-          type: string
-          nullable: true
-        created:
-          type: string
-          format: date-time
-
-    AccountInstanceSettings:
-      type: object
-      properties:
-        useCustomDefaults:
-          type: boolean
-        pullMode:
-          type: boolean
-        webhookUrl:
-          type: string
-          nullable: true
-        eventSigningSecret:
-          type: string
-          nullable: true
-        historySync:
-          type: boolean
-        eventFilters:
-          type: array
-          nullable: true
-          items:
-            type: string
-
-    UpdateInstanceNameRequest:
-      type: object
-      required: [name]
-      properties:
-        name:
-          type: string
-          maxLength: 256
-
-    AccountSubscription:
-      type: object
-      properties:
-        id:
-          type: string
-        created:
-          type: string
-          format: date-time
-        curPeriodStart:
-          type: string
-          format: date-time
-        curPeriodEnd:
-          type: string
-          format: date-time
-        quantity:
-          type: integer
-        plan:
-          type: string
-        price:
-          type: string
-        status:
-          type: string
-        cancelAtPeriodEnd:
-          type: boolean
-        instanceIds:
-          type: array
-          nullable: true
-          items:
-            type: string
-
-    AccountSubscriptionChange:
-      type: object
-      properties:
-        id:
-          type: string
-        timestamp:
-          type: string
-          format: date-time
-        subscriptionId:
-          type: string
-        changeType:
-          type: string
-        previousQuantity:
-          type: integer
-          nullable: true
-        newQuantity:
-          type: integer
-          nullable: true
-        instanceId:
-          type: string
-          nullable: true
-        proratedAmount:
-          type: number
-          format: decimal
-          nullable: true
-        notes:
-          type: string
-          nullable: true
-
-    AccountInstanceDefaults:
-      type: object
-      properties:
-        defaultWebhookUrl:
-          type: string
-          nullable: true
-        defaultSigningSecret:
-          type: string
-          nullable: true
-        defaultEventFilters:
-          type: array
-          nullable: true
-          items:
-            type: string
-        defaultHistorySync:
-          type: boolean
-        defaultPullMode:
-          type: boolean
-
-    PagedAccountInstances:
-      type: object
-      properties:
-        items:
-          type: array
-          items:
-            $ref: "#/components/schemas/AccountInstance"
-        totalCount:
-          type: integer
-        pageNumber:
-          type: integer
-        pageSize:
-          type: integer
-
-    PagedAccountSubscriptions:
-      type: object
-      properties:
-        items:
-          type: array
-          items:
-            $ref: "#/components/schemas/AccountSubscription"
-        totalCount:
-          type: integer
-        pageNumber:
-          type: integer
-        pageSize:
-          type: integer
-
-    PagedAccountSubscriptionChanges:
-      type: object
-      properties:
-        items:
-          type: array
-          items:
-            $ref: "#/components/schemas/AccountSubscriptionChange"
-        totalCount:
-          type: integer
-        pageNumber:
-          type: integer
-        pageSize:
-          type: integer

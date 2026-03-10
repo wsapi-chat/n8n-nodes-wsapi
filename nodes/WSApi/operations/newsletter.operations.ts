@@ -1,19 +1,18 @@
-import { IExecuteFunctions } from "n8n-workflow";
-import { IDataObject } from "n8n-workflow";
+import { IExecuteFunctions, IDataObject } from "n8n-workflow";
 
 export async function executeNewsletterOperation(
   this: IExecuteFunctions,
   operation: string,
   i: number,
 ): Promise<IDataObject> {
-  const credentials = await this.getCredentials("WSApiApi");
+  const credentials = await this.getCredentials("wsApiApi");
   const baseURL = credentials.baseUrl as string;
 
   switch (operation) {
     case "getAll":
-      return await this.helpers.requestWithAuthentication.call(
+      return await this.helpers.httpRequestWithAuthentication.call(
         this,
-        "WSApiApi",
+        "wsApiApi",
         {
           method: "GET",
           url: "/newsletters",
@@ -24,9 +23,9 @@ export async function executeNewsletterOperation(
 
     case "get": {
       const newsletterId = this.getNodeParameter("newsletterId", i) as string;
-      return await this.helpers.requestWithAuthentication.call(
+      return await this.helpers.httpRequestWithAuthentication.call(
         this,
-        "WSApiApi",
+        "wsApiApi",
         {
           method: "GET",
           url: `/newsletters/${encodeURIComponent(newsletterId)}`,
@@ -47,9 +46,9 @@ export async function executeNewsletterOperation(
       const body: IDataObject = { name };
       if (description) body.description = description;
       if (pictureBase64) body.pictureBase64 = pictureBase64;
-      return await this.helpers.requestWithAuthentication.call(
+      return await this.helpers.httpRequestWithAuthentication.call(
         this,
-        "WSApiApi",
+        "wsApiApi",
         {
           method: "POST",
           url: "/newsletters",
@@ -62,9 +61,9 @@ export async function executeNewsletterOperation(
 
     case "getByInviteCode": {
       const inviteCode = this.getNodeParameter("inviteCode", i) as string;
-      return await this.helpers.requestWithAuthentication.call(
+      return await this.helpers.httpRequestWithAuthentication.call(
         this,
-        "WSApiApi",
+        "wsApiApi",
         {
           method: "GET",
           url: `/newsletters/invite/${encodeURIComponent(inviteCode)}`,
@@ -77,7 +76,7 @@ export async function executeNewsletterOperation(
     case "setSubscription": {
       const newsletterId = this.getNodeParameter("newsletterId", i) as string;
       const subscribed = this.getNodeParameter("subscribed", i) as boolean;
-      await this.helpers.requestWithAuthentication.call(this, "WSApiApi", {
+      await this.helpers.httpRequestWithAuthentication.call(this, "wsApiApi", {
         method: "PUT",
         url: `/newsletters/${encodeURIComponent(newsletterId)}/subscription`,
         baseURL,
@@ -95,7 +94,7 @@ export async function executeNewsletterOperation(
     case "toggleMute": {
       const newsletterId = this.getNodeParameter("newsletterId", i) as string;
       const mute = this.getNodeParameter("mute", i) as boolean;
-      await this.helpers.requestWithAuthentication.call(this, "WSApiApi", {
+      await this.helpers.httpRequestWithAuthentication.call(this, "wsApiApi", {
         method: "PUT",
         url: `/newsletters/${encodeURIComponent(newsletterId)}/mute`,
         baseURL,

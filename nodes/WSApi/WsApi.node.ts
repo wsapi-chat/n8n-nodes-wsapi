@@ -1,4 +1,5 @@
 import {
+  IDataObject,
   IExecuteFunctions,
   INodeExecutionData,
   INodeType,
@@ -39,7 +40,7 @@ import { executeCommunityOperation } from "./operations/community.operations";
 import { executeNewsletterOperation } from "./operations/newsletter.operations";
 import { executeStatusOperation } from "./operations/status.operations";
 
-export class WSApi implements INodeType {
+export class WsApi implements INodeType {
   description: INodeTypeDescription = {
     displayName: "WSAPI",
     name: "wsApi",
@@ -56,7 +57,7 @@ export class WSApi implements INodeType {
     outputs: ["main"] as NodeConnectionType[],
     credentials: [
       {
-        name: "WSApiApi",
+        name: "wsApiApi",
         required: true,
       },
     ],
@@ -156,12 +157,12 @@ export class WSApi implements INodeType {
     const operation = this.getNodeParameter("operation", 0);
 
     // Get the baseURL from credentials
-    const credentials = await this.getCredentials("WSApiApi");
+    const credentials = await this.getCredentials("wsApiApi");
     const baseURL = credentials.baseUrl as string;
 
     for (let i = 0; i < items.length; i++) {
       try {
-        let responseData: any;
+        let responseData: INodeExecutionData[] | IDataObject;
 
         // Route to appropriate resource operation handler
         if (resource === "calls") {

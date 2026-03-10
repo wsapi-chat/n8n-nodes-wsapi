@@ -1,5 +1,4 @@
-import { IExecuteFunctions } from "n8n-workflow";
-import { IDataObject } from "n8n-workflow";
+import { IExecuteFunctions, IDataObject } from "n8n-workflow";
 import { cacheRead, cacheWrite, makeCacheKey } from "../helpers/utils";
 
 export async function executeGroupsOperation(
@@ -7,14 +6,14 @@ export async function executeGroupsOperation(
   operation: string,
   i: number,
 ): Promise<IDataObject> {
-  const credentials = await this.getCredentials("WSApiApi");
+  const credentials = await this.getCredentials("wsApiApi");
   const baseURL = credentials.baseUrl as string;
 
   switch (operation) {
     case "getAll":
-      return await this.helpers.requestWithAuthentication.call(
+      return await this.helpers.httpRequestWithAuthentication.call(
         this,
-        "WSApiApi",
+        "wsApiApi",
         {
           method: "GET",
           url: "/groups",
@@ -23,7 +22,7 @@ export async function executeGroupsOperation(
         },
       );
 
-    case "get":
+    case "get": {
       const groupId = this.getNodeParameter("groupId", i) as string;
       const cacheResults = this.getNodeParameter(
         "cacheResults",
@@ -33,7 +32,7 @@ export async function executeGroupsOperation(
       const cacheTtl = this.getNodeParameter("cacheTtl", i, 300) as number;
 
       if (cacheResults) {
-        const credentials = await this.getCredentials("WSApiApi");
+        const credentials = await this.getCredentials("wsApiApi");
         const instanceId = credentials.instanceId as string;
         const baseURL = credentials.baseUrl as string;
         const key = makeCacheKey([
@@ -47,9 +46,9 @@ export async function executeGroupsOperation(
         if (cached !== undefined) return cached as IDataObject;
       }
 
-      const resGet = await this.helpers.requestWithAuthentication.call(
+      const resGet = await this.helpers.httpRequestWithAuthentication.call(
         this,
-        "WSApiApi",
+        "wsApiApi",
         {
           method: "GET",
           url: `/groups/${groupId}`,
@@ -59,7 +58,7 @@ export async function executeGroupsOperation(
       );
 
       if (cacheResults) {
-        const credentials = await this.getCredentials("WSApiApi");
+        const credentials = await this.getCredentials("wsApiApi");
         const instanceId = credentials.instanceId as string;
         const baseURL = credentials.baseUrl as string;
         const key = makeCacheKey([
@@ -72,8 +71,9 @@ export async function executeGroupsOperation(
         cacheWrite(this, key, resGet, cacheTtl);
       }
       return resGet;
+    }
 
-    case "create":
+    case "create": {
       const groupName = this.getNodeParameter("groupName", i) as string;
       const participantsData = this.getNodeParameter(
         "participants",
@@ -84,9 +84,9 @@ export async function executeGroupsOperation(
         .map((p) => p.trim())
         .filter((p) => p);
 
-      return await this.helpers.requestWithAuthentication.call(
+      return await this.helpers.httpRequestWithAuthentication.call(
         this,
-        "WSApiApi",
+        "wsApiApi",
         {
           method: "POST",
           url: "/groups",
@@ -98,22 +98,24 @@ export async function executeGroupsOperation(
           },
         },
       );
+    }
 
-    case "leave":
+    case "leave": {
       const leaveGroupId = this.getNodeParameter("groupId", i) as string;
-      await this.helpers.requestWithAuthentication.call(this, "WSApiApi", {
+      await this.helpers.httpRequestWithAuthentication.call(this, "wsApiApi", {
         method: "POST",
         url: `/groups/${leaveGroupId}/leave`,
         baseURL,
         json: true,
       });
       return { success: true, message: "Left group successfully" };
+    }
 
-    case "setDescription":
+    case "setDescription": {
       const descGroupId = this.getNodeParameter("groupId", i) as string;
       const description = this.getNodeParameter("description", i) as string;
 
-      await this.helpers.requestWithAuthentication.call(this, "WSApiApi", {
+      await this.helpers.httpRequestWithAuthentication.call(this, "wsApiApi", {
         method: "PUT",
         url: `/groups/${descGroupId}/description`,
         baseURL,
@@ -124,12 +126,13 @@ export async function executeGroupsOperation(
         success: true,
         message: "Group description updated successfully",
       };
+    }
 
-    case "setName":
+    case "setName": {
       const nameGroupId = this.getNodeParameter("groupId", i) as string;
       const newName = this.getNodeParameter("groupName", i) as string;
 
-      await this.helpers.requestWithAuthentication.call(this, "WSApiApi", {
+      await this.helpers.httpRequestWithAuthentication.call(this, "wsApiApi", {
         method: "PUT",
         url: `/groups/${nameGroupId}/name`,
         baseURL,
@@ -137,14 +140,15 @@ export async function executeGroupsOperation(
         body: { name: newName },
       });
       return { success: true, message: "Group name updated successfully" };
+    }
 
-    case "setPicture":
+    case "setPicture": {
       const pictureGroupId = this.getNodeParameter("groupId", i) as string;
       const pictureBase64 = this.getNodeParameter("pictureBase64", i) as string;
 
-      return await this.helpers.requestWithAuthentication.call(
+      return await this.helpers.httpRequestWithAuthentication.call(
         this,
-        "WSApiApi",
+        "wsApiApi",
         {
           method: "POST",
           url: `/groups/${pictureGroupId}/picture`,
@@ -153,12 +157,13 @@ export async function executeGroupsOperation(
           body: { pictureBase64 },
         },
       );
+    }
 
-    case "getInviteLink":
+    case "getInviteLink": {
       const linkGroupId = this.getNodeParameter("groupId", i) as string;
-      return await this.helpers.requestWithAuthentication.call(
+      return await this.helpers.httpRequestWithAuthentication.call(
         this,
-        "WSApiApi",
+        "wsApiApi",
         {
           method: "GET",
           url: `/groups/${linkGroupId}/invite-link`,
@@ -166,12 +171,13 @@ export async function executeGroupsOperation(
           json: true,
         },
       );
+    }
 
-    case "resetInviteLink":
+    case "resetInviteLink": {
       const resetLinkGroupId = this.getNodeParameter("groupId", i) as string;
-      return await this.helpers.requestWithAuthentication.call(
+      return await this.helpers.httpRequestWithAuthentication.call(
         this,
-        "WSApiApi",
+        "wsApiApi",
         {
           method: "POST",
           url: `/groups/${resetLinkGroupId}/invite-link/reset`,
@@ -179,15 +185,16 @@ export async function executeGroupsOperation(
           json: true,
         },
       );
+    }
 
-    case "getParticipants":
+    case "getParticipants": {
       const participantsGetGroupId = this.getNodeParameter(
         "groupId",
         i,
       ) as string;
-      return await this.helpers.requestWithAuthentication.call(
+      return await this.helpers.httpRequestWithAuthentication.call(
         this,
-        "WSApiApi",
+        "wsApiApi",
         {
           method: "GET",
           url: `/groups/${participantsGetGroupId}/participants`,
@@ -195,12 +202,13 @@ export async function executeGroupsOperation(
           json: true,
         },
       );
+    }
 
-    case "getInviteRequests":
+    case "getInviteRequests": {
       const requestsGroupId = this.getNodeParameter("groupId", i) as string;
-      return await this.helpers.requestWithAuthentication.call(
+      return await this.helpers.httpRequestWithAuthentication.call(
         this,
-        "WSApiApi",
+        "wsApiApi",
         {
           method: "GET",
           url: `/groups/${requestsGroupId}/requests`,
@@ -208,8 +216,9 @@ export async function executeGroupsOperation(
           json: true,
         },
       );
+    }
 
-    case "updateParticipants":
+    case "updateParticipants": {
       const participantsGroupId = this.getNodeParameter("groupId", i) as string;
       const participantAction = this.getNodeParameter(
         "participantAction",
@@ -226,7 +235,7 @@ export async function executeGroupsOperation(
         .map((p) => p.trim())
         .filter((p) => p);
 
-      await this.helpers.requestWithAuthentication.call(this, "WSApiApi", {
+      await this.helpers.httpRequestWithAuthentication.call(this, "wsApiApi", {
         method: "PUT",
         url: `/groups/${participantsGroupId}/participants`,
         baseURL,
@@ -237,12 +246,13 @@ export async function executeGroupsOperation(
         success: true,
         message: "Group participants updated successfully",
       };
+    }
 
-    case "getInviteInfo":
+    case "getInviteInfo": {
       const inviteCode = this.getNodeParameter("inviteCode", i) as string;
-      return await this.helpers.requestWithAuthentication.call(
+      return await this.helpers.httpRequestWithAuthentication.call(
         this,
-        "WSApiApi",
+        "wsApiApi",
         {
           method: "GET",
           url: `/groups/invite/${inviteCode}`,
@@ -250,11 +260,12 @@ export async function executeGroupsOperation(
           json: true,
         },
       );
+    }
 
-    case "setAnnounce":
+    case "setAnnounce": {
       const announceGroupId = this.getNodeParameter("groupId", i) as string;
       const announce = this.getNodeParameter("announce", i) as boolean;
-      await this.helpers.requestWithAuthentication.call(this, "WSApiApi", {
+      await this.helpers.httpRequestWithAuthentication.call(this, "wsApiApi", {
         method: "PUT",
         url: `/groups/${announceGroupId}/settings/announce`,
         baseURL,
@@ -265,11 +276,12 @@ export async function executeGroupsOperation(
         success: true,
         message: "Group announce mode updated successfully",
       };
+    }
 
-    case "setLocked":
+    case "setLocked": {
       const lockedGroupId = this.getNodeParameter("groupId", i) as string;
       const locked = this.getNodeParameter("locked", i) as boolean;
-      await this.helpers.requestWithAuthentication.call(this, "WSApiApi", {
+      await this.helpers.httpRequestWithAuthentication.call(this, "wsApiApi", {
         method: "PUT",
         url: `/groups/${lockedGroupId}/settings/locked`,
         baseURL,
@@ -280,11 +292,12 @@ export async function executeGroupsOperation(
         success: true,
         message: "Group locked mode updated successfully",
       };
+    }
 
-    case "setJoinApproval":
+    case "setJoinApproval": {
       const joinApprovalGroupId = this.getNodeParameter("groupId", i) as string;
       const joinApproval = this.getNodeParameter("joinApproval", i) as boolean;
-      await this.helpers.requestWithAuthentication.call(this, "WSApiApi", {
+      await this.helpers.httpRequestWithAuthentication.call(this, "wsApiApi", {
         method: "PUT",
         url: `/groups/${joinApprovalGroupId}/settings/join-approval`,
         baseURL,
@@ -295,11 +308,12 @@ export async function executeGroupsOperation(
         success: true,
         message: "Group join approval mode updated successfully",
       };
+    }
 
-    case "setMemberAddMode":
+    case "setMemberAddMode": {
       const memberAddGroupId = this.getNodeParameter("groupId", i) as string;
       const onlyAdmins = this.getNodeParameter("onlyAdmins", i) as boolean;
-      await this.helpers.requestWithAuthentication.call(this, "WSApiApi", {
+      await this.helpers.httpRequestWithAuthentication.call(this, "wsApiApi", {
         method: "PUT",
         url: `/groups/${memberAddGroupId}/settings/member-add-mode`,
         baseURL,
@@ -310,12 +324,13 @@ export async function executeGroupsOperation(
         success: true,
         message: "Group member add mode updated successfully",
       };
+    }
 
-    case "joinWithLink":
+    case "joinWithLink": {
       const joinLinkCode = this.getNodeParameter("inviteCode", i) as string;
-      return await this.helpers.requestWithAuthentication.call(
+      return await this.helpers.httpRequestWithAuthentication.call(
         this,
-        "WSApiApi",
+        "wsApiApi",
         {
           method: "POST",
           url: "/groups/join/link",
@@ -324,8 +339,9 @@ export async function executeGroupsOperation(
           body: { code: joinLinkCode },
         },
       );
+    }
 
-    case "joinWithInvite":
+    case "joinWithInvite": {
       const joinInviteGroupId = this.getNodeParameter("groupId", i) as string;
       const inviterId = this.getNodeParameter("inviterId", i) as string;
       const joinInviteCode = this.getNodeParameter("inviteCode", i) as string;
@@ -340,9 +356,9 @@ export async function executeGroupsOperation(
       if (expiration !== undefined) {
         joinInviteBody.expiration = expiration;
       }
-      return await this.helpers.requestWithAuthentication.call(
+      return await this.helpers.httpRequestWithAuthentication.call(
         this,
-        "WSApiApi",
+        "wsApiApi",
         {
           method: "POST",
           url: "/groups/join/invite",
@@ -351,8 +367,9 @@ export async function executeGroupsOperation(
           body: joinInviteBody,
         },
       );
+    }
 
-    case "handleJoinRequests":
+    case "handleJoinRequests": {
       const handleRequestsGroupId = this.getNodeParameter(
         "groupId",
         i,
@@ -368,7 +385,7 @@ export async function executeGroupsOperation(
         .split(",")
         .map((p) => p.trim())
         .filter((p) => p);
-      await this.helpers.requestWithAuthentication.call(this, "WSApiApi", {
+      await this.helpers.httpRequestWithAuthentication.call(this, "wsApiApi", {
         method: "PUT",
         url: `/groups/${handleRequestsGroupId}/requests`,
         baseURL,
@@ -376,6 +393,7 @@ export async function executeGroupsOperation(
         body: { participants: requestParticipants, action: requestAction },
       });
       return { success: true, message: "Join requests handled successfully" };
+    }
 
     default:
       throw new Error(`Unknown groups operation: ${operation}`);

@@ -60,6 +60,9 @@ jspm_packages/
 # Yarn Integrity file
 .yarn-integrity
 
+# Local deploy output
+.local-deploy/
+
 #n8n docker volume
 n8n_data/
 n8n_data_npmjs/

@@ -9,27 +9,22 @@ export async function executeSessionOperation(
   operation: string,
   i: number,
 ): Promise<IDataObject | INodeExecutionData[]> {
-  const credentials = await this.getCredentials("WSApiApi");
+  const credentials = await this.getCredentials("wsApiApi");
   const baseURL = credentials.baseUrl as string;
 
   switch (operation) {
     case "getQrImage": {
-      const apiKey = credentials.apiKey as string;
-      const instanceId = credentials.instanceId as string;
-      const headers = {
-        "X-Api-Key": apiKey,
-        "X-Instance-Id": instanceId,
-        "Content-Type": "application/json",
-      };
-
-      const response = await this.helpers.httpRequest({
-        method: "GET",
-        url: "/session/qr",
-        baseURL,
-        headers,
-        encoding: "arraybuffer",
-        json: false,
-      });
+      const response = await this.helpers.httpRequestWithAuthentication.call(
+        this,
+        "wsApiApi",
+        {
+          method: "GET",
+          url: "/session/qr",
+          baseURL,
+          encoding: "arraybuffer",
+          json: false,
+        },
+      );
 
       const fileName = "qr.png";
       const contentType = "image/png";
@@ -53,9 +48,9 @@ export async function executeSessionOperation(
     }
 
     case "getQrCode":
-      return await this.helpers.requestWithAuthentication.call(
+      return await this.helpers.httpRequestWithAuthentication.call(
         this,
-        "WSApiApi",
+        "wsApiApi",
         {
           method: "GET",
           url: "/session/qr/text",
@@ -66,9 +61,9 @@ export async function executeSessionOperation(
 
     case "getPairCode": {
       const phone = this.getNodeParameter("phone", i) as string;
-      return await this.helpers.requestWithAuthentication.call(
+      return await this.helpers.httpRequestWithAuthentication.call(
         this,
-        "WSApiApi",
+        "wsApiApi",
         {
           method: "GET",
           url: `/session/pair-code/${phone}`,
@@ -79,9 +74,9 @@ export async function executeSessionOperation(
     }
 
     case "getStatus":
-      return await this.helpers.requestWithAuthentication.call(
+      return await this.helpers.httpRequestWithAuthentication.call(
         this,
-        "WSApiApi",
+        "wsApiApi",
         {
           method: "GET",
           url: "/session/status",
@@ -91,7 +86,7 @@ export async function executeSessionOperation(
       );
 
     case "logout":
-      await this.helpers.requestWithAuthentication.call(this, "WSApiApi", {
+      await this.helpers.httpRequestWithAuthentication.call(this, "wsApiApi", {
         method: "POST",
         url: "/session/logout",
         baseURL,
@@ -100,9 +95,9 @@ export async function executeSessionOperation(
       return { success: true, message: "Logged out successfully" };
 
     case "flushHistory":
-      return await this.helpers.requestWithAuthentication.call(
+      return await this.helpers.httpRequestWithAuthentication.call(
         this,
-        "WSApiApi",
+        "wsApiApi",
         {
           method: "POST",
           url: "/session/flush-history",
