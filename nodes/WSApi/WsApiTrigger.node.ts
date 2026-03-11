@@ -181,14 +181,6 @@ export class WsApiTrigger implements INodeType {
         description:
           "Whether to include the original webhook payload in the output",
       },
-      {
-        displayName: "Verify Webhook Signature",
-        name: "verifySignature",
-        type: "boolean",
-        default: true,
-        description:
-          "Whether to verify the HMAC-SHA256 signature of incoming webhooks using the signing secret from credentials",
-      },
     ],
   };
 
@@ -200,30 +192,19 @@ export class WsApiTrigger implements INodeType {
     ) as boolean;
     const parseEventData = this.getNodeParameter("parseEventData") as boolean;
     const includeRawEvent = this.getNodeParameter("includeRawEvent") as boolean;
-    const verifySignature = this.getNodeParameter("verifySignature") as boolean;
 
-    // Verify HMAC-SHA256 webhook signature if enabled
-    if (verifySignature) {
-      const credentials = await this.getCredentials("wsApiApi");
-      const signingSecret = credentials.signingSecret as string;
+    // Auto-detect webhook signature verification from credentials
+    const credentials = await this.getCredentials("wsApiApi");
+    const signingSecret = credentials.signingSecret as string;
 
-      if (!signingSecret) {
-        return {
-          webhookResponse: {
-            status: 500,
-            body: {
-              error: "Configuration Error",
-              message:
-                "Signature verification is enabled but no signing secret is configured in credentials",
-            },
-          },
-        };
-      }
-
+    if (signingSecret) {
       const headers = this.getHeaderData();
       const signatureHeader = (headers["x-webhook-signature"] || "") as string;
 
       if (!signatureHeader) {
+        this.logger.warn(
+          "Webhook signature verification failed: missing X-Webhook-Signature header",
+        );
         return {
           webhookResponse: {
             status: 401,
@@ -250,6 +231,9 @@ export class WsApiTrigger implements INodeType {
         expectedBuf.length !== receivedBuf.length ||
         !timingSafeEqual(expectedBuf, receivedBuf)
       ) {
+        this.logger.warn(
+          "Webhook signature verification failed: invalid signature",
+        );
         return {
           webhookResponse: {
             status: 401,
