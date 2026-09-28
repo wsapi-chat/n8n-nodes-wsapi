@@ -35,7 +35,7 @@
     "deploy:local": "npm run build && rm -rf .local-deploy && mkdir -p .local-deploy && cp package.json .local-deploy/ && cp -r dist .local-deploy/",
     "release": "n8n-node release",
     "prepublishOnly": "npm run build",
-    "test": "echo \"No tests specified\" && exit 0"
+    "test": "npm run build && node --test tests/*.test.cjs"
   },
   "files": [
     "dist"

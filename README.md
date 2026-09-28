@@ -48,6 +48,7 @@ You can obtain these credentials from your [WSAPI dashboard](https://wsapi.chat)
 ## Operations
 
 ### Messages
+
 - **Send Text** - Send plain text messages with mentions and replies
 - **Send Link** - Send rich link previews with thumbnails
 - **Send Image** - Send images with captions and view-once options
@@ -67,6 +68,7 @@ You can obtain these credentials from your [WSAPI dashboard](https://wsapi.chat)
 - **Delete for Me** - Delete messages only for yourself
 
 ### Chat Management
+
 - **Get All Chats** - Get all active chats
 - **Get Chat** - Get specific chat information
 - **Get Picture** - Get chat profile picture
@@ -83,6 +85,7 @@ You can obtain these credentials from your [WSAPI dashboard](https://wsapi.chat)
 - **Request Messages** - Request message history
 
 ### Session Control
+
 - **Get QR Code Image** - Generate QR code image for login
 - **Get QR Code String** - Get QR code as string
 - **Get Pair Code** - Generate pairing code for phone linking
@@ -91,6 +94,7 @@ You can obtain these credentials from your [WSAPI dashboard](https://wsapi.chat)
 - **Logout** - Disconnect from WhatsApp
 
 ### Contact Management
+
 - **Get Many** - Get all WhatsApp contacts
 - **Get Contact** - Retrieve specific contact information
 - **Create or Update Contact** - Add or update contacts
@@ -100,6 +104,7 @@ You can obtain these credentials from your [WSAPI dashboard](https://wsapi.chat)
 - **Sync Contacts** - Synchronize contacts
 
 ### Group Management
+
 - **Get Many** - Get all group chats
 - **Get Group** - Retrieve group details and participants
 - **Create Group** - Create new groups with participants
@@ -122,6 +127,7 @@ You can obtain these credentials from your [WSAPI dashboard](https://wsapi.chat)
 - **Join with Link** - Join a group using an invite link
 
 ### Community Management
+
 - **Get Many** - List all communities
 - **Get Community** - Retrieve community details
 - **Create Community** - Create a new community with participants
@@ -140,6 +146,7 @@ You can obtain these credentials from your [WSAPI dashboard](https://wsapi.chat)
 - **Unlink Group** - Unlink a group from the community
 
 ### Newsletter Management
+
 - **Get Many** - List all newsletters
 - **Get Newsletter** - Retrieve newsletter details
 - **Create Newsletter** - Create a new newsletter
@@ -148,6 +155,7 @@ You can obtain these credentials from your [WSAPI dashboard](https://wsapi.chat)
 - **Toggle Mute** - Mute or unmute a newsletter
 
 ### Status (Stories)
+
 - **Get Privacy** - Get status privacy settings
 - **Post Text** - Post a text status update
 - **Post Image** - Post an image status update
@@ -155,6 +163,7 @@ You can obtain these credentials from your [WSAPI dashboard](https://wsapi.chat)
 - **Delete Status** - Delete a status update
 
 ### User Operations
+
 - **Get User Profile** - Retrieve user profile by phone number
 - **Get My Profile** - Get your own profile information
 - **Update My Profile** - Update your profile information
@@ -165,17 +174,21 @@ You can obtain these credentials from your [WSAPI dashboard](https://wsapi.chat)
 - **Set Presence** - Set availability status
 
 ### Call Management
+
 - **Reject Call** - Automatically reject incoming calls
 
 ### Media Operations
+
 - **Download Media** - Download images, videos, audio, and documents from messages
 
 ### Webhook Triggers
+
 - **WSAPI Trigger** - Select any combination of event types to listen for: messages, chats, calls, contacts, groups, newsletters, sessions, and user presence
 
 ## Examples
 
 ### Send a Text Message
+
 ```
 Resource: Message
 Operation: Send Text
@@ -184,6 +197,7 @@ Text: Hello from n8n!
 ```
 
 ### Send an Image with Caption
+
 ```
 Resource: Message
 Operation: Send Image
@@ -193,6 +207,7 @@ Caption: Check out this awesome image!
 ```
 
 ### Create a WhatsApp Group
+
 ```
 Resource: Group
 Operation: Create Group
@@ -201,6 +216,7 @@ Participants: 1234567890,9876543210,5555555555
 ```
 
 ### Post a Text Status Update
+
 ```
 Resource: Status
 Operation: Post Text
@@ -208,6 +224,7 @@ Text: Hello from n8n automation!
 ```
 
 ### Set Up Message Webhook Trigger
+
 ```
 Trigger: WSAPI
 Events: Message, Message Read
@@ -232,10 +249,12 @@ The WSAPI node has `usableAsTool` enabled, making it directly usable as a tool w
 ## Development
 
 ### Prerequisites
+
 - Node.js 20.19.0 or later
 - npm 9 or later
 
 ### Setup
+
 ```bash
 git clone https://github.com/wsapi-chat/n8n-nodes-wsapi
 cd n8n-nodes-wsapi
@@ -243,16 +262,19 @@ npm install
 ```
 
 ### Building
+
 ```bash
 npm run build
 ```
 
 ### Testing
+
 ```bash
 npm test
 ```
 
 ### Linting & Formatting
+
 ```bash
 npm run lint
 npm run lint:fix
@@ -261,6 +283,7 @@ npm run format:check
 ```
 
 ### Local Development
+
 ```bash
 # Link the package locally
 npm link
@@ -287,3 +310,7 @@ See [CHANGELOG.md](CHANGELOG.md) for version history and updates.
 This project is licensed under the MIT License — see `LICENSE` for details.
 
 Trademark notice: "n8n" is a trademark of n8n GmbH. "WhatsApp" is a trademark of WhatsApp LLC. Any use here is for identification and compatibility purposes only and does not imply endorsement or affiliation with n8n GmbH, Meta Platforms, Inc., or WhatsApp LLC.
+
+## Unreleased contract update
+
+The source covers 101 WhatsApp operations; Cloud Account/subscription and OSS admin APIs are outside this integration's scope. Changes in this working tree have not been published. See [CHANGELOG.md](CHANGELOG.md).

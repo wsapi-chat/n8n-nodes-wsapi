@@ -79,7 +79,7 @@ export async function executeUsersOperation(
         url: "/users/me/presence",
         baseURL,
         json: true,
-        body: { status },
+        body: { presence: status },
       });
       return { success: true, message: "Presence updated successfully" };
     }

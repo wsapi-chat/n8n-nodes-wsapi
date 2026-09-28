@@ -53,7 +53,11 @@ export async function executeCommunityOperation(
           url: "/communities",
           baseURL,
           json: true,
-          body: { name, participants: phoneNumbers },
+          body: {
+            name,
+            participants: phoneNumbers,
+            approvalMode: this.getNodeParameter("approvalMode", i, ""),
+          },
         },
       );
     }
@@ -109,7 +113,7 @@ export async function executeCommunityOperation(
           url: `/communities/${encodeURIComponent(communityId)}/picture`,
           baseURL,
           json: true,
-          body: { pictureBase64 },
+          body: { data: pictureBase64 },
         },
       );
     }
@@ -122,7 +126,7 @@ export async function executeCommunityOperation(
         url: `/communities/${encodeURIComponent(communityId)}/settings/locked`,
         baseURL,
         json: true,
-        body: { locked },
+        body: { enabled: locked },
       });
       return {
         success: true,
@@ -224,7 +228,16 @@ export async function executeCommunityOperation(
           url: `/communities/${encodeURIComponent(communityId)}/groups`,
           baseURL,
           json: true,
-          body: { name },
+          body: {
+            name,
+            participants: (
+              ((this.getNodeParameter("participants", i, {}) as IDataObject)
+                .phoneNumbers as string) || ""
+            )
+              .split(",")
+              .map((p) => p.trim())
+              .filter(Boolean),
+          },
         },
       );
     }

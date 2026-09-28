@@ -161,6 +161,8 @@ export async function executeMessageOperation(
       const audioMimeType =
         (this.getNodeParameter("mimeType", i, "") as string) || "audio/mpeg";
       const audioBody: IDataObject = { to, mimeType: audioMimeType };
+      const audioCaption = this.getNodeParameter("caption", i, "") as string;
+      if (audioCaption) audioBody.caption = audioCaption;
       if (audioInputType === "base64") {
         audioBody.data = this.getNodeParameter("mediaBase64", i) as string;
       } else {
@@ -189,6 +191,10 @@ export async function executeMessageOperation(
         "url",
       ) as string;
       const voiceBody: IDataObject = { to };
+      const voiceCaption = this.getNodeParameter("caption", i, "") as string;
+      const voiceMimeType = this.getNodeParameter("mimeType", i, "") as string;
+      if (voiceCaption) voiceBody.caption = voiceCaption;
+      if (voiceMimeType) voiceBody.mimeType = voiceMimeType;
       if (voiceInputType === "base64") {
         voiceBody.data = this.getNodeParameter("mediaBase64", i) as string;
       } else {
@@ -219,6 +225,12 @@ export async function executeMessageOperation(
       const documentCaption = this.getNodeParameter("caption", i, "") as string;
       const documentFileName = this.getNodeParameter("fileName", i) as string;
       const documentBody: IDataObject = { to, filename: documentFileName };
+      const documentMimeType = this.getNodeParameter(
+        "mimeType",
+        i,
+        "",
+      ) as string;
+      if (documentMimeType) documentBody.mimeType = documentMimeType;
       if (documentInputType === "base64") {
         documentBody.data = this.getNodeParameter("mediaBase64", i) as string;
       } else {
@@ -358,6 +370,8 @@ export async function executeMessageOperation(
     case "editMessage": {
       const editMessageId = this.getNodeParameter("messageId", i) as string;
       const newMessage = this.getNodeParameter("newMessage", i) as string;
+      const editBody: IDataObject = { to, text: newMessage };
+      parseAdvancedOptions(advancedOptions, editBody);
 
       responseData = await this.helpers.httpRequestWithAuthentication.call(
         this,
@@ -365,7 +379,7 @@ export async function executeMessageOperation(
         {
           method: "POST",
           url: `/messages/${encodeURIComponent(editMessageId)}/edit`,
-          body: { to, text: newMessage },
+          body: editBody,
           baseURL: baseURL,
           json: true,
         },
@@ -434,7 +448,11 @@ export async function executeMessageOperation(
       await this.helpers.httpRequestWithAuthentication.call(this, "wsApiApi", {
         method: "POST",
         url: `/messages/${encodeURIComponent(starMessageId)}/star`,
-        body: { chatId: starChatId, senderId: starSenderId },
+        body: {
+          chatId: starChatId,
+          senderId: starSenderId,
+          starred: this.getNodeParameter("starred", i, true),
+        },
         baseURL: baseURL,
         json: true,
       });

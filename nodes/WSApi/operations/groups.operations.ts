@@ -154,7 +154,7 @@ export async function executeGroupsOperation(
           url: `/groups/${pictureGroupId}/picture`,
           baseURL,
           json: true,
-          body: { pictureBase64 },
+          body: { data: pictureBase64 },
         },
       );
     }
@@ -270,7 +270,7 @@ export async function executeGroupsOperation(
         url: `/groups/${announceGroupId}/settings/announce`,
         baseURL,
         json: true,
-        body: { announce },
+        body: { enabled: announce },
       });
       return {
         success: true,
@@ -286,7 +286,7 @@ export async function executeGroupsOperation(
         url: `/groups/${lockedGroupId}/settings/locked`,
         baseURL,
         json: true,
-        body: { locked },
+        body: { enabled: locked },
       });
       return {
         success: true,
@@ -302,7 +302,7 @@ export async function executeGroupsOperation(
         url: `/groups/${joinApprovalGroupId}/settings/join-approval`,
         baseURL,
         json: true,
-        body: { joinApproval },
+        body: { enabled: joinApproval },
       });
       return {
         success: true,
@@ -318,7 +318,7 @@ export async function executeGroupsOperation(
         url: `/groups/${memberAddGroupId}/settings/member-add-mode`,
         baseURL,
         json: true,
-        body: { onlyAdmins },
+        body: { onlyAdminAdd: onlyAdmins },
       });
       return {
         success: true,

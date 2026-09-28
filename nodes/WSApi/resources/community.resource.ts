@@ -113,6 +113,16 @@ export const communityOperations: INodeProperties = {
 
 export const communityFields: INodeProperties[] = [
   {
+    displayName: "Approval Mode",
+    name: "approvalMode",
+    type: "string",
+    default: "",
+    description: "Join approval mode; leave empty to use the server default",
+    displayOptions: {
+      show: { resource: ["community"], operation: ["create"] },
+    },
+  },
+  {
     displayName: "Community ID",
     name: "communityId",
     type: "string",
@@ -219,7 +229,7 @@ export const communityFields: INodeProperties[] = [
     displayOptions: {
       show: {
         resource: ["community"],
-        operation: ["create", "updateParticipants"],
+        operation: ["create", "createSubGroup", "updateParticipants"],
       },
     },
   },

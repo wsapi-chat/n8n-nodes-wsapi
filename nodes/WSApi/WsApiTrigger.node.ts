@@ -8,6 +8,7 @@ import {
   INodeTypeDescription,
   IWebhookResponseData,
   NodeConnectionType,
+  NodeOperationError,
 } from "n8n-workflow";
 
 export class WsApiTrigger implements INodeType {
@@ -23,7 +24,6 @@ export class WsApiTrigger implements INodeType {
     defaults: {
       name: "WSAPI Trigger",
     },
-    usableAsTool: true,
     inputs: [],
     outputs: ["main"] as NodeConnectionType[],
     credentials: [
@@ -194,8 +194,10 @@ export class WsApiTrigger implements INodeType {
     const includeRawEvent = this.getNodeParameter("includeRawEvent") as boolean;
 
     // Auto-detect webhook signature verification from credentials
-    const credentials = await this.getCredentials("wsApiApi");
-    const signingSecret = credentials.signingSecret as string;
+    const credentials = this.getNode().credentials?.wsApiApi
+      ? await this.getCredentials("wsApiApi")
+      : undefined;
+    const signingSecret = credentials?.signingSecret as string | undefined;
 
     if (signingSecret) {
       const headers = this.getHeaderData();
@@ -205,20 +207,22 @@ export class WsApiTrigger implements INodeType {
         this.logger.warn(
           "Webhook signature verification failed: missing X-Webhook-Signature header",
         );
-        return {
-          webhookResponse: {
-            status: 401,
-            body: {
-              error: "Unauthorized",
-              message: "Missing X-Webhook-Signature header",
-            },
-          },
-        };
+        this.getResponseObject().status(401).json({
+          error: "Unauthorized",
+          message: "Missing X-Webhook-Signature header",
+        });
+        return { noWebhookResponse: true };
       }
 
       const req = this.getRequestObject();
       const rawBody = (req as unknown as { rawBody?: Buffer }).rawBody;
-      const bodyBytes = rawBody || Buffer.from(JSON.stringify(body), "utf-8");
+      if (!Buffer.isBuffer(rawBody)) {
+        throw new NodeOperationError(
+          this.getNode(),
+          "Cannot verify webhook signature without the original raw request body",
+        );
+      }
+      const bodyBytes = rawBody;
 
       const expected =
         "sha256=" +
@@ -234,31 +238,23 @@ export class WsApiTrigger implements INodeType {
         this.logger.warn(
           "Webhook signature verification failed: invalid signature",
         );
-        return {
-          webhookResponse: {
-            status: 401,
-            body: {
-              error: "Unauthorized",
-              message: "Invalid webhook signature",
-            },
-          },
-        };
+        this.getResponseObject().status(401).json({
+          error: "Unauthorized",
+          message: "Invalid webhook signature",
+        });
+        return { noWebhookResponse: true };
       }
     }
 
     // Validate webhook structure
     if (!body.eventType || !body.eventData) {
-      return {
-        webhookResponse: {
-          status: 400,
-          body: {
-            error: "Bad Request",
-            message:
-              "Invalid webhook payload. Expected format: { eventType: string, eventData: object }",
-            received: body,
-          },
-        },
-      };
+      this.getResponseObject().status(400).json({
+        error: "Bad Request",
+        message:
+          "Invalid webhook payload. Expected format: { eventType: string, eventData: object }",
+        received: body,
+      });
+      return { noWebhookResponse: true };
     }
 
     const eventType = body.eventType as string;

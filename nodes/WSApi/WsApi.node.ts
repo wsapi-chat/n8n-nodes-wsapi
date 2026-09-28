@@ -6,6 +6,8 @@ import {
   INodeTypeDescription,
   NodeConnectionType,
   NodeOperationError,
+  NodeApiError,
+  JsonObject,
 } from "n8n-workflow";
 
 import { messageOperations, messageFields } from "./resources/message.resource";
@@ -258,7 +260,9 @@ export class WsApi implements INodeType {
           returnData.push(...executionData);
           continue;
         }
-        throw error;
+        throw new NodeApiError(this.getNode(), error as JsonObject, {
+          itemIndex: i,
+        });
       }
     }
 

@@ -133,6 +133,16 @@ export const messageOperations: INodeProperties = {
 };
 
 export const messageFields: INodeProperties[] = [
+  {
+    displayName: "Starred",
+    name: "starred",
+    type: "boolean",
+    default: true,
+    description: "Whether to star or unstar the message",
+    displayOptions: {
+      show: { resource: ["message"], operation: ["starMessage"] },
+    },
+  },
   // Consolidated "To" field for all message operations (tool-compatible)
   {
     displayName: "To",
@@ -322,7 +332,14 @@ export const messageFields: INodeProperties[] = [
     displayOptions: {
       show: {
         resource: ["message"],
-        operation: ["sendImage", "sendVideo", "sendAudio", "sendSticker"],
+        operation: [
+          "sendImage",
+          "sendVideo",
+          "sendAudio",
+          "sendVoice",
+          "sendDocument",
+          "sendSticker",
+        ],
       },
     },
     default: "",
@@ -369,7 +386,13 @@ export const messageFields: INodeProperties[] = [
     displayOptions: {
       show: {
         resource: ["message"],
-        operation: ["sendImage", "sendVideo", "sendDocument"],
+        operation: [
+          "sendImage",
+          "sendVideo",
+          "sendAudio",
+          "sendVoice",
+          "sendDocument",
+        ],
       },
     },
     default: "",

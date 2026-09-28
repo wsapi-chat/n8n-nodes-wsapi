@@ -16,10 +16,11 @@ export function createAdvancedOptions(): INodeProperties {
         description:
           "Custom expiration time for this message, overriding the chat's ephemeral settings",
         options: [
-          { name: "Use Chat Default", value: "" },
           { name: "24 Hours", value: "24h" },
           { name: "7 Days", value: "7d" },
           { name: "90 Days", value: "90d" },
+          { name: "Off", value: "off" },
+          { name: "Use Chat Default", value: "" },
         ],
       },
       {
@@ -63,7 +64,13 @@ export function createAdvancedOptions(): INodeProperties {
         displayOptions: {
           show: {
             "/resource": ["message"],
-            "/operation": ["sendImage", "sendVideo", "sendAudio", "sendVoice"],
+            "/operation": [
+              "sendImage",
+              "sendVideo",
+              "sendAudio",
+              "sendVoice",
+              "sendDocument",
+            ],
           },
         },
       },
