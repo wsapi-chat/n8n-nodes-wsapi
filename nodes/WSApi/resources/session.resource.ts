@@ -12,6 +12,13 @@ export const sessionOperations: INodeProperties = {
   },
   options: [
     {
+      name: "Confirm Passkey (Rarely Needed)",
+      value: "confirmPasskey",
+      description:
+        "Compatibility fallback: send the passkey pairing confirmation. The server now sends it automatically, so this is rarely needed.",
+      action: "Confirm passkey pairing",
+    },
+    {
       name: "Flush History",
       value: "flushHistory",
       description: "Flush cached history sync messages",
@@ -22,6 +29,13 @@ export const sessionOperations: INodeProperties = {
       value: "getPairCode",
       description: "Get pair code for phone number",
       action: "Get pair code for phone",
+    },
+    {
+      name: "Get Passkey State",
+      value: "getPasskeyState",
+      description:
+        "Get the passkey verification state (and WebAuthn challenge while status is required)",
+      action: "Get passkey state",
     },
     {
       name: "Get QR Code Image",
@@ -47,6 +61,20 @@ export const sessionOperations: INodeProperties = {
       description: "Logout from WhatsApp",
       action: "Log out from whats app",
     },
+    {
+      name: "Request Passkey Challenge",
+      value: "requestPasskey",
+      description:
+        "Ask WhatsApp for a passkey challenge for an unpaired device (idempotent while one is pending)",
+      action: "Request passkey challenge",
+    },
+    {
+      name: "Submit Passkey Assertion",
+      value: "submitPasskey",
+      description:
+        "Submit the WebAuthn assertion signed by the account owner's passkey on web.whatsapp.com",
+      action: "Submit passkey assertion",
+    },
   ],
   default: "getStatus",
 };
@@ -65,6 +93,22 @@ export const sessionFields: INodeProperties[] = [
       show: {
         resource: ["session"],
         operation: ["getPairCode"],
+      },
+    },
+  },
+  {
+    displayName: "Passkey Assertion (JSON)",
+    name: "passkeyAssertion",
+    type: "json",
+    required: true,
+    default: "{}",
+    description:
+      "WebAuthn assertion as produced by PublicKeyCredential.toJSON() after calling navigator.credentials.get() on https://web.whatsapp.com with the challenge from Get Passkey State",
+    hint: 'Must include "rawId" and "response" (with "clientDataJSON" and "signature"); binary fields are base64url-encoded',
+    displayOptions: {
+      show: {
+        resource: ["session"],
+        operation: ["submitPasskey"],
       },
     },
   },

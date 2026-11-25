@@ -94,7 +94,7 @@ export async function executeGroupsOperation(
           json: true,
           body: {
             name: groupName,
-            participants: phoneNumbers,
+            ...(phoneNumbers.length ? { participants: phoneNumbers } : {}),
           },
         },
       );

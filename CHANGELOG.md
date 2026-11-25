@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 
 The format is based on Keep a Changelog, and this project adheres to Semantic Versioning.
 
+## [Unreleased]
+
+### Added
+
+- **Session operations**: Get Passkey State (`GET /session/passkey`), Request Passkey Challenge (`POST /session/passkey/request`), Submit Passkey Assertion (`POST /session/passkey`, JSON input) and Confirm Passkey (`POST /session/passkey/confirm`, compatibility only — rarely needed since the server confirms automatically)
+- **OpenAPI spec**: Passkey endpoints and `PasskeyState` / `PasskeyAssertion` schemas, `passkeyStatus` on `SessionStatus`, 409 `PasskeyPending` on QR and pair-code endpoints, `verifiedName` on `UserInfo`
+
+### Changed
+
+- **Groups operations**: Participants are optional when creating a group; an empty list is omitted from the request so the group contains only the paired account
+
 ## [3.0.0]
 
 Corrected picture, group/community setting, presence and star payloads. Added unstar, subgroup participants, community approval mode, edit mentions/expiration and optional media fields. Unsigned triggers work without credentials; configured credential errors remain errors. Signatures require original bytes and invalid signatures return actual HTTP 401. Ad attribution survives trigger parsing and is included in the event spec. Replaced the placeholder test command with contract/trigger tests. These changes are unpublished; npm publication and n8n Cloud verification are distinct.
