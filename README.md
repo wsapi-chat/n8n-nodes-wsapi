@@ -317,6 +317,6 @@ This project is licensed under the MIT License — see `LICENSE` for details.
 
 Trademark notice: "n8n" is a trademark of n8n GmbH. "WhatsApp" is a trademark of WhatsApp LLC. Any use here is for identification and compatibility purposes only and does not imply endorsement or affiliation with n8n GmbH, Meta Platforms, Inc., or WhatsApp LLC.
 
-## Unreleased contract update
+## Scope
 
-The source covers 101 WhatsApp operations; Cloud Account/subscription and OSS admin APIs are outside this integration's scope. Changes in this working tree have not been published. See [CHANGELOG.md](CHANGELOG.md).
+The node covers the WSAPI WhatsApp operations; Cloud Account/subscription and OSS admin APIs are outside this integration's scope. See [CHANGELOG.md](CHANGELOG.md).

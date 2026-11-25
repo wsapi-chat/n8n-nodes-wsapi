@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 The format is based on Keep a Changelog, and this project adheres to Semantic Versioning.
 
-## [Unreleased]
+## [3.2.0] - 2026-11-25
 
 ### Added
 
@@ -14,6 +14,10 @@ The format is based on Keep a Changelog, and this project adheres to Semantic Ve
 ### Changed
 
 - **Groups operations**: Participants are optional when creating a group; an empty list is omitted from the request so the group contains only the paired account
+
+### Fixed
+
+- The bundled OpenAPI spec documented the `DeviceNotPaired` response with status 403; the API returns 409
 
 ## [3.0.0]
 
