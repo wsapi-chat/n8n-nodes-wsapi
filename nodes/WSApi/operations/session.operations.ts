@@ -2,6 +2,8 @@ import {
   IExecuteFunctions,
   IDataObject,
   INodeExecutionData,
+  NodeOperationError,
+  jsonParse,
 } from "n8n-workflow";
 
 export async function executeSessionOperation(
@@ -105,6 +107,79 @@ export async function executeSessionOperation(
           json: true,
         },
       );
+
+    case "getPasskeyState":
+      return await this.helpers.httpRequestWithAuthentication.call(
+        this,
+        "wsApiApi",
+        {
+          method: "GET",
+          url: "/session/passkey",
+          baseURL,
+          json: true,
+        },
+      );
+
+    case "requestPasskey":
+      return await this.helpers.httpRequestWithAuthentication.call(
+        this,
+        "wsApiApi",
+        {
+          method: "POST",
+          url: "/session/passkey/request",
+          baseURL,
+          json: true,
+        },
+      );
+
+    case "submitPasskey": {
+      const raw = this.getNodeParameter("passkeyAssertion", i) as
+        | string
+        | IDataObject;
+      let assertion: IDataObject;
+      try {
+        assertion = typeof raw === "string" ? jsonParse<IDataObject>(raw) : raw;
+      } catch {
+        throw new NodeOperationError(
+          this.getNode(),
+          "Passkey Assertion must be valid JSON",
+          { itemIndex: i },
+        );
+      }
+      if (
+        !assertion ||
+        typeof assertion !== "object" ||
+        Array.isArray(assertion) ||
+        !assertion.rawId ||
+        !assertion.response
+      ) {
+        throw new NodeOperationError(
+          this.getNode(),
+          'Passkey Assertion must be the PublicKeyCredential.toJSON() object, including "rawId" and "response"',
+          { itemIndex: i },
+        );
+      }
+      return await this.helpers.httpRequestWithAuthentication.call(
+        this,
+        "wsApiApi",
+        {
+          method: "POST",
+          url: "/session/passkey",
+          baseURL,
+          json: true,
+          body: assertion,
+        },
+      );
+    }
+
+    case "confirmPasskey":
+      await this.helpers.httpRequestWithAuthentication.call(this, "wsApiApi", {
+        method: "POST",
+        url: "/session/passkey/confirm",
+        baseURL,
+        json: true,
+      });
+      return { success: true, message: "Passkey confirmation sent" };
 
     default:
       throw new Error(`Unknown session operation: ${operation}`);

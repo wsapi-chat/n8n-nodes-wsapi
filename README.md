@@ -89,9 +89,15 @@ You can obtain these credentials from your [WSAPI dashboard](https://wsapi.chat)
 - **Get QR Code Image** - Generate QR code image for login
 - **Get QR Code String** - Get QR code as string
 - **Get Pair Code** - Generate pairing code for phone linking
-- **Get Status** - Check connection and login status
+- **Get Status** - Check connection and login status (includes `passkeyStatus` while a passkey step is pending)
 - **Flush History** - Clear session history
 - **Logout** - Disconnect from WhatsApp
+- **Get Passkey State** - Get the passkey verification state and, while `status` is `required`, the WebAuthn challenge
+- **Request Passkey Challenge** - Ask WhatsApp for a passkey challenge for an unpaired device
+- **Submit Passkey Assertion** - Submit the `PublicKeyCredential.toJSON()` assertion signed on `https://web.whatsapp.com`
+- **Confirm Passkey (Rarely Needed)** - Compatibility fallback; the server sends the confirmation automatically
+
+Some WhatsApp accounts require the owner's passkey to link a device. While a passkey step is pending (`passkeyStatus` is `required`, `submitted` or `confirmation_required`), Get QR Code Image, Get QR Code String and Get Pair Code return HTTP 409 — stop polling them until the step completes, fails or expires (5 minutes).
 
 ### Contact Management
 
@@ -311,6 +317,6 @@ This project is licensed under the MIT License — see `LICENSE` for details.
 
 Trademark notice: "n8n" is a trademark of n8n GmbH. "WhatsApp" is a trademark of WhatsApp LLC. Any use here is for identification and compatibility purposes only and does not imply endorsement or affiliation with n8n GmbH, Meta Platforms, Inc., or WhatsApp LLC.
 
-## Unreleased contract update
+## Scope
 
-The source covers 101 WhatsApp operations; Cloud Account/subscription and OSS admin APIs are outside this integration's scope. Changes in this working tree have not been published. See [CHANGELOG.md](CHANGELOG.md).
+The node covers the WSAPI WhatsApp operations; Cloud Account/subscription and OSS admin APIs are outside this integration's scope. See [CHANGELOG.md](CHANGELOG.md).

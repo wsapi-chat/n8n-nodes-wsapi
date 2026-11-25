@@ -199,3 +199,98 @@ test("configured credential failures are not silently ignored", async () => {
     /Credentials unavailable/,
   );
 });
+
+const {
+  executeSessionOperation,
+} = require("../dist/nodes/WSApi/operations/session.operations.js");
+
+function requestContext(params) {
+  const calls = [];
+  return {
+    calls,
+    getNodeParameter(name, i, fallback) {
+      return name in params ? params[name] : (fallback ?? "sample");
+    },
+    getNode: () => ({ name: "WSAPI" }),
+    async getCredentials() {
+      return { baseUrl: "https://unused.invalid" };
+    },
+    helpers: {
+      async httpRequestWithAuthentication(auth, options) {
+        calls.push(options);
+        return { status: "required" };
+      },
+    },
+  };
+}
+
+test("group create omits participants when none are given", async () => {
+  const ctx = requestContext({ groupName: "solo", participants: {} });
+  await executeGroupsOperation.call(ctx, "create", 0, "https://unused.invalid");
+  assert.equal(ctx.calls[0].url, "/groups");
+  assert.deepEqual(ctx.calls[0].body, { name: "solo" });
+});
+
+test("group create sends participants when given", async () => {
+  const ctx = requestContext({
+    groupName: "team",
+    participants: { phoneNumbers: "u, v" },
+  });
+  await executeGroupsOperation.call(ctx, "create", 0, "https://unused.invalid");
+  assert.deepEqual(ctx.calls[0].body, {
+    name: "team",
+    participants: ["u", "v"],
+  });
+});
+
+for (const [operation, method, url] of [
+  ["getPasskeyState", "GET", "/session/passkey"],
+  ["requestPasskey", "POST", "/session/passkey/request"],
+  ["confirmPasskey", "POST", "/session/passkey/confirm"],
+]) {
+  test("session " + operation + " calls " + method + " " + url, async () => {
+    const ctx = requestContext({});
+    await executeSessionOperation.call(ctx, operation, 0);
+    assert.equal(ctx.calls[0].method, method);
+    assert.equal(ctx.calls[0].url, url);
+    assert.equal(ctx.calls[0].body, undefined);
+  });
+}
+
+const assertion = {
+  id: "cred",
+  rawId: "cred",
+  type: "public-key",
+  response: { clientDataJSON: "cdj", signature: "sig", userHandle: null },
+};
+for (const input of [JSON.stringify(assertion), assertion]) {
+  test(
+    "session submitPasskey posts the assertion (" + typeof input + ")",
+    async () => {
+      const ctx = requestContext({ passkeyAssertion: input });
+      const result = await executeSessionOperation.call(
+        ctx,
+        "submitPasskey",
+        0,
+      );
+      assert.equal(ctx.calls[0].method, "POST");
+      assert.equal(ctx.calls[0].url, "/session/passkey");
+      assert.deepEqual(ctx.calls[0].body, assertion);
+      assert.deepEqual(result, { status: "required" });
+    },
+  );
+}
+
+for (const input of ["not json", "{}", "[]"]) {
+  test(
+    "session submitPasskey rejects invalid assertion: " + input,
+    async () => {
+      const ctx = requestContext({ passkeyAssertion: input });
+      await assert.rejects(
+        executeSessionOperation.call(ctx, "submitPasskey", 0),
+        /Passkey Assertion/,
+      );
+      assert.equal(ctx.calls.length, 0);
+    },
+  );
+}

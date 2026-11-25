@@ -231,7 +231,7 @@ export const groupsFields: INodeProperties[] = [
         type: "string",
         default: "",
         description:
-          "Phone numbers of group participants (comma-separated, with country codes)",
+          "Phone numbers of group participants (comma-separated, with country codes). Optional for Create: leave empty to create a group with only the paired account.",
         hint: "Format: country code + phone number, separated by commas (e.g., 1234567890,0987654321)",
         placeholder: "1234567890,0987654321,1122334455",
       },
